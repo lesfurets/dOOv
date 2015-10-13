@@ -1,0 +1,22 @@
+{
+  "name": "model-map-conferences",
+  "version": "1.0.0",
+  "authors": [
+    "benbaix <jul.baudry@gmail.com>"
+  ],
+  "description": "Présentations de Model-Map",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "https://github.com/jubaudry/model-map",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "reveal.js": "~3.1.0"
+  }
+}
