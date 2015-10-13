@@ -20,7 +20,6 @@
         document.getElementsByTagName( 'head' )[0].appendChild( link );
       }
     </script>
-    <!--[if lt IE 9]><script src="lib/js/html5shiv.js"></script><![endif]-->
   </head>
   <body>
     <div class="footer">
@@ -28,30 +27,58 @@
     </div>
     <div class="reveal">
       <div class="slides">
-      <section>
-        <h2>DomainModel.stream()</h1>
-        <h2><a href="http://soft-shake.ch/2015/en/" target="_blank"><img class="logo" width="66%" src="png/logo_softshake.png"></a></h2>
-        <p>Gilles  DI GUGLIELMO - Julien BAUDRY</p>
-        <a href="https://github.com/lesfurets" target="_blank">https://github.com/jubaudry/model-map</a>
-      </section>
-      <section>
+
         <section>
-          <h2>Titre</h2>
+          <h1>DomainModel.stream()</h1>
+          <h2><a href="http://soft-shake.ch/2015/en/" target="_blank"><img class="logo" width="40%" src="png/logo_softshake.png"></a></h2>
+          <p>Gilles  DI GUGLIELMO - Julien BAUDRY</p>
+          <a href="https://github.com/lesfurets" target="_blank">https://github.com/jubaudry/model-map</a>
+        </section>
+
+        <section>
+          <section>
+            <h2>Qui sommes-nous?</h2>
         </section>
         <section>
-          <h3>Titre</h3>
-          <p>Paragraphe</p>
+          <div class="fragment">
+            <h2>@gdigugli – Gilles Di Guglielmo</h2>
+            <ul>
+              <li>Java Developer since 1999</li>
+              <li>Architecte chez LesFurets.com</li>
+            </ul>
+          </div>
+          <p/>
+          <div class="fragment">
+            <h2>@jubaudry – Julien Baudry</h2>
+            <ul>
+              <li>Java Developer since 2007</li>
+              <li>Architecte chez LesFurets.com</li>
+            </ul>
+          </div>
         </section>
         <section>
-          <h3>Titre</h3>
-          <p>Paragraphe</p>
-          <ul>
-            <li class="fragment">Bullet 1</li>
-            <li class="fragment">Bullet 2</li>
-            <li class="fragment">Bullet 3</li>
+          <h2>LesFurets.com</h2>
+          <ul class="fragment">
+            <li>22 ingénieurs</li>
+            <li>2 Devops</li>
+            <li>3 Architectes</li>
           </ul>
         </section>
+        <section>
+          <h2>LesFurets.com</h2>
+          <ul class="fragment">
+            <li>1 site web, 6 comparateurs</li>
+            <li>400k lignes de code, 30k test unitaires</li>
+            <li>150 tests Selenium</li>
+            <li>10+ serveurs</li>
+            <li>1 code base</li>
+          </ul>
+        </section>
+        <section>
+          <p>TODO repository informations</p>
+        </section>
       </section>
+
       <section>
         <section>
           <h2>Domain Model</h2>
@@ -59,7 +86,11 @@
         <section>
           <img width="100%" src="png/org_modelmap.png">
         </section>
-          <section>
+        <section>
+          <p>TODO : exemple de getter/setter sur le domain model</p>
+          <p>TODO : longueur, lisibilité, risque d'erreur...</p>
+        </section>
+        <section>
           <h2>User</h2>
         </section>
         <section data-transition="fade">
@@ -78,6 +109,10 @@
           <img width="100%" src="png/org_modelmap_user_mapping_5.png">
         </section>
         <section>
+          <p>TODO : déclaration des fields</p>
+          <p>TODO : écriture simple, courte et lisible</p>
+        </section>
+        <section>
           <h2>Account</h2>
         </section>
         <section data-transition="fade">
@@ -86,25 +121,24 @@
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_mapping_1.png">
         </section>
-        <section
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_mapping_2.png">
         </section>
-        <section
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_mapping_3.png">
         </section>
-        <section
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_mapping_4.png">
         </section>
-        <section
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_mapping_5.png">
         </section>
-        <section
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_mapping_6.png">
+        </section>
+        <section>
+          <p>TODO : déclaration des fields</p>
+          <p>TODO : avec le cas des collections</p>
         </section>
         <section>
           <h2>Account &amp; User ID</h2>
@@ -115,10 +149,49 @@
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_accountid_mapping.png">
         </section>
+        <section>
+          <p>TODO : déclaration des fields</p>
+          <p>TODO : avec le cas de l'héritage et des constraintes sur les paths</p>
+        </section>
       </section>
+
+      <section>
+        <section>
+          <h2>Code Generation</h2>
+        </section>
+        <section>
+          <p>TODO : déclaration d'annotations pour tagger le domain model</p>
+          <p>TODO : exemple de domain model taggé</p>
+          <p>TODO : annotation répétables Java 8</p>
+        </section>
+        <section>
+          <p>TODO : déclaration de la code génération</p>
+          <p>TODO : exemple de plugin maven</p>
+        </section>
+        <section>
+          <p>TODO : description des pattern du code généré</p>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Applications</h2>
+        </section>
+        <section>
+          <p>TODO : Schéma architecture</p>
+        </section>
+        <section>
+          <p>TODO : Model comme map clé-valeur</p>
+        </section>
+        <section>
+          <p>TODO : Stream, performance</p>
+        </section>
+      </section>
+
       <section>
         <h2>Questions / réponses</h2>
       </section>
+
       <section>
         <img width="75%" src="png/logo_softshake.png">
       </section>
