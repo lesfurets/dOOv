@@ -82,6 +82,17 @@
 
       <section>
         <section>
+          <h2>Applications</h2>
+        </section>
+        <section>
+          <p>TODO : Schéma architecture courante</p>
+          <p>TODO : Schéma architecture cible</p>
+          <p>TODO : Modèle clé-valeur</p>
+        </section>
+      </section>
+
+      <section>
+        <section>
           <h2>Domain Model</h2>
         </section>
         <section>
@@ -90,16 +101,16 @@
         </section>
         <section data-transition="fade">
           <h2>Common issues</h2>
-          <p>
-            not easy to read</br>
-            repetitive pattern</br>
-            error-prone
-          </p>
+          <ul>
+            <li>Not easy to read</li>
+            <li>Repetitive pattern</li>
+            <li>Error-prone</li>
+          </ul>
           <img width="100%" src="png/org_modelmap_account_code_sample_1_1.png">
         </section>
         <section>
           <p>TODO : avec field id + java enum</p>
-          <img width="100%" src="png/org_modelmap.png">
+          <img width="100%" src="svg/org_modelmap.svg">
         </section>
         <section>
           <h2>User</h2>
@@ -120,7 +131,7 @@
           <img width="100%" src="png/org_modelmap_user_mapping_5.png">
         </section>
         <section>
-          <h2>Exemple</h2>
+          <h2>Example</h2>
         </section>
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_user_code_sample_1.png">
@@ -154,7 +165,7 @@
           <img width="100%" src="png/org_modelmap_account_mapping_6.png">
         </section>
         <section>
-          <h2>Exemple</h2>
+          <h2>Example</h2>
         </section>
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_code_sample_1_1.png">
@@ -176,9 +187,23 @@
           <img width="100%" src="png/org_modelmap_accountid_mapping.png">
         </section>
         <section>
-          <p>TODO : déclaration des fields</p>
-          <p>TODO : avec le cas de l'héritage et des constraintes sur les paths</p>
-        </section>
+          <h2>Many FieldId for a single property</h2>
+          <ul>
+            <li>How to retrieve the value for a field?</li>
+            <li>getAccount().getId() or getUser().getId()?</li>
+          </ul>
+          <p/>
+          <img width="100%" src="png/org_modelmap_userid_accountid_code_field_id.png">
+        </section>  
+        <section>
+          <h2>Create 2 constraint</h2>
+          <p>One for each field, specify which getter to use</p>
+          <img width="100%" src="png/org_modelmap_userid_accountid_code_constraint.png">
+        </section>  
+        <section>
+          <h2>Add contraint for each annotation</h2>
+          <img width="100%" src="png/org_modelmap_userid_accountid_code_mapping.png">
+        </section>  
       </section>
 
       <section>
@@ -186,31 +211,27 @@
           <h2>Code Generation</h2>
         </section>
         <section>
-          <p>TODO : déclaration d'annotations pour tagger le domain model</p>
-          <p>TODO : exemple de domain model taggé</p>
-          <p>TODO : annotation répétables Java 8</p>
+          <h2>Step 1 : one FieldId Enumeration</h2>
+          <ul>
+            <li>one literal for each property/key</li>
+            <li>optionnal : use TagId if necessary</li>
+          </ul>
         </section>
         <section>
-          <p>TODO : déclaration de la code génération</p>
-          <p>TODO : exemple de plugin maven</p>
+          <h2>Step 2 : one Repeatable Annotation </h2>
+          <ul>
+            <li>one method to retrieve the FieldId</li>
+            <li>one method to retrieve the Contraint</li>
+          </ul>
+        </section> 
+        <section>
+          <h2>Step 3 : annotate your domain model</h2>
         </section>
         <section>
-          <p>TODO : description des pattern du code généré</p>
-        </section>
-      </section>
-
-      <section>
-        <section>
-          <h2>Applications</h2>
+          <h2>Step 4 : execute the maven plugin</h2>
         </section>
         <section>
-          <p>TODO : Schéma architecture</p>
-        </section>
-        <section>
-          <p>TODO : Model comme map clé-valeur</p>
-        </section>
-        <section>
-          <p>TODO : Stream, performance</p>
+          <p>Generation output</p>
         </section>
       </section>
 
