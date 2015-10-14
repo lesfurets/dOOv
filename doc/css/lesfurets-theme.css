@@ -101,23 +101,6 @@ body {
  * LISTS
  *********************************************/
 
-
-/*
-.reveal li {
-  color: #b3b4ff;
-  padding: 5px;
-}
-
-.reveal li:before {
-  content: "•";
-  color: red;
-}
-
-.reveal ul {
-  list-style: none;
-}
-*/
-
 .reveal li {
   color: #b3b4ff;
   padding: 5px;
@@ -126,6 +109,7 @@ body {
 .reveal ul {
   list-style-type: circle;
 }
+*/
 
 /*********************************************
  * LINKS
