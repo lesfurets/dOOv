@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>DomainModel.stream()</title>
     <meta name="description" content="DomainModel.stream()">
-    <meta name="author" content="Alexandre DuBreuil">
+    <meta name="author" content="Julien BAUDRY">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -85,35 +85,56 @@
           <h2>Applications</h2>
         </section>
         <section>
-          <p>TODO : Schéma architecture courante</p>
-          <p>TODO : Schéma architecture cible</p>
-          <p>TODO : Modèle clé-valeur</p>
+          <h2>Current Architecture</h2>
+          <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_1.png">
+        </section>
+        <section>
+          <h2>Target Architecture</h2>
+          <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_3.png">
         </section>
       </section>
 
       <section>
         <section>
-          <h2>Domain Model</h2>
+          <h2>Domain Model Transformation</h2>
         </section>
         <section>
-          <p>TODO : sans field id</p>
-          <img width="100%" src="png/org_modelmap.png">
+          <img width="100%" src="png/org_modelmap_1.png">
         </section>
         <section data-transition="fade">
-          <h2>Common issues</h2>
+          <h2>Coding common issues</h2>
           <ul>
-            <li>Not easy to read</li>
-            <li>Repetitive pattern</li>
-            <li>Error-prone</li>
+            <li>Repetitive pattern : not very readable</li>
+            <li>Check for null reference : error-prone</li>
           </ul>
           <img width="100%" src="png/org_modelmap_account_code_sample_1_1.png">
         </section>
         <section>
-          <p>TODO : avec field id + java enum</p>
-          <img width="100%" src="svg/org_modelmap.svg">
+          <h2>Domain model as key-value model</h2>
+          <img width="100%" src="png/org_modelmap_2.png">
+        </section>
+
+        <section>
+          <h2>Step 1 : one FieldId Enumeration</h2>
+          <ul>
+            <li>one literal for each property/key</li>
+            <li>use TagId if necessary (documentation, introspection)</li>
+          </ul>
         </section>
         <section>
-          <h2>User</h2>
+          <h2>Step 2 : one Repeatable Annotation </h2>
+          <ul>
+            <li>one method to retrieve the FieldId</li>
+            <li>one method to retrieve the Contraint</li>
+          </ul>
+        </section> 
+        <section>
+          <h2>Step 3 : annotate your domain model</h2>
+        </section>
+
+
+        <section>
+          <h2>User model</h2>
         </section>
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_user_mapping_1.png">
@@ -141,7 +162,7 @@
         </section>
 
         <section>
-          <h2>Account</h2>
+          <h2>Account model</h2>
         </section>
         <section data-transition="fade">
           <img width="100%" src="png/org_modelmap_account_mapping_0.png">
@@ -198,11 +219,11 @@
         <section>
           <h2>Create 2 constraint</h2>
           <p>One for each field, specify which getter to use</p>
-          <img width="100%" src="png/org_modelmap_userid_accountid_code_constraint.png">
+          <img class="fragment" width="100%" src="png/org_modelmap_userid_accountid_code_constraint.png">
         </section>  
         <section>
           <h2>Add contraint for each annotation</h2>
-          <img width="100%" src="png/org_modelmap_userid_accountid_code_mapping.png">
+          <img class="fragment" width="100%" src="png/org_modelmap_userid_accountid_code_mapping.png">
         </section>  
       </section>
 
@@ -211,27 +232,34 @@
           <h2>Code Generation</h2>
         </section>
         <section>
-          <h2>Step 1 : one FieldId Enumeration</h2>
-          <ul>
-            <li>one literal for each property/key</li>
-            <li>optionnal : use TagId if necessary</li>
-          </ul>
+          <h2>Execute the maven plugin</h2>
+          <p>TODO why generation base on reflection on the classpath (multi modules)</p>
+          <p>TODO why not apt (limitations)</p>
         </section>
         <section>
-          <h2>Step 2 : one Repeatable Annotation </h2>
-          <ul>
-            <li>one method to retrieve the FieldId</li>
-            <li>one method to retrieve the Contraint</li>
-          </ul>
-        </section> 
-        <section>
-          <h2>Step 3 : annotate your domain model</h2>
+          <h2>Execute the maven plugin</h2>
+          <p>TODO execution configration</p>
         </section>
         <section>
-          <h2>Step 4 : execute the maven plugin</h2>
+          <h2>Generation output</h2>
+          <p>TODO describe pattern generation of field info</p>
         </section>
         <section>
-          <p>Generation output</p>
+          <h2>Generation output</h2>
+          <p>TODO describe pattern generation of field info</p>
+          <p>TODO usage for C* persistence</p>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Stream your domain model</h2>
+        </section>
+        <section>
+          <h2>Domain Model as Stream</h2>
+          <p>Domain can be manipulated as a stream of key/value pair</p>  
+          <p>TODO : diff model</p>
+          <p>TODO : C* persistence</p>
         </section>
       </section>
 
@@ -264,6 +292,11 @@
         history: true,
         center: true,
         embedded: true,
+        mouseWheel: true,
+        viewDistance: 5,
+        
+        width: 1024,
+        height: 700,
 
         //theme: 'lesfurets', // available themes are in /css/theme
         transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
