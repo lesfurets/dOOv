@@ -97,6 +97,7 @@
           <h2>Domain Model Migration</h2>
         </section>
         <section>
+          <h2>Let's start with this model</h2>
           <img width="100%" src="png/org_modelmap_1.png">
         </section>
         <section data-transition="fade">
@@ -198,7 +199,7 @@
         </section>
         <section data-transition="fade">
           <h2>Account model (6/6)</h2>
-          <img width="100%" src="png/org_modelmap_account_mapping_6.png">
+          <img width="100%" src="png/org_modelmap_account_mapping_5.png">
         </section>
         <section>
           <h2>Account model coding</h2>
@@ -259,25 +260,31 @@
           <h2>Code Generation</h2>
         </section>
         <section>
-          <h2>Execute the code generator</h2>
-          <ul>
+          <h2>Code generator implementation</h2>
+          <ul class="fragment">
             <li>Execution using a maven plugin</li>
             <li>Annotated properties are processed using Java Reflection</li>
             <li>Not implemented as a APT processor, due to some limitations</li>
           </ul>
-        </section>
-        <section>
-          <h2>Execute the maven plugin</h2>
+          <p></p>
           <img class="fragment" width="100%" src="png/org_modelmap_maven_codegen_1.png">
         </section>
         <section>
-          <h2>Generation output (1/2)</h2>
+          <h2>Execute the maven plugin</h2>
+          <img class="fragment" width="100%" src="png/org_modelmap_maven_codegen_2.png">
+        </section>
+        <section>
+          <h2>Generation output (1/3)</h2>
           <p>TODO describe pattern generation of wrapper</p>
         </section>
         <section>
-          <h2>Generation output (2/2)</h2>
+          <h2>Generation output (2/3)</h2>
           <p>TODO describe pattern generation of field info</p>
           <p>TODO usage for C* persistence</p>
+        </section>
+        <section>
+          <h2>Generation output (3/3)</h2>
+          <p>TODO bonus CSV</p>
         </section>
       </section>
 
@@ -304,13 +311,12 @@
             <li>Framework and example</li>
           </ul>
         </section>
+        <section>
+          <h2>Thank You!</h2>
+          <img width="75%" src="png/logo_softshake.png">
+        </section>
       </section>
-      
-      <section>
-        <h2>Thank You!</h2>
-        <img width="75%" src="png/logo_softshake.png">
-      </section>
-      </div>
+           
     </div>
     <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
     <script src="bower_components/reveal.js/js/reveal.js"></script>
