@@ -80,31 +80,91 @@
 
       <section>
         <section>
-          <h2>Applications</h2>
+          <h2>Architecture</h2>
         </section>
         <section>
-          <h2>Current Architecture</h2>
+          <h2>What you have ...</h2>
           <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_1.png">
         </section>
         <section>
-          <h2>Javascript Front App changes</h2>
-          <img class="fragment" data-transition="fade" width="50%" src="png/org_modelmap_archi_evol_2.png">
+          <h2>Architecture Buzz</h2>
+          <div class="fragment columns">
+            <ul class="column-left">
+              <li>Copy on write</li>
+              <li>Immutable data</li>
+              <li>noSQL</li>
+              <li>Clustered Data Base</li>
+              <li>CQRS</li>
+              <li>Data streaming</li>
+              <li>Micro batching</li>
+              <li>Lambda architecture</li>
+              <li>Data on demand</li>
+            </ul>
+            <div class="column-right">
+              <img data-transition="fade" width="100%" src="png/buzz.png">
+            </div>
+          </div>
         </section>
         <section>
-          <h2>Runtime DataBase changes</h2>
-          <img class="fragment" data-transition="fade" width="50%" src="png/org_modelmap_archi_evol_3.png">
+          <h2>What you want …</h2>
+          <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_3.png">
         </section>
         <section>
-          <h2>BackOffice changes</h2>
-          <img class="fragment" data-transition="fade" width="70%" src="png/org_modelmap_archi_evol_4.png">
-        </section>
-        <section>
-          <h2>Changes Summary</h2>
+          <h2>You are in trouble ...</h2>
           <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_1.png">
         </section>
         <section>
-          <h2>Target Architecture</h2>
-          <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_3.png">
+          <h2>Front app evolutions</h2>
+          <div class="fragment columns">
+            <ul class="column-left">
+              <li>Your domain model is cloned using two different language.</li>
+              <li></li>
+              <li>Governance of the domain model and change request are difficult to implement.</li>
+              <li></li>
+              <li>Development owners of the server and JavaScript application are different.</li>
+              <li></li>
+              <li>UI Spaghetti code.</li>
+            </ul>
+            <div class="column-right">
+              <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_2.png">
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>Front storage evolutions</h2>
+          <div class="fragment columns">
+            <ul class="column-left">
+              <li>Mapping entities in Cassandra is painful.</li>
+              <li></li>
+              <li>Don’t migrate your Entity/Relation model as it!</li>
+              <li></li>
+              <li>You should probably flat your domain model to fit a single raw.</li>
+              <li></li>
+              <li>Infinite storage.</li>
+            </ul>
+            <div class="column-right">
+              <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_3.png">
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>BackOffice evolutions</h2>
+          <div class="fragment columns">
+            <ul class="column-left">
+              <li>A lot of rework to implement.</li>
+              <li></li>
+              <li>Spark and ML-lib love data vectors.</li>
+              <li></li>
+              <li>Spark read raw data, aggregate, write them in micro batches.</li>
+              <li></li>
+              <li>No more nightly batches.</li>
+              <li></li>
+              <li>Full history is available for custom computations.</li>
+            </ul>
+            <div class="column-right">
+              <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_4.png">
+            </div>
+          </div>
         </section>
       </section>
 
@@ -366,7 +426,7 @@
         viewDistance: 5,
         
         width: 1024,
-        height: 700,
+        height: 800,
 
         //theme: 'lesfurets', // available themes are in /css/theme
         transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none

@@ -110,6 +110,25 @@ body {
   list-style-type: none;
 }
 
+/*********************************************
+ * 2 COLUMNS LAYOUT
+ *********************************************/
+
+.columns {
+  padding-top: 5px;
+}
+
+.column-left {
+  float: left;
+  width: 50%;
+  text-align: left;
+}
+
+.column-right {
+  float: right;
+  width: 50%;
+  text-align: left;
+}
 
 /*********************************************
  * LINKS
