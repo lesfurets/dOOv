@@ -45,19 +45,17 @@
           <div class="fragment">
             <h2>@gdigugli – Gilles Di Guglielmo</h2>
             <ul>
-              <p>
-                Java Developer since 1999<br/>
-                Software Architect at LesFurets.com
-              </p>
+              <li>Java Developer since 1999</li>
+              <li>Software Architect at LesFurets.com</li>
             </ul>
           </div>
-          <p/>
+          <p></p>
           <div class="fragment">
             <h2>@jubaudry – Julien Baudry</h2>
-            <p>
-              Java Developer since 2007<br/>
-              Software Architect at LesFurets.com
-            </p>
+            <ul>
+              <li>Java Developer since 2007</li>
+              <li>Software Architect at LesFurets.com</li>
+            </ul>
           </div>
         </section>
         <section>
@@ -96,16 +94,16 @@
 
       <section>
         <section>
-          <h2>Domain Model Transformation</h2>
+          <h2>Domain Model Migration</h2>
         </section>
         <section>
           <img width="100%" src="png/org_modelmap_1.png">
         </section>
         <section data-transition="fade">
-          <h2>Coding common issues</h2>
+          <h2>Some common issues</h2>
           <ul>
             <li>Repetitive pattern : not very readable</li>
-            <li>Check for null reference : error-prone</li>
+            <li>Check for null reference, collection size : error-prone</li>
           </ul>
           <img width="100%" src="png/org_modelmap_account_code_sample_1_1.png">
         </section>
@@ -116,20 +114,27 @@
 
         <section>
           <h2>Step 1 : one FieldId Enumeration</h2>
-          <ul>
-            <li>one literal for each property/key</li>
-            <li>use TagId if necessary (documentation, introspection)</li>
+          <ul class="fragment">
+            <li>one literal for each class property/key</li>
+            <li>use tag to add meta-information (optionnal)</li>
           </ul>
+          <img class="fragment" width="100%" src="png/org_modelmap_migration_step_1.png">
         </section>
         <section>
           <h2>Step 2 : one Repeatable Annotation </h2>
-          <ul>
+          <ul class="fragment">
             <li>one method to retrieve the FieldId</li>
             <li>one method to retrieve the Contraint</li>
           </ul>
+          <img class="fragment" width="100%" src="png/org_modelmap_migration_step_2.png">
         </section> 
         <section>
           <h2>Step 3 : annotate your domain model</h2>
+          <ul class="fragment">
+            <li>attribute, getter or setter can be annotated</li>
+            <li>getter and setter must follow Java naming conventions</li>
+          </ul>
+          <img class="fragment" width="100%" src="png/org_modelmap_migration_step_3.png">
         </section>
 
 
@@ -209,12 +214,13 @@
         </section>
         <section>
           <h2>Many FieldId for a single property</h2>
-          <ul>
-            <li>How to retrieve the value for a field?</li>
-            <li>getAccount().getId() or getUser().getId()?</li>
-          </ul>
-          <p/>
-          <img width="100%" src="png/org_modelmap_userid_accountid_code_field_id.png">
+          <div class="fragment">
+            <ul>
+              <li>How to retrieve the value for a field?</li>
+              <li>getAccount().getId() or getUser().getId()?</li>
+            </ul>
+            <img width="100%" src="png/org_modelmap_userid_accountid_code_field_id.png">
+          </div>
         </section>  
         <section>
           <h2>Create 2 constraint</h2>
@@ -232,20 +238,23 @@
           <h2>Code Generation</h2>
         </section>
         <section>
-          <h2>Execute the maven plugin</h2>
-          <p>TODO why generation base on reflection on the classpath (multi modules)</p>
-          <p>TODO why not apt (limitations)</p>
+          <h2>Execute the code generator</h2>
+          <ul>
+            <li>Execution using a maven plugin</li>
+            <li>Annotated properties are processed using Java Reflection</li>
+            <li>Not implemented as a APT processor, due to some limitations</li>
+          </ul>
         </section>
         <section>
           <h2>Execute the maven plugin</h2>
-          <p>TODO execution configration</p>
+          <img class="fragment" width="100%" src="png/org_modelmap_maven_codegen_1.png">
         </section>
         <section>
-          <h2>Generation output</h2>
-          <p>TODO describe pattern generation of field info</p>
+          <h2>Generation output (1/2)</h2>
+          <p>TODO describe pattern generation of wrapper</p>
         </section>
         <section>
-          <h2>Generation output</h2>
+          <h2>Generation output (2/2)</h2>
           <p>TODO describe pattern generation of field info</p>
           <p>TODO usage for C* persistence</p>
         </section>
@@ -277,6 +286,7 @@
       </section>
       
       <section>
+        <h2>Thank You!</h2>
         <img width="75%" src="png/logo_softshake.png">
       </section>
       </div>
