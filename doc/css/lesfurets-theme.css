@@ -14,7 +14,7 @@ body {
   background-color: #3335a2;
   background-image: url("../png/bg-dots.png"), radial-gradient(circle 1000px at top center, #3439b3 40%, #161875 60%);
   background-image: url("../png/bg-dots.png"), -webkit-radial-gradient(top center, circle 1000px, #3439b3 40%, #161875 60%);
-  background-image: url("../png/bg-dots.png"),radial-gradient(circle 1000px at top center, #3439b3 40%, #161875 60%);
+  background-image: url("../png/bg-dots.png"), radial-gradient(circle 1000px at top center, #3439b3 40%, #161875 60%);
 }
 
 .reveal {
@@ -42,6 +42,7 @@ body {
 .reveal em {
   color: white;
 }
+
 
 /*********************************************
  * HEADERS
@@ -82,7 +83,6 @@ body {
 /*********************************************
  * BLOCKQUOTES
  *********************************************/
-
 .reveal blockquote {
   padding: 25px;
 }
@@ -114,20 +114,32 @@ body {
  * 2 COLUMNS LAYOUT
  *********************************************/
 
-.columns {
+.reveal .columns {
   padding-top: 5px;
 }
 
-.column-left {
+.reveal .column-left-50,
+.reveal .column-left-35,
+.reveal .column-right-50,
+.reveal .column-right-65 {
   float: left;
-  width: 50%;
   text-align: left;
 }
 
-.column-right {
-  float: right;
+.reveal .column-left-50 {
   width: 50%;
-  text-align: left;
+}
+
+.reveal .column-left-35 {
+  width: 35%;
+}
+
+.reveal .column-right-50 {
+  width: 50%;
+}
+
+.reveal .column-right-65 {
+  width: 65%;
 }
 
 /*********************************************
@@ -158,7 +170,7 @@ body {
  * IMAGES
  *********************************************/
 .reveal section img {
-  margin: 15px 0px;
+  margin: 5px 0px;
   border: 1px solid black;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.50);
   -webkit-transition: all .2s linear;
@@ -167,7 +179,7 @@ body {
   -o-transition: all .2s linear;
   transition: all .2s linear; 
   background-color: white;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
 }
 
@@ -189,6 +201,7 @@ body {
   height: 90px;
   width: 90px;
 }
+
 .reveal .controls div.navigate-left,
 .reveal .controls div.navigate-left.enabled {
   border-right-color: #f07d00;
@@ -247,6 +260,7 @@ body {
 .reveal .slide-number {
   color: #13daec; 
 }
+
 /*********************************************
  * FOOTER
  *********************************************/

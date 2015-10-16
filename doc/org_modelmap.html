@@ -89,7 +89,8 @@
         <section>
           <h2>Architecture Buzz</h2>
           <div class="fragment columns">
-            <ul class="column-left">
+            <ul class="column-left-50">
+              <li></li>
               <li>Copy on write</li>
               <li>Immutable data</li>
               <li>noSQL</li>
@@ -100,7 +101,7 @@
               <li>Lambda architecture</li>
               <li>Data on demand</li>
             </ul>
-            <div class="column-right">
+            <div class="column-right-50">
               <img data-transition="fade" width="100%" src="png/buzz.png">
             </div>
           </div>
@@ -116,7 +117,8 @@
         <section>
           <h2>Front app evolutions</h2>
           <div class="fragment columns">
-            <ul class="column-left">
+            <ul class="column-left-50">
+              <li></li>
               <li>Your domain model is cloned using two different language.</li>
               <li></li>
               <li>Governance of the domain model and change request are difficult to implement.</li>
@@ -125,7 +127,7 @@
               <li></li>
               <li>UI Spaghetti code.</li>
             </ul>
-            <div class="column-right">
+            <div class="column-right-50">
               <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_2.png">
             </div>
           </div>
@@ -133,7 +135,8 @@
         <section>
           <h2>Front storage evolutions</h2>
           <div class="fragment columns">
-            <ul class="column-left">
+            <ul class="column-left-50">
+              <li></li>
               <li>Mapping entities in Cassandra is painful.</li>
               <li></li>
               <li>Don’t migrate your Entity/Relation model as it!</li>
@@ -142,7 +145,7 @@
               <li></li>
               <li>Infinite storage.</li>
             </ul>
-            <div class="column-right">
+            <div class="column-right-50">
               <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_3.png">
             </div>
           </div>
@@ -150,18 +153,19 @@
         <section>
           <h2>BackOffice evolutions</h2>
           <div class="fragment columns">
-            <ul class="column-left">
+            <ul class="column-left-35">
+              <li></li>
               <li>A lot of rework to implement.</li>
               <li></li>
               <li>Spark and ML-lib love data vectors.</li>
               <li></li>
-              <li>Spark read raw data, aggregate, write them in micro batches.</li>
+              <li>Spark read raw data, aggregate, write them in microbatches.</li>
               <li></li>
               <li>No more nightly batches.</li>
               <li></li>
               <li>Full history is available for custom computations.</li>
             </ul>
-            <div class="column-right">
+            <div class="column-right-65">
               <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_4.png">
             </div>
           </div>
@@ -425,8 +429,9 @@
         mouseWheel: true,
         viewDistance: 5,
         
-        width: 1024,
-        height: 800,
+        width: 1280,
+        height: 900,
+        margin: 0,
 
         transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
 
