@@ -268,7 +268,7 @@ body {
   background-color: white;
   bottom: 0;
   left: 0;
-  padding: 25px;
+  padding: 10px;
   position: absolute;
   width: 100%;
   z-index: 1;
@@ -276,12 +276,13 @@ body {
 .footer .link {
   display: block;
 }
-.footer .logo {
+.footer .logo-softshake,
+.footer .logo-lesfurets {
   height: 40px;
 }
-.footer .github, .footer .twitter {
-  color: #161875;
-  text-decoration: none;
+.footer .logo-lesfurets {
+  float: right;
+  padding-right: 25px;
 }
 .footer a {
   font-family: Helvetica, Arial, sans-serif;
