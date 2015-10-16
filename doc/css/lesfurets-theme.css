@@ -170,7 +170,7 @@ body {
  * IMAGES
  *********************************************/
 .reveal section img {
-  margin: 5px 0px;
+  margin: 10px 0px;
   border: 1px solid black;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.50);
   -webkit-transition: all .2s linear;
@@ -179,7 +179,7 @@ body {
   -o-transition: all .2s linear;
   transition: all .2s linear; 
   background-color: white;
-  padding: 5px;
+  padding: 10px;
   border-radius: 5px;
 }
 
