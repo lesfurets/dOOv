@@ -204,9 +204,15 @@
           <h2>Step 1 : one FieldId Enumeration</h2>
           <ul class="fragment">
             <li>one literal for each class property/key</li>
-            <li>use tag to add meta-information (optionnal)</li>
+            <li>position : used when collections are denormalized (optional)</li>
+            <li>tag : used to add meta-information (optionnal)</li>
           </ul>
-          <img class="fragment" width="100%" src="png/org_modelmap_migration_step_1.png">
+          <p></p>
+          <img class="fragment" width="60%" src="png/org_modelmap_migration_step_1_1.png">
+        </section>
+        <section>
+          <h2>Step 1 : one FieldId Enumeration</h2>
+          <img class="fragment" width="100%" src="png/org_modelmap_migration_step_1_2.png">
         </section>
         <section>
           <h2>Step 2 : one Repeatable Annotation </h2>
@@ -223,6 +229,13 @@
             <li>getter and setter must follow Java naming conventions</li>
           </ul>
           <img class="fragment" width="100%" src="png/org_modelmap_migration_step_3.png">
+        </section>
+        <section>
+          <h2>Step 4 : generate the key value model</h2>
+          <ul class="fragment">
+           
+          </ul>
+          <img class="fragment" width="100%" src="png/org_modelmap_migration_step_4.png">
         </section>
 
 
@@ -365,8 +378,8 @@
             <li>The generated model implements the FieldModel interface.</li>
             <li></li>
             <li>The 2 main methods are a getter and setter by FieldId.</li>
-            <p></p>
           </ul>
+          <p></p>
           <img class="fragment" src="png/org_modelmap_maven_codegen_3_1.png">
         </section>
          <section>
