@@ -360,32 +360,15 @@
           </section>
           <section>
             <h2>Code generator implementation</h2>
+            <p></p> 
             <ul class="fragment">
               <li>Execution using a maven plugin</li>
               <li>Annotated properties are processed using Java Reflection</li>
-              <li>Not implemented as a APT processor, due to some limitations</li>
             </ul>
-            <p></p>
-            <img class="fragment" width="100%" src="png/org_modelmap_maven_codegen_1.png">
-          </section>
-          <section>
-            <h2>Execute the maven plugin</h2>
-            <img class="fragment" width="100%" src="png/org_modelmap_maven_codegen_2.png">
           </section>
           <section>
             <h2>Generation output (1/3)</h2>
-            <ul class="fragment">
-              <li>The generated model implements the FieldModel interface.</li>
-              <li></li>
-              <li>The 2 main methods are a getter and setter by FieldId.</li>
-            </ul>
-            <p></p>
-            <img class="fragment" src="png/org_modelmap_maven_codegen_3_1.png">
-          </section>
-           <section>
-            <h2>Generation output (1/3)</h2>
-            <p class="fragment">... and with some additional methods.</p>
-            <img class="fragment" src="png/org_modelmap_maven_codegen_3_2.png">
+            <img class="fragment" src="png/org_modelmap_maven_codegen_3.png">
           </section>
           <section>
             <h2>Generation output (2/3)</h2>
@@ -394,13 +377,19 @@
             <img class="fragment" width="60%" src="png/org_modelmap_maven_codegen_4_1.png">
           </section>
           <section>
-            <h2>Generation output (2/3)</h2>
-            <img class="fragment" width="100%" src="png/org_modelmap_maven_codegen_4_2.png">
-          </section>
-          <section>
             <h2>Generation output (3/3)</h2>
             <p class="fragment">a CSV containing each field, path, and value type</p>
             <img class="fragment" width="100%" src="png/org_modelmap_maven_codegen_5.png">
+          </section>
+          <section>
+            <h2>Let's generate the key-value model</h2>
+            <div class="fragment">
+              <p>Github project contains 2 models : </p>
+              <ul>
+               <li>one small one (20 keys)</li> 
+               <li>and a bigger one (400 keys)</li>
+              </ul>
+            </div>
           </section>
         </section>
 
