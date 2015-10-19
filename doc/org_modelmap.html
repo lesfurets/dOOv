@@ -66,13 +66,13 @@
             <img class="logo" width="50%" src="png/logo_lesfurets.png">
             <p></p>
             <ul class="fragment">
-              <li>1 website, 6 Insurance Aggregators : Car, Health, Home, Bike and Loan</li>
-              <li>22 Developers, 2 Devops, 3 Architects</li>
-              <li>1 codebase, 450k line of code, 60k unit tests, 150 selenium tests</li>
+              <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
+              <li>22 Developers, 2 DevOps, 3 Architects</li>
+              <li>1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
               <li>7 years of code history</li>
               <li>1 release per day</li>
               <li>10+ production servers</li>
-              <li>2.5M of quotes/year, 31% of market shares</li>
+              <li>2.5M quotes/year, 31% of market share</li>
             </ul>
           </section>
         </section>
@@ -138,9 +138,9 @@
                 <li></li>
                 <li>Mapping entities in Cassandra is painful.</li>
                 <li></li>
-                <li>Don’t migrate your Entity/Relation model as it!</li>
+                <li>Don’t migrate your Entity/Relation model using cut &amp; paste!</li>
                 <li></li>
-                <li>You should probably flat your domain model to fit a single raw.</li>
+                <li>You should probably flat your domain model to fit a single row.</li>
                 <li></li>
                 <li>Infinite storage.</li>
               </ul>
@@ -192,7 +192,7 @@
             <img width="100%" src="png/org_modelmap_1.png">
           </section>
           <section>
-            <h2>... and transform it as a key-value model</h2>
+            <h2>... and transform it to a key-value model</h2>
             <img width="100%" src="png/org_modelmap_2.png">
           </section>
 
@@ -202,7 +202,7 @@
               <ul>
                 <li>one literal for each key</li>
                 <li>position (optional) : used when collections are denormalized </li>
-                <li>tag (optional) : used to add meta-information (optionnal)</li>
+                <li>tag (optional) : used to add meta-information</li>
               </ul>
               <p></p>
               <img class=width="75%" src="png/org_modelmap_migration_step_1_1.png">
@@ -212,7 +212,7 @@
             <h2>Step 2 : one Annotation to annotate the domain</h2>
             <ul class="fragment">
               <li>one method to retrieve the FieldId</li>
-              <li>one method to retrieve the Contraint</li>
+              <li>one method to retrieve the Constraint</li>
             </ul>
               <p></p>
             <img class="fragment" width="75%" src="png/org_modelmap_migration_step_2.png">
@@ -258,27 +258,27 @@
             <h2>Account model</h2>
           </section>
           <section data-transition="fade">
-            <h2>Account model (1/6)</h2>
+            <h2>Account model</h2>
             <img width="100%" src="png/org_modelmap_account_mapping_0.png">
           </section>
           <section data-transition="fade">
-            <h2>Account model (2/6)</h2>
+            <h2>Account model</h2>
             <img width="100%" src="png/org_modelmap_account_mapping_1.png">
           </section>
           <section data-transition="fade">
-            <h2>Account model (3/6)</h2>
+            <h2>Account model</h2>
             <img width="100%" src="png/org_modelmap_account_mapping_2.png">
           </section>
           <section data-transition="fade">
-            <h2>Account model (4/6)</h2>
+            <h2>Account model</h2>
             <img width="100%" src="png/org_modelmap_account_mapping_3.png">
           </section>
           <section data-transition="fade">
-            <h2>Account model (5/6)</h2>
+            <h2>Account model</h2>
             <img width="100%" src="png/org_modelmap_account_mapping_4.png">
           </section>
           <section data-transition="fade">
-            <h2>Account model (6/6)</h2>
+            <h2>Account model</h2>
             <img width="100%" src="png/org_modelmap_account_mapping_5.png">
           </section>
           
@@ -315,7 +315,7 @@
             <img class="fragment" width="80%" src="png/org_modelmap_userid_accountid_code_2.png">
           </section>  
           <section>
-            <h2>Add a contraint for each annotation</h2>
+            <h2>Add a constraint for each annotation</h2>
             <div class="fragment">
               <ul>
                 <li>the code generator only use the path with the specified getter</li>
@@ -334,7 +334,7 @@
             <h2>Code generator under the hood</h2>
             <p></p> 
             <ul class="fragment">
-              <li>Execution using a maven plugin</li>
+              <li>Execution is done using a maven plugin</li>
               <li>Annotated properties are processed using Java Reflection</li>
             </ul>
           </section>
@@ -345,7 +345,7 @@
           <section>
             <h2>Generation output (2/3)</h2>
             <div class="fragment">
-              <p>An Enumeration containing field, type, generics type (optionnal)</p>
+              <p>An Enumeration containing field, type, generics type (optional)</p>
               <p></p>
               <img width="60%" src="png/org_modelmap_maven_codegen_4_1.png">
             </div>
@@ -373,7 +373,7 @@
             <p></p>
             <h2>Let's try it</h2>
             <ul>
-              <li>Could you write quick domain model diff with us ;-)</li>
+              <li>Could you write domain model diff with us ;-)</li>
             </ul>
           </section>
           <section>
@@ -387,7 +387,7 @@
               <li>Mocking our domain model in thousand of unit tests</li>
             </ul>
             <p></p>
-            <h2>Everything in interative fashion during the 2 past years</h2>
+            <h2>Everything in interative fashion during the past 2 years</h2>
           </section>
         </section>
 
