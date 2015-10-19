@@ -196,31 +196,29 @@
             <img width="100%" src="png/org_modelmap_1.png">
           </section>
           <section>
-            <h2>... but as key-value model</h2>
+            <h2>... and transform it as a key-value model</h2>
             <img width="100%" src="png/org_modelmap_2.png">
           </section>
 
           <section>
-            <h2>Step 1 : one FieldId Enumeration</h2>
-            <ul class="fragment">
-              <li>one literal for each class property/key</li>
-              <li>position : used when collections are denormalized (optional)</li>
-              <li>tag : used to add meta-information (optionnal)</li>
-            </ul>
-            <p></p>
-            <img class="fragment" width="60%" src="png/org_modelmap_migration_step_1_1.png">
+            <h2>Step 1 : one Enumeration with all keys</h2>
+            <div class="fragment">
+              <ul>
+                <li>one literal for each class property/key</li>
+                <li>position : used when collections are denormalized (optional)</li>
+                <li>tag : used to add meta-information (optionnal)</li>
+              </ul>
+              <p></p>
+              <img class=width="75%" src="png/org_modelmap_migration_step_1_1.png">
+            </div>
           </section>
           <section>
-            <h2>Step 1 : one FieldId Enumeration</h2>
-            <img class="fragment" width="100%" src="png/org_modelmap_migration_step_1_2.png">
-          </section>
-          <section>
-            <h2>Step 2 : one Repeatable Annotation </h2>
+            <h2>Step 2 : one Annotation to annotate the domain</h2>
             <ul class="fragment">
               <li>one method to retrieve the FieldId</li>
               <li>one method to retrieve the Contraint</li>
             </ul>
-            <img class="fragment" width="100%" src="png/org_modelmap_migration_step_2.png">
+            <img class="fragment" width="75%" src="png/org_modelmap_migration_step_2.png">
           </section> 
           <section>
             <h2>Step 3 : annotate your domain model</h2>
@@ -243,35 +241,20 @@
             <h2>User model</h2>
           </section>
           <section data-transition="fade">
-            <h2>User model (1/5)</h2>
+            <h2>User model</h2>
             <img width="100%" src="png/org_modelmap_user_mapping_1.png">
           </section>
           <section data-transition="fade">
-            <h2>User model (2/5)</h2>
+            <h2>User model</h2>
             <img width="100%" src="png/org_modelmap_user_mapping_2.png">
           </section>
           <section data-transition="fade">
-            <h2>User model (3/5)</h2>
-            <img width="100%" src="png/org_modelmap_user_mapping_3.png">
-          </section>
-          <section data-transition="fade">
-            <h2>User model (4/5)</h2>
+            <h2>User model</h2>
             <img width="100%" src="png/org_modelmap_user_mapping_4.png">
           </section>
           <section data-transition="fade">
-            <h2>User model (5/5)</h2>
+            <h2>User model</h2>
             <img width="100%" src="png/org_modelmap_user_mapping_5.png">
-          </section>
-          <section>
-            <h2>User model coding</h2>
-          </section>
-          <section data-transition="fade">
-            <h2>Using Java bean</h2>
-            <img width="100%" src="png/org_modelmap_user_code_sample_1.png">
-          </section>
-          <section data-transition="fade">
-            <h2>Using generated key-value model</h2>
-            <img width="100%" src="png/org_modelmap_user_code_sample_2.png">
           </section>
           <section>
             <h2>Account model</h2>
@@ -300,47 +283,38 @@
             <h2>Account model (6/6)</h2>
             <img width="100%" src="png/org_modelmap_account_mapping_5.png">
           </section>
+          
           <section>
-            <h2>Account model coding</h2>
-          </section>
-          <section data-transition="fade">
-            <h2>Using Java bean (1/2)</h2>
-            <img width="100%" src="png/org_modelmap_account_code_sample_1_1.png">
-          </section>
-          <section data-transition="fade">
-            <h2>Using Java bean (2/2)</h2>
-            <img width="100%" src="png/org_modelmap_account_code_sample_1_2.png">
-          </section>
-          <section data-transition="fade">
-            <h2>Using generated key-value model</h2>
-            <img width="100%" src="png/org_modelmap_account_code_sample_2.png">
+            <h2>Let's see the domain model &amp; the key-value model</h2>
           </section>
 
           <section>
-            <h2>Account &amp; User ID</h2>
+            <h2>... Just one little issue.</h2>
           </section>
           <section data-transition="fade">
-            <h2>Account &amp; User ID (1/2)</h2>
+            <h2>Account &amp; User ID</h2>
             <img width="100%" src="png/org_modelmap_userid_mapping.png">
           </section>
           <section data-transition="fade">
-            <h2>Account &amp; User ID (2/2)</h2>
+            <h2>Account &amp; User ID</h2>
             <img width="100%" src="png/org_modelmap_accountid_mapping.png">
           </section>
           <section>
-            <h2>Many FieldId for a single property</h2>
+            <h2>Many key for a single attribute</h2>
             <div class="fragment">
               <ul>
+                <li>Each key must have a unique path to retrieve its value</li>
                 <li>How to retrieve the right value for each field?</li>
                 <li>getAccount().getId() or getUser().getId()?</li>
               </ul>
-              <img width="100%" src="png/org_modelmap_userid_accountid_code_1.png">
+              <p></p>
+              <img width="80%" src="png/org_modelmap_userid_accountid_code_1.png">
             </div>
           </section>  
           <section>
-            <h2>Create 2 constraint</h2>
+            <h2>Solution : constraints</h2>
             <p>One for each field, specify which getter to use</p>
-            <img class="fragment" width="100%" src="png/org_modelmap_userid_accountid_code_2.png">
+            <img class="fragment" width="80%" src="png/org_modelmap_userid_accountid_code_2.png">
           </section>  
           <section>
             <h2>Add a contraint for each annotation</h2>
