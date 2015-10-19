@@ -3,8 +3,6 @@
  *
  * orange #f07d00
  * blue #3335a2
- * medium blue #d1d2ff
- * light blue #b3b4ff;
  */
 
 /*********************************************
@@ -92,7 +90,7 @@ body {
  *********************************************/
 
 .reveal p {
-  color: #d1d2ff;
+  color: #eeeeee;
   padding: 25px 100px;
   padding: 25px 0;
 }
@@ -102,7 +100,7 @@ body {
  *********************************************/
 
 .reveal li {
-  color: #b3b4ff;
+  color: #eeeeee;
   padding: 5px;
 }
 
