@@ -30,9 +30,8 @@
       <div class="slides">
 
         <section>
+          <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
           <h1>DomainModel.stream()</h1>
-          <h2><img class="logo herve-francois" width="50%" src="png/lf_com_herve_francois.png"></a></h2>
-          <p>Gilles  DI GUGLIELMO - Julien BAUDRY</p>
           <p>
             <a href="https://github.com/lesfurets">https://github.com/lesfurets/model-map</a>
           </p>
@@ -45,12 +44,10 @@
           <section>
             <div class="fragment">
               <h2>@gdigugli – Gilles Di Guglielmo</h2>
-              <div class="centered">
               <ul>
                 <li>Designer of sweet cooked software since 1999</li>
                 <li>Software Architect at LesFurets.com</li>
               </ul>
-              <div>
             </div>
             <br/><br/>
             <div class="fragment">
@@ -72,13 +69,13 @@
             <p></p>
             <ul class="fragment">
               <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
-              <li>1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests<br/></li>
-              
+              <li class="emptyline">1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
+        
               <li>22 Developers, 2 DevOps, 3 Architects</li>
-              <li>10+ production servers<br/></li>
+              <li class="emptyline">10+ production servers<br/></li>
               
               <li>1 release per day</li>
-              <li>7 years of code history<br/></li>
+              <li class="emptyline">7 years of code history<br/></li>
            
               <li>2.5M quotes/year, 31% of market share</li>
             </ul>
@@ -95,11 +92,10 @@
           <section>
             <h2>Architecture Buzz</h2>
             <div class="fragment container-grid-2">
-              <ul class="container-grid-text">
-                <br/>
+              <ul>
                 <li>Copy on write</li>
                 <li>Immutable data</li>
-                <li>noSQL</li>
+                <li>NoSQL</li>
                 <li>Clustered Data Base</li>
                 <li>Data streaming</li>
                 <li>Micro batching</li>
@@ -126,12 +122,11 @@
           <section>
             <h2>Front app evolutions</h2>
             <div class="fragment container-grid-2">
-              <ul class="container-grid-text">
-                <li>Your domain model is cloned using two different languages.<br/></li>
-                <br/>
-                <li>Governance of the domain model and change requests are difficult to implement.<br/></li>
-                <li>Development owners of the server and front application are different.<br/></li>
-                <li>UI Spaghetti code.</li>
+              <ul>
+                <li class="emptyline">Your domain model is cloned using two different languages.<br/></li>
+                <li class="emptyline">Governance of the domain model and change requests are difficult to implement.<br/></li>
+                <li class="emptyline">Development owners of the server and front application are different.<br/></li>
+                <li class="emptyline">UI Spaghetti code.</li>
               </ul>
               <div>
                 <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_2.png">
@@ -141,15 +136,11 @@
           <section>
             <h2>Front storage evolutions</h2>
             <div class="fragment container-grid-2">
-              <ul class="container-grid-text">
-                <br/>
-                <li>Mapping entities in Cassandra is painful.</li>
-                <br/>
-                <li>Don’t migrate your Entity/Relation model using cut &amp; paste!</li>
-                <br/>
-                <li>You should probably flat your domain model to fit a single row.</li>
-                <br/>
-                <li>Infinite storage.</li>
+              <ul>
+                <li class="emptyline">Mapping entities in Cassandra is painful.</li>
+                <li class="emptyline">Don’t migrate your Entity/Relation model using cut &amp; paste!</li>
+                <li class="emptyline">You should probably flat your domain model to fit a single row.</li>
+                <li class="emptyline">Infinite storage.</li>
               </ul>
               <div>
                 <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_3.png">
@@ -159,19 +150,14 @@
           <section>
             <h2>BackOffice evolutions</h2>
             <div class="fragment container-grid-2">
-              <ul class="container-grid-text">
-                <br/>
-                <li>A lot of rework to implement.</li>
-                <br/>
-                <li>Spark and ML-lib love data vectors.</li>
-                <br/>
-                <li>Spark read raw data, aggregate, write them in microbatches.</li>
-                <br/>
-                <li>No more (very long) nightly batches.</li>
-                <br/>
-                <li>Full history is available for custom computations.</li>
+              <ul class="container-grid-40p">
+                <li class="emptyline">A lot of rework to implement.</li>
+                <li class="emptyline">Spark and ML-lib love data vectors.</li>
+                <li class="emptyline">Spark read raw data, aggregate, write them in microbatches.</li>
+                <li class="emptyline">No more (very long) nightly batches.</li>
+                <li class="emptyline">Full history is available for custom computations.</li>
               </ul>
-              <div>
+              <div class="container-grid-60p">
                 <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_4.png">
               </div>
             </div>
@@ -209,12 +195,15 @@
 
           <section>
             <h2>From domain model to key-value model</h2>
-            <p></p>
+            <p></p> 
             <ul>
-              <li class="fragment">Step 1 : one Enumeration for all keys</li><br/>
-              <li class="fragment">Step 2 : annotate your domain model</li><br/>
-              <li class="fragment">Step 3 : generate the key value model</li>
+              <li class="fragment emptyline">Step 1 : create one Enumeration with all keys</li>
+              <li class="fragment emptyline">Step 2 : annotate your domain model</li>
+              <li class="fragment emptyline">Step 3 : generate the key value model</li>
             </ul>
+          </section>
+          <section>
+            <h2>Let's see the domain model &amp; the key-value model</h2>
           </section>
 
           <section>
@@ -223,9 +212,8 @@
               <ul>
                 <li>one literal for each key</li>
                 <li>position (optional) : used when collections are denormalized </li>
-                <li>tag (optional) : used to add meta-information</li>
+                <li class="emptyline">tag (optional) : used to add meta-information</li>
               </ul>
-              <p></p>
               <img class=width="75%" src="png/org_modelmap_migration_step_1_1.png">
             </div>
           </section>
@@ -233,25 +221,22 @@
             <h2>Step 2 : one Annotation to annotate the domain</h2>
             <ul class="fragment">
               <li>one method to retrieve the FieldId</li>
-              <li>one method to retrieve the Constraint</li>
+              <li class="emptyline">one method to retrieve the Constraint</li>
             </ul>
-              <p></p>
             <img class="fragment" width="75%" src="png/org_modelmap_migration_step_2.png">
           </section> 
           <section>
             <h2>Step 3 : annotate your domain model</h2>
             <ul class="fragment">
               <li>attribute, getter or setter can be annotated</li>
-              <li>getter and setter must follow Java naming conventions</li>
+              <li class="emptyline">getter and setter must follow Java naming conventions</li>
             </ul>
-              <p></p>
             <img class="fragment" width="100%" src="png/org_modelmap_migration_step_3.png">
           </section>
           <section>
             <h2>Step 4 : generate the key value model</h2>
             <img class="fragment" width="100%" src="png/org_modelmap_migration_step_4.png">
           </section>
-
 
           <section>
             <h2>User model</h2>
@@ -325,8 +310,7 @@
               <ul>
                 <li>Each key must have a unique path to retrieve its value</li>
                 <li>How to retrieve the right value for each field?</li>
-                <li>getAccount().getId()? getUser().getId()?</li>
-                <br/>
+                <li class="emptyline">getAccount().getId()? getUser().getId()?</li>
               </ul>
               <img width="80%" src="png/org_modelmap_userid_accountid_code_1.png">
             </div>
@@ -341,8 +325,7 @@
             <div class="fragment">
               <ul>
                 <li>the code generator only use the path with the specified getter</li>
-                <li>each field is now mapped correctly</li>
-                <br/>
+                <li class="emptyline">each field is now mapped correctly</li>
               </ul>
               <img width="100%" src="png/org_modelmap_userid_accountid_code_3.png">
             </div>
@@ -371,7 +354,7 @@
           <section>
             <h2>Generation output (2/3)</h2>
             <div class="fragment">
-              <p>An Enumeration containing metadate : type, generics type</p>
+              <p class="emptyline">An Enumeration containing metadate : type, generics type</p>
               <p></p>
               <img width="50%" src="png/org_modelmap_maven_codegen_4_1.png">
             </div>
@@ -394,8 +377,7 @@
             <ul class="fragment">
               <li>FieldModel#stream() : a stream of key/value pair (FieldId/Object)</li>
               <li>FieldModel#parallelStream() : parallel stream and better performance</li>
-              <li>Easy use a filter/map/reduce operations on a domain model</li>
-              <br/>
+              <li class="emptyline">Easy use a filter/map/reduce operations on a domain model</li>
             </ul>
             <p class="fragment">Could you write a domain model diff tool now ?</p>
           </section>
@@ -403,14 +385,11 @@
             <h2>Where we use it at LesFurets.com</h2>
             <ul class="fragment">
               <li>Simple UI binding by replacing JSON model by a Dictionary (80% less code)</li>
-              <li>Use JSON Dictionary for client/server RPC</li>
-              <br/>
+              <li class="emptyline">Use JSON Dictionary for client/server RPC</li>
               <li>Batch and ETL with an email provider (90% less code)</li>
-              <li>Persistence in cassandra (from scratch with 200 lines of code for a whole model)</li>
-              <br/>
+              <li class="emptyline">Persistence in cassandra (from scratch with 200 lines of code for a whole model)</li>
               <li>Injecting user data in selenium (40% less code)</li>
-              <li>Mocking our domain model in thousand of unit tests</li>
-              <br/>
+              <li class="emptyline">Mocking our domain model in thousand of unit tests</li>
             </ul>
             <p class="fragment">... everything in iterative fashion during the past 2 years.</p>
           </section>
@@ -426,12 +405,10 @@
         <section>
           <section>
             <h2>Model-Map available on Github</h2>
-            <ul>
-              <li>http://github.com/lesfurets/model-map</li>
-              <li>Framework and examples</li>
-            </ul>
             <p></p>
             <ul>
+              <li>http://github.com/lesfurets/model-map</li>
+              <li class="emptyline">Framework and examples</li>
               <li>Apache Licence</li>
               <li>Try it and contribute !</li>
             </ul>

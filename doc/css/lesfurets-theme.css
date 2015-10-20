@@ -46,6 +46,10 @@ body {
  * HEADERS
  *********************************************/
 
+.reveal h1 {
+  font-size: 150%;
+}
+
 .reveal h1,
 .reveal h2,
 .reveal h3,
@@ -109,6 +113,10 @@ body {
   padding: 5px;
 }
 
+.reveal li.emptyline {
+  padding: 5px 5px 40px 5px;
+}
+
 .reveal ul {
   list-style-type: disc;
   display: inline-block;
@@ -130,8 +138,18 @@ body {
     width: 50%;
 }
 
-.container-grid-text {
-  text-align: left;
+.container-grid-2 > ul {
+    padding-top: 15px;
+}
+
+.container-grid-40p {
+    flex: 0 0 auto;
+    width: 40%;
+}
+
+.container-grid-60p {
+    flex: 0 0 auto;
+    width: 60%;
 }
 
 
