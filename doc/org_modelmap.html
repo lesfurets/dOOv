@@ -31,10 +31,10 @@
 
         <section>
           <h1>DomainModel.stream()</h1>
-          <h2><a href="http://soft-shake.ch/2015/en/" target="_blank"><img class="logo" width="50%" src="png/logo_softshake.png"></a></h2>
+          <h2><img class="logo herve-francois" width="50%" src="png/lf_com_herve_francois.png"></a></h2>
           <p>Gilles  DI GUGLIELMO - Julien BAUDRY</p>
           <p>
-            <a href="https://github.com/lesfurets">https://github.com/jubaudry/model-map</a>
+            <a href="https://github.com/lesfurets">https://github.com/lesfurets/model-map</a>
           </p>
         </section>
 
@@ -62,30 +62,30 @@
             </div>
           </section>
           <section>
-            <img class="logo" width="70%" src="png/lf_com_home.png">
+            <img width="70%" src="png/lf_com_home.png">
           </section>
           <section>
-            <img class="logo" width="70%" src="png/lf_com_mrh_journey.png">
+            <img width="70%" src="png/lf_com_mrh_journey.png">
           </section>
           <section>
-            <img class="logo" width="50%" src="png/logo_lesfurets.png">
+            <img width="50%" src="png/logo_lesfurets.png">
             <p></p>
             <ul class="fragment">
               <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
-              <li>1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
-              <br/>
+              <li>1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests<br/></li>
+              
               <li>22 Developers, 2 DevOps, 3 Architects</li>
-              <li>10+ production servers</li>
-              <br/>
+              <li>10+ production servers<br/></li>
+              
               <li>1 release per day</li>
-              <li>7 years of code history</li>
-              <br/>
+              <li>7 years of code history<br/></li>
+           
               <li>2.5M quotes/year, 31% of market share</li>
             </ul>
           </section>
           <section>
             <h2>Domain Model, what do you mean ?</h2>
-            <img class="logo" width="100%" src="png/lf_domain_model.png">
+            <img width="100%" src="png/lf_domain_model.png">
           </section>
         </section>
         <section>
@@ -127,13 +127,10 @@
             <h2>Front app evolutions</h2>
             <div class="fragment container-grid-2">
               <ul class="container-grid-text">
+                <li>Your domain model is cloned using two different languages.<br/></li>
                 <br/>
-                <li>Your domain model is cloned using two different languages.</li>
-                <br/>
-                <li>Governance of the domain model and change requests are difficult to implement.</li>
-                <br/>
-                <li>Development owners of the server and front application are different.</li>
-                <br/>
+                <li>Governance of the domain model and change requests are difficult to implement.<br/></li>
+                <li>Development owners of the server and front application are different.<br/></li>
                 <li>UI Spaghetti code.</li>
               </ul>
               <div>
@@ -407,9 +404,11 @@
             <ul class="fragment">
               <li>Simple UI binding by replacing JSON model by a Dictionary (80% less code)</li>
               <li>Use JSON Dictionary for client/server RPC</li>
+              <br/>
               <li>Batch and ETL with an email provider (90% less code)</li>
-              <li>Injecting user data in selenium (40% less code)</li>
               <li>Persistence in cassandra (from scratch with 200 lines of code for a whole model)</li>
+              <br/>
+              <li>Injecting user data in selenium (40% less code)</li>
               <li>Mocking our domain model in thousand of unit tests</li>
               <br/>
             </ul>
