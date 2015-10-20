@@ -83,6 +83,7 @@ body {
  *********************************************/
 .reveal blockquote {
   padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /*********************************************
@@ -95,50 +96,44 @@ body {
   padding: 25px 0;
 }
 
+.reveal .centered {
+  margin-left:auto;
+  margin-right:auto;
+}
+
 /*********************************************
  * LISTS
  *********************************************/
 
 .reveal li {
-  color: #eeeeee;
   padding: 5px;
 }
 
 .reveal ul {
-  list-style-type: none;
-}
-
-/*********************************************
- * 2 COLUMNS LAYOUT
- *********************************************/
-
-.reveal .columns {
-  padding-top: 5px;
-}
-
-.reveal .column-left-50,
-.reveal .column-left-35,
-.reveal .column-right-50,
-.reveal .column-right-65 {
-  float: left;
+  list-style-type: disc;
+  display: inline-block;
   text-align: left;
 }
 
-.reveal .column-left-50 {
-  width: 50%;
+/*********************************************
+ * Flex box layout
+ *********************************************/
+
+.container-grid-2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-.reveal .column-left-35 {
-  width: 35%;
+.container-grid-2 > * {
+    flex: 0 0 auto;
+    width: 50%;
 }
 
-.reveal .column-right-50 {
-  width: 50%;
+.container-grid-text {
+  text-align: left;
 }
 
-.reveal .column-right-65 {
-  width: 65%;
-}
 
 /*********************************************
  * LINKS
@@ -266,7 +261,6 @@ body {
   background-color: white;
   bottom: 0;
   left: 0;
-  padding: 10px;
   position: absolute;
   width: 100%;
   z-index: 1;
@@ -278,9 +272,12 @@ body {
 .footer .logo-lesfurets {
   height: 40px;
 }
+.footer .logo-softshake {
+  padding: 10px;
+}
 .footer .logo-lesfurets {
   float: right;
-  padding-right: 25px;
+  padding: 10px;
 }
 .footer a {
   font-family: Helvetica, Arial, sans-serif;

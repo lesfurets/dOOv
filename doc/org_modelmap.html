@@ -45,12 +45,14 @@
           <section>
             <div class="fragment">
               <h2>@gdigugli – Gilles Di Guglielmo</h2>
+              <div class="centered">
               <ul>
                 <li>Designer of sweet cooked software since 1999</li>
                 <li>Software Architect at LesFurets.com</li>
               </ul>
+              <div>
             </div>
-            <p></p>
+            <br/><br/>
             <div class="fragment">
               <h2>@jubaudry – Julien Baudry</h2>
               <ul>
@@ -70,11 +72,14 @@
             <p></p>
             <ul class="fragment">
               <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
-              <li>22 Developers, 2 DevOps, 3 Architects</li>
               <li>1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
-              <li>7 years of code history</li>
-              <li>1 release per day</li>
+              <br/>
+              <li>22 Developers, 2 DevOps, 3 Architects</li>
               <li>10+ production servers</li>
+              <br/>
+              <li>1 release per day</li>
+              <li>7 years of code history</li>
+              <br/>
               <li>2.5M quotes/year, 31% of market share</li>
             </ul>
           </section>
@@ -89,20 +94,19 @@
           </section>
           <section>
             <h2>Architecture Buzz</h2>
-            <div class="fragment columns">
-              <ul class="column-left-50">
-                <li></li>
+            <div class="fragment container-grid-2">
+              <ul class="container-grid-text">
+                <br/>
                 <li>Copy on write</li>
                 <li>Immutable data</li>
                 <li>noSQL</li>
                 <li>Clustered Data Base</li>
-                <li>CQRS <font size="-0.5">Command Query Responsibility Segregation</font></li>
                 <li>Data streaming</li>
                 <li>Micro batching</li>
                 <li>Lambda architecture</li>
                 <li>Data on demand</li>
               </ul>
-              <div class="column-right-50">
+              <div>
                 <img data-transition="fade" width="100%" src="png/buzz.png">
               </div>
             </div>
@@ -121,56 +125,56 @@
           </section>
           <section>
             <h2>Front app evolutions</h2>
-            <div class="fragment columns">
-              <ul class="column-left-50">
-                <li></li>
+            <div class="fragment container-grid-2">
+              <ul class="container-grid-text">
+                <br/>
                 <li>Your domain model is cloned using two different languages.</li>
-                <li></li>
+                <br/>
                 <li>Governance of the domain model and change requests are difficult to implement.</li>
-                <li></li>
+                <br/>
                 <li>Development owners of the server and front application are different.</li>
-                <li></li>
+                <br/>
                 <li>UI Spaghetti code.</li>
               </ul>
-              <div class="column-right-50">
+              <div>
                 <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_2.png">
               </div>
             </div>
           </section>
           <section>
             <h2>Front storage evolutions</h2>
-            <div class="fragment columns">
-              <ul class="column-left-50">
-                <li></li>
+            <div class="fragment container-grid-2">
+              <ul class="container-grid-text">
+                <br/>
                 <li>Mapping entities in Cassandra is painful.</li>
-                <li></li>
+                <br/>
                 <li>Don’t migrate your Entity/Relation model using cut &amp; paste!</li>
-                <li></li>
+                <br/>
                 <li>You should probably flat your domain model to fit a single row.</li>
-                <li></li>
+                <br/>
                 <li>Infinite storage.</li>
               </ul>
-              <div class="column-right-50">
+              <div>
                 <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_3.png">
               </div>
             </div>
           </section>
           <section>
             <h2>BackOffice evolutions</h2>
-            <div class="fragment columns">
-              <ul class="column-left-35">
-                <li></li>
+            <div class="fragment container-grid-2">
+              <ul class="container-grid-text">
+                <br/>
                 <li>A lot of rework to implement.</li>
-                <li></li>
+                <br/>
                 <li>Spark and ML-lib love data vectors.</li>
-                <li></li>
+                <br/>
                 <li>Spark read raw data, aggregate, write them in microbatches.</li>
-                <li></li>
+                <br/>
                 <li>No more (very long) nightly batches.</li>
-                <li></li>
+                <br/>
                 <li>Full history is available for custom computations.</li>
               </ul>
-              <div class="column-right-65">
+              <div>
                 <img data-transition="fade" width="100%" src="png/org_modelmap_archi_evol_4.png">
               </div>
             </div>
@@ -210,10 +214,8 @@
             <h2>From domain model to key-value model</h2>
             <p></p>
             <ul>
-              <li class="fragment">Step 1 : one Enumeration for all keys</li>
-              <li></li>
-              <li class="fragment">Step 2 : annotate your domain model</li>
-              <li></li>
+              <li class="fragment">Step 1 : one Enumeration for all keys</li><br/>
+              <li class="fragment">Step 2 : annotate your domain model</li><br/>
               <li class="fragment">Step 3 : generate the key value model</li>
             </ul>
           </section>
@@ -313,10 +315,12 @@
           <section data-transition="fade">
             <h2>Account &amp; User ID</h2>
             <img width="100%" src="png/org_modelmap_userid_mapping.png">
+            <blockquote>g().getId()</blockquote>
           </section>
           <section data-transition="fade">
             <h2>Account &amp; User ID</h2>
             <img width="100%" src="png/org_modelmap_accountid_mapping.png">
+            <blockquote>getAccount().getId()</blockquote>
           </section>
           <section>
             <h2>Many key for a single attribute</h2>
@@ -324,9 +328,9 @@
               <ul>
                 <li>Each key must have a unique path to retrieve its value</li>
                 <li>How to retrieve the right value for each field?</li>
-                <li>getAccount().getId() or getUser().getId()?</li>
+                <li>getAccount().getId()? getUser().getId()?</li>
+                <br/>
               </ul>
-              <p></p>
               <img width="80%" src="png/org_modelmap_userid_accountid_code_1.png">
             </div>
           </section>  
@@ -341,6 +345,7 @@
               <ul>
                 <li>the code generator only use the path with the specified getter</li>
                 <li>each field is now mapped correctly</li>
+                <br/>
               </ul>
               <img width="100%" src="png/org_modelmap_userid_accountid_code_3.png">
             </div>
@@ -369,9 +374,9 @@
           <section>
             <h2>Generation output (2/3)</h2>
             <div class="fragment">
-              <p>An Enumeration containing field, type, generics type (optional)</p>
+              <p>An Enumeration containing metadate : type, generics type</p>
               <p></p>
-              <img width="60%" src="png/org_modelmap_maven_codegen_4_1.png">
+              <img width="50%" src="png/org_modelmap_maven_codegen_4_1.png">
             </div>
           </section>
           <section>
@@ -389,35 +394,30 @@
           </section>
           <section>
             <h2>You can use Java 8 stream on your Domain Model !</h2>
-            <ul>
+            <ul class="fragment">
               <li>FieldModel#stream() : a stream of key/value pair (FieldId/Object)</li>
               <li>FieldModel#parallelStream() : parallel stream and better performance</li>
               <li>Easy use a filter/map/reduce operations on a domain model</li>
+              <br/>
             </ul>
-            <p></p>
-            <h2>Let's try it</h2>
-            <ul>
-              <li>Could you write a domain model diff tool now ?</li>
-            </ul>
+            <p class="fragment">Could you write a domain model diff tool now ?</p>
           </section>
           <section>
             <h2>Where we use it at LesFurets.com</h2>
-            <ul>
+            <ul class="fragment">
               <li>Simple UI binding by replacing JSON model by a Dictionary (80% less code)</li>
               <li>Use JSON Dictionary for client/server RPC</li>
               <li>Batch and ETL with an email provider (90% less code)</li>
               <li>Injecting user data in selenium (40% less code)</li>
               <li>Persistence in cassandra (from scratch with 200 lines of code for a whole model)</li>
               <li>Mocking our domain model in thousand of unit tests</li>
+              <br/>
             </ul>
-            <p></p>
-            <ul>
-              <li>... everything in iterative fashion during the past 2 years.</li>
-            </ul>
+            <p class="fragment">... everything in iterative fashion during the past 2 years.</p>
           </section>
           <section>
             <h2>Future and ideas</h2>
-            <ul>
+            <ul class="fragment">
                <li>Push as OSS our Cassandra serialisation code</li>
                <li>Push some Spark samples</li>
                <li>JEP 276: Dynamic Linking of Language-Defined Object Models</li>
@@ -425,9 +425,6 @@
           </section>
     	</section>
         <section>
-          <section>
-            <h2>Questions / Answers</h2>
-          </section>
           <section>
             <h2>Model-Map available on Github</h2>
             <ul>
@@ -478,6 +475,8 @@
         ]
       });
 
+      // navigation with mouse click
+      /*
       window.addEventListener("mousedown", handleClick, false);
       window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
 
@@ -486,6 +485,7 @@
         if(e.button === 0) Reveal.next(); 
         if(e.button === 2) Reveal.prev(); 
       }
+      */
     </script>
   </body>
 </html>
