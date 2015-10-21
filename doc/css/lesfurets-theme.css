@@ -41,6 +41,18 @@ body {
   color: white;
 }
 
+/*********************************************
+ * OPENING SLIDE
+ *********************************************/
+.reveal .opening {
+  background-color: white;
+  background-image: none;
+}
+
+.reveal .opening-title {
+  color: black;
+  text-transform: none;
+}
 
 /*********************************************
  * HEADERS
@@ -117,7 +129,7 @@ body {
   padding: 5px 5px 40px 5px;
 }
 
-.reveal ul {
+.reveal ul {ffooter
   list-style-type: disc;
   display: inline-block;
   text-align: left;
@@ -295,7 +307,7 @@ body {
 }
 .footer .logo-softshake,
 .footer .logo-lesfurets {
-  height: 40px;
+  height: 80px;
 }
 .footer .logo-softshake {
   padding: 10px;
