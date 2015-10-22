@@ -52,6 +52,7 @@ body {
 .reveal .opening-title {
   color: black;
   text-transform: none;
+  font-size: 250%;
 }
 
 /*********************************************
@@ -325,4 +326,11 @@ body {
 }
 .footer a:last-child {
   margin-right: 0;
+}
+
+.footer .opening-logo-softshake {
+  width: 100%;
+}
+.footer .openinglogo-softshake {
+  padding: 10px;
 }
