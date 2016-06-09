@@ -236,6 +236,16 @@
             <h2>ETL C* to SQL database : round #3</h2>
             <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_cassandra_6.png">
           </section>
+          <section>
+            <h2>Summary</h2>
+            <ul>
+              <li>Introducing timestamp is mandatory to achieve the C* full migration</li>
+              <li>Auto IDs could be corrupted in recovery & replication cases</li>
+              <li>Timestamp are more reliable to synchronize asynchronously two databases</li>
+              <li>Timestamp provide millisecond precision instead of minutes for REF_TIMES_ID</li>
+              <li>SQL queries using REF_TIMES_ID are really painful to read & write</li>
+            </ul>
+          </section>
         </section>
        <section>
           <section>
