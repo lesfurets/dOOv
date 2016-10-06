@@ -182,187 +182,33 @@
 
         <section>
           <section>
-            <h2>A bit of decoration</h2>
+            <h2>A bit of livecoding</h2>
           </section>
           <section>
-            <h2>Let's start with this model...</h2>
-            <img width="100%" src="png/org_modelmap_1.png">
+            <h2>Live code 1 : Introduction to key value API</h2>
+            <img data-transition="fade" width="60%" src="png/live_code_1.png">
           </section>
           <section>
-            <h2>... and transform it to a key-value model</h2>
-            <img width="100%" src="png/org_modelmap_2.png">
-          </section>
-          
-          <section data-transition="fade">
-            <h2>User model</h2>
-            <img width="100%" src="png/org_modelmap_user_mapping_1.png">
-          </section>
-          <section data-transition="fade">
-            <h2>User model</h2>
-            <img width="100%" src="png/org_modelmap_user_mapping_2.png">
-          </section>
-          <section data-transition="fade">
-            <h2>User model</h2>
-            <img width="100%" src="png/org_modelmap_user_mapping_5.png">
-          </section>
-
-          <section data-transition="fade">
-            <h2>Account model</h2>
-            <img width="100%" src="png/org_modelmap_account_mapping_0.png">
-          </section>
-          <section data-transition="fade">
-            <h2>Account model</h2>
-            <img width="100%" src="png/org_modelmap_account_mapping_1.png">
-          </section>
-          <section data-transition="fade">
-            <h2>Account model</h2>
-            <img width="100%" src="png/org_modelmap_account_mapping_2.png">
-          </section>
-          <section data-transition="fade">
-            <h2>Account model</h2>
-            <img width="100%" src="png/org_modelmap_account_mapping_4.png">
-          </section>
-          <section data-transition="fade">
-            <h2>Account model</h2>
-            <img width="100%" src="png/org_modelmap_account_mapping_5.png">
-          </section>
-
-          <section>
-            <h2>From domain model to key-value model</h2>
-            <p></p> 
-            <ul>
-              <li class="fragment emptyline">Step 1 : create one Enumeration with all keys</li>
-              <li class="fragment emptyline">Step 2 : annotate your domain model</li>
-              <li class="fragment emptyline">Step 3 : generate the key value model</li>
-            </ul>
+            <h2>Live code 2 : Mixing with java.util.Map</h2>
+            <img data-transition="fade" width="80%" src="png/live_code_2.png">
           </section>
           <section>
-            <h2>Let's see the domain model &amp; the key-value model</h2>
-          </section>
-
-          <section>
-            <h2>Step 1 : one Enumeration with all keys</h2>
-            <div class="fragment">
-              <ul>
-                <li>one literal for each key</li>
-                <li>position (optional) : used when collections are denormalized </li>
-                <li class="emptyline">tag (optional) : used to add meta-information</li>
-              </ul>
-              <img class=width="75%" src="png/org_modelmap_migration_step_1_1.png">
-            </div>
+            <h2>Live code 3 : Tag filtering</h2>
+            <img data-transition="fade" width="80%" src="png/live_code_3.png">
           </section>
           <section>
-            <h2>Step 2 : one Annotation to annotate the domain</h2>
-            <ul class="fragment">
-              <li>one method to retrieve the FieldId</li>
-              <li class="emptyline">one method to retrieve the Constraint</li>
-            </ul>
-            <img class="fragment" width="75%" src="png/org_modelmap_migration_step_2.png">
-          </section> 
-          <section>
-            <h2>Step 3 : annotate your domain model</h2>
-            <ul class="fragment">
-              <li>attribute, getter or setter can be annotated</li>
-              <li class="emptyline">getter and setter must follow Java naming conventions</li>
-            </ul>
-            <img class="fragment" width="100%" src="png/org_modelmap_migration_step_3.png">
+            <h2>Live code 4 : Generate CQL</h2>
+            <img data-transition="fade" width="80%" src="png/live_code_4.png">
           </section>
           <section>
-            <h2>Step 4 : generate the key value model</h2>
-            <img class="fragment" width="100%" src="png/org_modelmap_migration_step_4.png">
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>... Just one little issue.</h2>
-          </section>
-          <section data-transition="fade">
-            <h2>Account &amp; User ID</h2>
-            <img width="100%" src="png/org_modelmap_userid_mapping.png">
-            <blockquote>sampleModel.getUser().getId()</blockquote>
-          </section>
-          <section data-transition="fade">
-            <h2>Account &amp; User ID</h2>
-            <img width="100%" src="png/org_modelmap_accountid_mapping.png">
-            <blockquote>sampleModel.getAccount().getId()</blockquote>
-          </section>
-          <section>
-            <h2>Many key for a single attribute</h2>
-            <div class="fragment">
-              <ul>
-                <li>Each key must have a unique path to retrieve its value</li>
-                <li>How to retrieve the right value for each field?</li>
-                <li class="emptyline">getAccount().getId()? getUser().getId()?</li>
-              </ul>
-              <img width="80%" src="png/org_modelmap_userid_accountid_code_1.png">
-            </div>
-          </section>  
-          <section>
-            <h2>Solution : constraints</h2>
-            <p>One for each field, specify which getter to use</p>
-            <img class="fragment" width="80%" src="png/org_modelmap_userid_accountid_code_2.png">
-          </section>  
-          <section>
-            <h2>Add a constraint for each annotation</h2>
-            <div class="fragment">
-              <ul>
-                <li>the code generator only use the path with the specified getter</li>
-                <li class="emptyline">each field is now mapped correctly</li>
-              </ul>
-              <img width="100%" src="png/org_modelmap_userid_accountid_code_3.png">
-            </div>
-          </section>  
-        </section>
-
-        <section>
-          <section>
-            <h2>Let the magic begin ...</h2>
-          </section>
-          <section>
-            <h2>Code generator under the hood</h2>
-            <p></p> 
-            <ul class="fragment">
-              <li>Execution is done using a maven plugin</li>
-              <li class="emptyline">Annotated properties are processed using Java Reflection</li>
-              <li>Generate handwritten style code, easy to read</li>
-              <li>Enable JIT optimisations by combining lambdas and enumerations</li>
-              <li>Lightweight pattern, designed for performance</li>
-            </ul>
-          </section>
-          <section>
-            <h2>Generation output</h2>
-            <img class="fragment" src="png/org_modelmap_maven_codegen_3.png">
-          </section>
-          <section>
-            <h2>Generation output</h2>
-            <div class="fragment">
-              <p class="emptyline">An Enumeration containing metadate : type, generics type</p>
-              <p></p>
-              <img width="50%" src="png/org_modelmap_maven_codegen_4_1.png">
-            </div>
-          </section>
-          <section>
-            <h2>Generation output</h2>
-            <div class="fragment">
-              <p>a CSV containing each field, path, and value type</p>
-              <img width="100%" src="png/org_modelmap_maven_codegen_5.png">
-            </div>
+            <h2>Live code 5 : Diff two models</h2>
+            <img data-transition="fade" width="80%" src="png/live_code_5.png">
           </section>
         </section>
 
         <section>
           <section>
             <h2>Usages are unlimited</h2>
-          </section>
-          <section>
-            <h2>You can use Java 8 stream on your Domain Model !</h2>
-            <ul class="fragment">
-              <li>FieldModel#stream() : a stream of key/value pair (FieldId/Object)</li>
-              <li>FieldModel#parallelStream() : parallel stream and better performance</li>
-              <li class="emptyline">Easy use a filter/map/reduce operations on a domain model</li>
-            </ul>
-            <p class="fragment">Could you write a domain model diff tool now ?</p>
           </section>
           <section>
             <h2>Where we use it at LesFurets.com</h2>
