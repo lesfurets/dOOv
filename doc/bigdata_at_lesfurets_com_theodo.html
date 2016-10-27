@@ -174,16 +174,95 @@
             <h1>Moving the infrastrucure</h1>
           </section>
           <section>
+            <h2>Hosting at OVH</h2>
+            <img class="fragment" width="90%" src="png/lf_com_data_ovh.png">
+          </section>
+          <section>
             <h2>System to replace</h2>
             <img class="fragment" width="90%" src="png/infra_system_to_replace.png">
           </section>
           <section>
-            <h2>Existing MySQL setup</h2>
+            <h2>Previous MySQL setup</h2>
             <img class="fragment" width="50%" src="png/infra_mysql.png">
+          </section>
+          <section>
+            <h2>New Maria DB - Galera Cluster</h2>
+            <img class="fragment" width="50%" src="png/infra_mariadb_galera.png">
           </section>
           <section>
             <h2>Cassandra cluster setup</h2>
             <img class="fragment" width="100%" src="png/infra_cassandra.png">
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>ETL mandatory evolutions</h1>
+          </section>
+          <section>
+            <h2>[Old] ETL</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_update_2.png">
+          </section>
+          <section>
+            <h2>[Old] ETL : round #1</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_1.png">
+          </section>
+          <section>
+            <h2>[Old] ETL : round #1</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_2.png">
+          </section>
+          <section>
+            <h2>[Old] ETL : round #2</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_3.png">
+          </section>
+          <section>
+            <h2>[Old] ETL : round #2</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_4.png">
+          </section>
+          <section>
+            <h2>[Old] ETL : round #3</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_5.png">
+          </section>
+          <section>
+            <h2>[Old] ETL : round #3</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_6.png">
+          </section>
+          <section>
+            <h2>[New] ETL</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_update_3.png">
+          </section>
+          <section>
+            <h2>[New] ETL : round #1</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_cassandra_1.png">
+          </section>
+          <section>
+            <h2>[New] ETL : round #1</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_cassandra_2.png">
+          </section>
+          <section>
+            <h2>[New] ETL : round #2</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_cassandra_3.png">
+          </section>
+          <section>
+            <h2>[New] ETL : round #2</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_cassandra_4.png">
+          </section>
+          <section>
+            <h2>[New] ETL : round #3</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_cassandra_5.png">
+          </section>
+          <section>
+            <h2>[New] ETL : round #3</h2>
+            <img class="fragment" width="90%" src="png/etl/org_modelmap_etl_sync_cassandra_6.png">
+          </section>
+          <section>
+            <h2>Summary</h2>
+            <ul>
+              <li>Introducing timestamp is mandatory to achieve the C* full migration</li>
+              <li>Auto IDs could be corrupted in recovery & replication cases</li>
+              <li>Timestamp are more reliable to synchronize asynchronously two databases</li>
+              <li>Timestamp provide millisecond precision instead of minutes for REF_TIMES_ID</li>
+              <li>SQL queries using REF_TIMES_ID are really painful to read & write</li>
+            </ul>
           </section>
         </section>
        <section>
