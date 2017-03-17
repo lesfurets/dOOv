@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>lambda_architecture[at]lesfurets.com</title>
+    <meta name="description" content="lambda_architecture[at]lesfurets[dot]com">
+    <meta name="author" content="Gilles Di Guglielmo">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/meta-conf-theme.css" id="theme">
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+  </head>
+  <body>
+    <div class="footer">
+      <img class="logo-metaconf" src="png/logo_meta_conf_small.png">
+      <img class="logo-lesfurets" src="png/logo_meta_lesfurets_small.png">  
+    </div>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
+          <h1>Lambda_Architecture[at]LesFurets.com</h1>
+          <h2>The State of the Union</h2>
+        </section>
+        <section>
+          <section>
+            <h1>Welcome to the Furets !</h1>
+          </section>
+          <section>
+            <div class="fragment">
+              <h2>@gdigugli – Gilles Di Guglielmo</h2>
+              <ul>
+                <li>Designer of sweet cooked software since 1999</li>
+                <li>Software Architect at LesFurets.com</li>
+              </ul>
+            </div>
+            <br/><br/>
+            <div class="fragment">
+              <h2>@dubreuia – Alexandre Dubreuil</h2>
+              <ul>
+                <li>Full Stack Developer since 2010</li>
+                <li>Software Architect at LesFurets.com</li>
+              </ul>
+            </div>
+          </section>
+          <section>
+            <h2>Sept 2007 - Broker Desktop Application</h2>
+            <img width="100%" src="png/org_modelmap_history_1.png">
+          </section>
+          <section>
+            <img width="80%" src="png/org_modelmap_courtanet.png">
+          </section>
+          <section>
+            <h2>Jun 2009 - Broker Directory : Assuremieux.com</h2>
+            <img width="100%" src="png/org_modelmap_history_3.png">
+          </section>
+          <section>
+            <img width="90%" src="png/history/amx_0.7/home.png">
+          </section>
+          <section>
+            <img width="90%" src="png/history/amx_0.7/edm_auto.png">
+          </section>
+          <section>
+            <h2>Jan 2010 - Insurance Aggregator</h2>
+            <img width="100%" src="png/org_modelmap_history_4.png">
+          </section>
+          <section>
+            <h2>Apr 2012 - New brand : LesFurets.com</h2>
+            <img width="100%" src="png/org_modelmap_history_5.png">
+          </section>
+          <section>
+            <img width="90%" src="png/history/lf_2.2/home.png">
+          </section>
+          <section>
+            <h2>Sep 2012 - First TV advertising</h2>
+            <img width="100%" src="png/org_modelmap_history_6.png">
+          </section>
+          <section>
+            <h2>Dec 2015 - Market leader</h2>
+            <img width="100%" src="png/org_modelmap_history_7.png">
+          </section>
+          <section>
+            <img width="70%" src="png/lf_com_home.png">
+          </section>
+          <section>
+            <img width="70%" src="png/lf_com_mrh_journey.png">
+          </section>
+          <section>
+            <img width="70%" src="png/lf_com_car_price_sheet.png">
+          </section>
+          <section>
+            <img width="50%" src="png/logo_lesfurets.png">
+            <p></p>
+            <ul class="fragment">
+              <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
+              <li class="emptyline">1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
+        
+              <li>22 Developers, 2 DevOps, 4 Architects</li>
+              <li class="emptyline">19 production servers including Load balancers, Frontend, Backend, Databases, BI<br/></li>
+              
+              <li>1 release per day</li>
+              <li class="emptyline">8 years of code history<br/></li>
+
+              <li>3M quotes/year, 40% of market share, 4M of customers</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Growing fast !</h1>
+          </section>
+          <section>
+            <h2>Prevent disaster</h2>
+            <img width="90%" src="png/storage_backoffice_compact.png">
+          </section>
+          <section>
+            <h2>Risk and Capabilities</h2>
+            <img width="90%" src="png/raw_data_goals_1.png">
+          </section>
+          <section>
+            <h2>Business Objectives</h2>
+            <img width="90%" src="png/raw_data_goals_2.png">
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Introducing the lambda architecture</h1>
+          </section>
+          <section>
+            <h2>Lambda architecture - Nathan Marz</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_lambda_architecture.png">
+          </section>
+          <section>
+            <h2>Managing sales : old fashion</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/raw_sale_lambda_architecture_1.png">
+          </section>
+          <section>
+            <h2>Managing sales : understanding the sale lifecycle</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/raw_sale_lambda_architecture_2.png">
+          </section>
+          <section>
+            <h2>Managing sales : applying the lambda architecture</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/raw_sale_lambda_architecture_3.png">
+          </section>
+          <section>
+            <h2>Managing sales : applying the lambda architecture</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/raw_sale_lambda_architecture_4.png">
+          </section>
+          <section>
+            <h2>Managing sales : applying the lambda architecture</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/raw_sale_lambda_architecture_5.png">
+          </section>
+          <section>
+            <h2>Managing sales : applying the lambda architecture</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/raw_sale_lambda_architecture_6.png">
+          </section>
+          <section>
+            <h2>Managing sales : applying the lambda architecture</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/raw_sale_lambda_architecture_7.png">
+          </section>
+          <section>
+            <h2>Summary</h2>
+            <ul>
+              <li>Multiple channels of sales declaration</li>
+              <li>Enable full history rebuild</li>
+              <li>Enable to change the 'merge' algorithm</li>
+              <li>Enable to simulate algorithm changes on analytics</li>
+              <li>15 min delay between sales declarations and analytics</li>
+              <li>Error recovery only on raw sales</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Moving the architecture</h1>
+          </section>
+          <section>
+            <h2>Past architecture</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_1.png">
+          </section>
+          <section>
+            <h2>Our target architecture</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_3.png">
+          </section>
+          <section>
+            <h2>Current state</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_update_1.png">
+          </section>
+          <section>
+            <h2>On Demand Machine Learning</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_update_5.png">
+          </section>
+          <section>
+            <h2>Live Computation with Spark</h2>
+            <img class="fragment" data-transition="fade" width="100%" src="png/org_modelmap_archi_update_4.png">
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Moving the infrastrucure</h1>
+          </section>
+          <section>
+            <h2>Hosting at OVH</h2>
+            <img class="fragment" width="90%" src="png/lf_com_data_ovh.png">
+          </section>
+          <section>
+            <h2>Cassandra cluster setup</h2>
+            <img class="fragment" width="100%" src="png/infra_cassandra.png">
+          </section>
+        </section>
+       <section>
+          <section>
+            <h1>Enjoy LesFurets.com</h1>
+            <p></p>
+            <ul>
+              <li>http://www.lesfurets.com</li>
+              <li>Compare and buy !</li>
+            <ul>
+            <p></p>
+            </ul>
+              <li>http://github.com/lesfurets</li>
+              <li>Try and contribute !</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Thank You!</h2>
+            <img width="40%" src="png/logo_meta_conf_small.png">
+          </section>
+        </section>
+      </div> 
+    </div>
+    <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+    <script src="bower_components/reveal.js/js/reveal.js"></script>
+    <script>
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+        embedded: true,
+        mouseWheel: true,
+        viewDistance: 5,
+        
+        width: 1280,
+        height: 900,
+        margin: 0,
+
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+      // navigation with mouse click
+      
+      window.addEventListener("mousedown", handleClick, false);
+      window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+
+      function handleClick(e) {
+        e.preventDefault();
+        if(e.button === 0) Reveal.next(); 
+        if(e.button === 2) Reveal.prev(); 
+      }
+      
+    </script>
+  </body>
+</html>
