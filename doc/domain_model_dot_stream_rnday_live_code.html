@@ -117,7 +117,7 @@
   System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
 
   fieldModel.set(EMAIL, "lesfurets@gmail.com");
-  System.out.println(fieldModel.&lt;String&gt; get(EMAIL)); 
+  System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
               </code>
             </pre>
           </section>
@@ -130,14 +130,15 @@
   System.out.println(model.&lt;String&gt; get(EMAIL));
   model.stream().forEach(System.out::println);
 
-  Map&lt;FieldId, Object&gt; map = model.stream() //
+  Map&lt;FieldId, Object&gt; map = model.stream()
            .collect(toMap(Entry::getKey, Entry::getValue));
   System.out.println(map);
 
-  SampleModelWrapper newModel = map.entrySet().stream() //
+  SampleModelWrapper newModel = map.entrySet().stream()
            .collect(SampleModelWrapper.toFieldModel());
   newModel.stream().forEach(System.out::println);
-  System.out.println(newModel.getModel().getAccount().getEmail());
+  System.out.println(newModel.getModel()
+           .getAccount().getEmail());
               </code>
             </pre>
           </section>
@@ -147,12 +148,12 @@
               <code>
   FieldModel model = SampleModels.wrapper();
 
-  Map&lt;FieldId, Object&gt; map = model.stream() //
+  Map&lt;FieldId, Object&gt; map = model.stream()
           .collect(toMap(Entry::getKey, Entry::getValue));
 
-  SampleModelWrapper newModel = map.entrySet().stream() //
-          .filter(e -> e.getKey().hasTag(SampleTag.ACCOUNT)) //
-          .filter(e -> e.getKey().hasTag(SampleTag.USER)) //
+  SampleModelWrapper newModel = map.entrySet().stream()
+          .filter(e -> e.getKey().hasTag(SampleTag.ACCOUNT))
+          .filter(e -> e.getKey().hasTag(SampleTag.USER))
           .collect(SampleModelWrapper.toFieldModel());
 
   newModel.stream().forEach(System.out::println);
@@ -165,13 +166,13 @@
               <code>
   FieldModel model = SampleModels.wrapper();
 
-  Create create = SchemaBuilder.createTable("Field") //
-           .addClusteringColumn(LOGIN.name(), text()) //
+  Create create = SchemaBuilder.createTable("Field")
+           .addClusteringColumn(LOGIN.name(), text())
            .addPartitionKey("snapshot_id", timeuuid());
-  stream(model.getFieldInfos()).filter(f -> f.id() != LOGIN) //
-           .forEach(f -> //
+  stream(model.getFieldInfos()).filter(f -> f.id() != LOGIN)
+           .forEach(f ->
                create.addColumn(f.id().name(), cqlType(f)));
-  Create.Options createWithOptions = create.withOptions() //
+  Create.Options createWithOptions = create.withOptions()
            .clusteringOrder(LOGIN.name(), DESC);
 
   System.out.println(createWithOptions);
@@ -185,7 +186,7 @@
   FieldModel model = SampleModels.wrapper();
 
   Insert insert = QueryBuilder.insertInto("Field");
-  model.stream().forEach(e -> //
+  model.stream().forEach(e ->
            insert.value(e.getKey().name(), e.getValue()));
 
   System.out.println(insert.getQueryString(codecRegistry()));
@@ -203,14 +204,14 @@
   sample_2.set(FAVORITE_SITE_URL_1, "www.lesfurets.com");
   sample_2.set(EMAILS_PREFERENCES, Collections.emptyList());
 
-  Stream.concat(sample_1.stream().map(buildRight), //
-                sample_2.stream().map(buildLeft)) //
+  Stream.concat(sample_1.stream().map(buildRight),
+                sample_2.stream().map(buildLeft))
 
-          .collect(Collectors.toMap(Triple::getMiddle, // 
-                                    Function.identity(), //
-                                    merge)) //
+          .collect(Collectors.toMap(Triple::getMiddle,
+                                    Function.identity(),
+                                    merge))
 
-          .values().stream().filter(isNotSame) //
+          .values().stream().filter(isNotSame)
           .forEach(System.out::println);
               </code>
             </pre>
