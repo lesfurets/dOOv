@@ -335,3 +335,8 @@ body {
 .footer .openinglogo-softshake {
   padding: 10px;
 }
+
+.hljs.hljs.hljs {
+  text-align: left;
+  font-family: monospace;
+}

@@ -32,7 +32,7 @@
           <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
           <h1>DomainModel.stream()</h1>
           <p>
-            <a href="https://github.com/lesfurets">https://github.com/lesfurets/model-map</a>
+            <a href="https:github.com/lesfurets">https:github.com/lesfurets/model-map</a>
           </p>
         </section>
 
@@ -106,23 +106,115 @@
           </section>
           <section>
             <h2>Live code 1 : Introduction to key value API</h2>
-            <img data-transition="fade" width="60%" src="png/live_code_1.png">
+            <pre>
+              <code>
+  SampleModel model = new SampleModel();
+  model.setAccount(new Account());
+  model.getAccount().setEmail("livecode@gmail.com");
+  System.out.println(model.getAccount().getEmail());
+
+  FieldModel fieldModel = new SampleModelWrapper(model);
+  System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
+
+  fieldModel.set(EMAIL, "lesfurets@gmail.com");
+  System.out.println(fieldModel.&lt;String&gt; get(EMAIL)); 
+              </code>
+            </pre>
           </section>
           <section>
             <h2>Live code 2 : Mixing with java.util.Map</h2>
-            <img data-transition="fade" width="80%" src="png/live_code_2.png">
+            <pre>
+              <code>
+  FieldModel model = SampleModels.wrapper();
+
+  System.out.println(model.&lt;String&gt; get(EMAIL));
+  model.stream().forEach(System.out::println);
+
+  Map&lt;FieldId, Object&gt; map = model.stream() 
+           .collect(toMap(Entry::getKey, Entry::getValue));
+  System.out.println(map);
+
+  SampleModelWrapper newModel = map.entrySet().stream() 
+           .collect(SampleModelWrapper.toFieldModel());
+  newModel.stream().forEach(System.out::println);
+  System.out.println(newModel.getModel()
+           .getAccount().getEmail());
+              </code>
+            </pre>
           </section>
           <section>
             <h2>Live code 3 : Tag filtering</h2>
-            <img data-transition="fade" width="80%" src="png/live_code_3.png">
+            <pre>
+              <code>
+  FieldModel model = SampleModels.wrapper();
+
+  Map&lt;FieldId, Object&gt; map = model.stream() 
+          .collect(toMap(Entry::getKey, Entry::getValue));
+
+  SampleModelWrapper newModel = map.entrySet().stream() 
+          .filter(e -> e.getKey().hasTag(SampleTag.ACCOUNT)) 
+          .filter(e -> e.getKey().hasTag(SampleTag.USER)) 
+          .collect(SampleModelWrapper.toFieldModel());
+
+  newModel.stream().forEach(System.out::println);
+              </code>
+            </pre>
           </section>
           <section>
-            <h2>Live code 4 : Generate CQL</h2>
-            <img data-transition="fade" width="80%" src="png/live_code_4.png">
+            <h2>Live code 4 : Generate CQL - Create</h2>
+            <pre>
+              <code>
+  FieldModel model = SampleModels.wrapper();
+
+  Create create = SchemaBuilder.createTable("Field") 
+           .addClusteringColumn(LOGIN.name(), text()) 
+           .addPartitionKey("snapshot_id", timeuuid());
+  stream(model.getFieldInfos()).filter(f -> f.id() != LOGIN) 
+           .forEach(f -> 
+               create.addColumn(f.id().name(), cqlType(f)));
+  Create.Options createWithOptions = create.withOptions() 
+           .clusteringOrder(LOGIN.name(), DESC);
+
+  System.out.println(createWithOptions);
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h2>Live code 4 : Generate CQL - Insert</h2>
+            <pre>
+              <code>
+  FieldModel model = SampleModels.wrapper();
+
+  Insert insert = QueryBuilder.insertInto("Field");
+  model.stream().forEach(e -> 
+           insert.value(e.getKey().name(), e.getValue()));
+
+  System.out.println(insert.getQueryString(codecRegistry()));
+              </code>
+            </pre>
           </section>
           <section>
             <h2>Live code 5 : Diff two models</h2>
-            <img data-transition="fade" width="80%" src="png/live_code_5.png">
+            <pre>
+              <code>
+  FieldModel sample_1 = SampleModels.wrapper();
+  FieldModel sample_2 = SampleModels.wrapper();
+
+  sample_1.set(FAVORITE_SITE_NAME_3, null);
+  sample_2.set(FAVORITE_SITE_URL_1, "www.lesfurets.com");
+  sample_2.set(EMAILS_PREFERENCES, Collections.emptyList());
+
+  Stream.concat(sample_1.stream().map(buildRight), 
+                sample_2.stream().map(buildLeft)) 
+
+          .collect(Collectors.toMap(Triple::getMiddle,  
+                                    Function.identity(), 
+                                    merge)) 
+
+          .values().stream().filter(isNotSame) 
+          .forEach(System.out::println);
+              </code>
+            </pre>
           </section>
         </section>
 
@@ -140,7 +232,7 @@
             <h2>Model-Map available on Github</h2>
             <p></p>
             <ul>
-              <li>http://github.com/lesfurets/model-map</li>
+              <li>http:github.com/lesfurets/model-map</li>
               <li class="emptyline">Framework and examples</li>
               <li>Apache Licence</li>
               <li>Try it and contribute !</li>
@@ -156,8 +248,8 @@
     <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
     <script src="bower_components/reveal.js/js/reveal.js"></script>
     <script>
-      // Full list of configuration options available here:
-      // https://github.com/hakimel/reveal.js#configuration
+       Full list of configuration options available here:
+       https:github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
         controls: false,
         progress: true,
@@ -171,9 +263,9 @@
         height: 900,
         margin: 0,
 
-        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+        transition: Reveal.getQueryHash().transition || 'linear',  default/cube/page/concave/zoom/linear/fade/none
 
-        // Optional libraries used to extend on reveal.js
+         Optional libraries used to extend on reveal.js
         dependencies: [
           { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
@@ -184,7 +276,7 @@
         ]
       });
 
-      // navigation with mouse click
+       navigation with mouse click
 
       window.addEventListener("mousedown", handleClick, false);
       window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
