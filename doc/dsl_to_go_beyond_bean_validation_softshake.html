@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DSL.using(java).toGoBeyond(BeanValidation).at(SoftShake.eq(ch));</title>
+    <meta name="description" content="Fluent, stream-like API's are great for writing type checked code, taking advantage of Java 8 functions and lambdas. Perhaps the best example of such project is jOOQ, which creates a fluent Java DSL for SQL. But what about creating your own DSL to manipulate and validate your model? We created an open-source framework for generating validation DSLs from a domain model. This presentation will demonstrate the efficiency and expressiveness of this framework to define validation constraints. We will refactor complex legacy business rules during a live code session.">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/softshake-theme.css" id="theme">
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+  </head>
+  <body>
+    <div class="footer">
+      <img class="logo-lesfurets" src="png/logo_lesfurets_blanc.png">
+      <img class="logo-rnday" src="png/softshake/logo-transparent.png">
+    </div>
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
+          <h1 class="code">DSL.using(java)<br>
+                 &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
+                 &nbsp;&nbsp;&nbsp;.at(SoftShake.eq(ch));</h1>
+          <p>
+            <a href="https://github.com/lesfurets">https://github.com/lesfurets/model-map</a>
+          </p>
+        </section>
+
+        <section>
+          <section>
+            <h2>Welcome to the Furets !</h2>
+          </section>
+          <section>
+            <div class="fragment">
+              <h2>@dubreuia – Alexandre Dubreuil</h2>
+              <ul>
+                <li>TODO</li>
+              </ul>
+            </div>
+            <div class="fragment">
+              <h2>@gdigugli – Gilles Di Guglielmo</h2>
+              <ul>
+                <li>Designer of sweet cooked software since 1999</li>
+                <li>Software Architect at LesFurets.com</li>
+              </ul>
+            </div>
+          </section>
+          <section>
+            <img width="50%" src="png/logo_lesfurets.png">
+            <p></p>
+            <ul class="fragment">
+              <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
+              <li class="emptyline">1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
+
+              <li>22 Developers, 2 DevOps, 4 Architects</li>
+              <li class="emptyline">19 production servers including Load balancers, Frontend, Backend, Databases, BI</li>
+
+              <li>1 release per day</li>
+              <li class="emptyline">9 years of code history<br/></li>
+
+              <li>3M quotes/year, 40% of market share, 4M of customers</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Moving the architecture</h2>
+          </section>
+          <section>
+            <h2>Architect at work ...</h2>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_1.png">
+          </section>
+          <section>
+            <h2>Keying everything !</h2>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>A bit of livecoding</h2>
+          </section>
+          <section>
+            <h2>Live code 1 : TODO</h2>
+            <pre>
+              <code>
+TODO
+              </code>
+            </pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Model-Map available on Github</h2>
+            <p></p>
+            <ul>
+              <li>http://github.com/lesfurets/model-map</li>
+              <li class="emptyline">Framework and examples</li>
+              <li>Apache Licence</li>
+              <li>Try it and contribute !</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Thank You!</h2>
+            <img width="50%" src="png/rnday/logo-transparent-vert.png">
+          </section>
+        </section>
+      </div>
+    </div>
+    <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+    <script src="bower_components/reveal.js/js/reveal.js"></script>
+    <script>
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+        embedded: true,
+        mouseWheel: true,
+        viewDistance: 5,
+
+        width: 1280,
+        height: 900,
+        margin: 0,
+
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+      // navigation with mouse click
+
+      window.addEventListener("mousedown", handleClick, false);
+      window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+
+      function handleClick(e) {
+        e.preventDefault();
+        if(e.button === 0) Reveal.next();
+        if(e.button === 2) Reveal.prev();
+      }
+
+    </script>
+  </body>
+</html>
