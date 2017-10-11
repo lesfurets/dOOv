@@ -49,6 +49,7 @@
                 <li>TODO</li>
               </ul>
             </div>
+            <br><br>
             <div class="fragment">
               <h2>@gdigugli – Gilles Di Guglielmo</h2>
               <ul>
@@ -73,6 +74,135 @@
               <li>3M quotes/year, 40% of market share, 4M of customers</li>
             </ul>
           </section>
+        </section>
+
+        <section>
+            <section>
+                <p>À priori sur Java : c'est verbeux, mais on peut réduire le bruit avec un fluent API</p>
+            </section>
+            <section>
+                <p>Plusieurs nouveaux idiome nous le permettent : les streams, <code>java.time</code>, les lambda java 8
+                </p>
+                <p>Plusieurs librairies "en vogue" en fournissent : jOOQ, guava, etc.</p>
+            </section>
+
+            <section>
+                <p>Motivation 1 pour écrire un fluent API</p>
+                <p>model-map : Mapping bijectif de clef / valeur / modèle</p>
+                <p>Utilisé dans notre front comme dictionnaire, pour notre modèle de donnée C*, etc.</p>
+                <div class="code-wrapper">
+            <pre><code class="code lang-java" data-trim data-noescape>
+SampleModel sampleModel = new SampleModel();
+sampleModel.setAccount(new Account());
+sampleModel.getAccount().setEmail("chtijug@gmail.com");
+
+// Domain model to map
+FieldModel model = new SampleModelWrapper(sampleModel);
+Map<FieldId, Object> map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
+
+// Map to domain model
+SampleModelWrapper newModel = map.entrySet().stream()
+                            .collect(SampleModelWrapper.toFieldModel());
+System.out.println(newModel.getModel().getAccount().getEmail());
+            </code></pre>
+                </div>
+            </section>
+            <section>
+                <p>Motivation 2 pour écrire un fluent API</p>
+                <p>Utilisation de jOOQ dans notre code base, soit un modèle de colonne exprimé avec un DSL permettant de
+                    générer du SQL
+                <p>
+                <div class="code-wrapper">
+            <pre><code class="code lang-java" data-trim data-noescape>
+DSL.using(conn)
+   .selectFrom(BO_INSURANCE)
+   .where(BO_INSURANCE.STATUS.equal(CONFIRMED.getCode()))
+   .stream()
+   .map(InsuranceDAO::InsuranceDto)
+   .collect(toList());
+            </code></pre>
+            </section>
+            <section>
+                <p>Motivation 3 pour écrire un fluent API</p>
+                <p>Exclusions assureurs (équivalent à une règle de validation) écrites sur le modèle OO</p>
+                <p>DETTE ! (c'est notre problème à résoudre)</p>
+                <div class="code-wrapper smaller">
+            <pre><code class="code lang-java" data-trim data-noescape>
+        AntecedentsAssurance antecedents = conducteur.getHistorique().getAntecedents();
+        if (conducteur.getTypePermis() == ETypePermis.AUTO
+                        && !antecedents.isFormation125()
+                        && (vehicule.getDescription().is3roues() || !vehicule.getDescription().is3roues()
+                                        && vehicule.getDescription().getCylindree() > 50
+                                        && vehicule.getDescription().getCylindree() <= 125
+                                        && DateHelper.isAfter("19800301", conducteur.getPermisConduireAuto()
+                                                        .getDateObtention(), EPrecision.mois))) {
+            for (Assurance a : antecedents.getAssurances()) {
+                if ((DateHelper.isAfter(a.getDateDebut(), "20100131", EPrecision.jour) && a.getCylindree()
+                                .getIntervalle().getMin() > 50))
+                    return;
+            }
+            if (!antecedents.isAssurancePlus4Ans()) {
+                throw new ExclusionException(USAGE);
+            }
+        }
+            </code></pre>
+            </section>
+
+            <section>
+                <p>Ces 3 éléments nous permettent de créer un DSL basé sur model-map (fluent domain), inspiré par le DSL
+                    de jOOQ (fluent SQL)</p>
+            </section>
+            <section>
+                <p>Pourquoi un dsl ?</p>
+                <p>- auditabilité</p>
+                <p>- compliance</p>
+                <p>- gouvernance</p>
+                <p>(voir dernière slide)</p>
+            </section>
+            <section>
+                <p>- actuel : 400 classes d'exclusion</p>
+                <p>- gouvernance par le nom de la classe</p>
+            </section>
+
+            <section>
+                <p>- accesseurs du modele</p>
+                <p>- field info + demo</p>
+            </section>
+            <section>
+                <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+            </section>
+            <section>
+                <p>design du dsl</p>
+                <p>- DSL</p>
+                <p>- step condition</p>
+                <p>- AST + visualisation</p>
+            </section>
+
+            <section>
+                <p>- montrer formulaire lf</p>
+            </section>
+            <section>
+                <p>- montrer codebase lf ?</p>
+            </section>
+            <section>
+                <p>live demo sample</p>
+                <p>- demo jmh</p>
+                <p>- legacy vs lambda</p>
+            </section>
+
+            <section>
+                <p>- bean validation : contrainte sur un modele</p>
+                <p>- dsl : resoud pas meme probleme</p>
+                <p>- utile pour des champs separes</p>
+            </section>
+
+            <section>
+                <p>- gouvernance des regles (rappel)</p>
+                <p>- expressivite</p>
+                <p>- flexibilite ast</p>
+                <p>- mieux que bv</p>
+            </section>
+
         </section>
 
         <section>

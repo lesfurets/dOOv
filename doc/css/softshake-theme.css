@@ -345,3 +345,28 @@ body {
   text-align: left;
   font-family: monospace;
 }
+
+.reveal .code-wrapper {
+    font-size: 0.75em;
+    position: relative;
+    right: 50%;
+    text-align: center;
+}
+
+.reveal .code-wrapper.small {
+    font-size: 0.7em;
+}
+
+.reveal .code-wrapper.smaller {
+    font-size: 0.55em;
+}
+
+.reveal code.code {
+    display: inline-block;
+    font-family: monospace;
+    line-height: 1.25;
+    padding: 5px 20px;
+    text-align: left;
+    overflow: hidden;
+    margin-right: -100%;
+}
