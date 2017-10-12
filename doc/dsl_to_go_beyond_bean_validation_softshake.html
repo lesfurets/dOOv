@@ -128,23 +128,23 @@ DSL.using(conn)
                 <p>DETTE ! (c'est notre problème à résoudre)</p>
                 <div class="code-wrapper smaller">
             <pre><code class="code lang-java" data-trim data-noescape>
-        AntecedentsAssurance antecedents = conducteur.getHistorique().getAntecedents();
-        if (conducteur.getTypePermis() == ETypePermis.AUTO
-                        && !antecedents.isFormation125()
-                        && (vehicule.getDescription().is3roues() || !vehicule.getDescription().is3roues()
-                                        && vehicule.getDescription().getCylindree() > 50
-                                        && vehicule.getDescription().getCylindree() <= 125
-                                        && DateHelper.isAfter("19800301", conducteur.getPermisConduireAuto()
-                                                        .getDateObtention(), EPrecision.mois))) {
-            for (Assurance a : antecedents.getAssurances()) {
-                if ((DateHelper.isAfter(a.getDateDebut(), "20100131", EPrecision.jour) && a.getCylindree()
-                                .getIntervalle().getMin() > 50))
-                    return;
-            }
-            if (!antecedents.isAssurancePlus4Ans()) {
-                throw new ExclusionException(USAGE);
-            }
-        }
+AntecedentsAssurance antecedents = conducteur.getHistorique().getAntecedents();
+if (conducteur.getTypePermis() == ETypePermis.AUTO
+            && !antecedents.isFormation125()
+            && (vehicule.getDescription().is3roues() || !vehicule.getDescription().is3roues()
+                        && vehicule.getDescription().getCylindree() > 50
+                        && vehicule.getDescription().getCylindree() <= 125
+                        && DateHelper.isAfter("19800301", conducteur.getPermisConduireAuto()
+                                        .getDateObtention(), EPrecision.mois))) {
+    for (Assurance a : antecedents.getAssurances()) {
+        if ((DateHelper.isAfter(a.getDateDebut(), "20100131", EPrecision.jour) && a.getCylindree()
+                        .getIntervalle().getMin() > 50))
+            return;
+    }
+    if (!antecedents.isAssurancePlus4Ans()) {
+        throw new ExclusionException(USAGE);
+    }
+}
             </code></pre>
             </section>
 
@@ -160,22 +160,52 @@ DSL.using(conn)
                 <p>(voir dernière slide)</p>
             </section>
             <section>
-                <p>- actuel : 400 classes d'exclusion</p>
-                <p>- gouvernance par le nom de la classe</p>
+                <p>État actuel : 400 classes d'exclusion et absence de gouvernance</p>
+                <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
             </section>
 
             <section>
-                <p>- accesseurs du modele</p>
-                <p>- field info + demo</p>
+                <p>Demo model-map : accesseurs du modèle</p>
+                <div class="code-wrapper smaller">
+            <pre><code class="code lang-java" data-trim data-noescape>
+public class Account extends Identity {
+
+    @SamplePath(field = SampleFieldId.LOGIN)
+    private String login;
+
+    @SamplePath(field = SampleFieldId.PASSWD, readable = "password")
+    private String password;
+
+}
+            </code></pre>
             </section>
             <section>
                 <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
             </section>
             <section>
-                <p>design du dsl</p>
-                <p>- DSL</p>
-                <p>- step condition</p>
-                <p>- AST + visualisation</p>
+                <p>Design du dsl</p>
+                <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération <code>StepWhen#validate</code> permet de retourner la règle (avec ou sans message)</p>
+                <div class="code-wrapper smaller">
+            <pre><code class="code lang-java" data-trim data-noescape>
+public static final StepValidate EMAIL_VALID = DSL
+    .when(EMAIL.matches("\\w+[@]\\w+\\.com")
+      .or(EMAIL.matches("\\w+[@]\\w+\\.fr")))
+    .validate()
+    .withMessage("email finishes with .com or .fr");
+            </code></pre>
+            </section>
+
+            <section>
+                <p>Design du dsl</p>
+                <p>Un AST est disponible avec <code>StepValidate#readable</code> et pour exécuter la règle il faut appeler <code>StepValidate#executeOn(FieldModel)</code></p>
+                <div class="code-wrapper smaller">
+            <pre><code class="code lang-java" data-trim data-noescape>
+rules.stream()
+    .map(rule -> rule.executeOn(model))
+    .filter(Result::isInvalid)
+    .map(Result::message)
+    .collect(toList());
+            </code></pre>
             </section>
 
             <section>
