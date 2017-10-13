@@ -11,13 +11,13 @@
     <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
     <link rel="stylesheet" href="css/softshake-theme.css" id="theme">
     <script>
-      if( window.location.search.match( /print-pdf/gi ) ) {
-        var link = document.createElement( 'link' );
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = 'css/print/pdf.css';
-        document.getElementsByTagName( 'head' )[0].appendChild( link );
-      }
+if( window.location.search.match( /print-pdf/gi ) ) {
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = 'css/print/pdf.css';
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+}
     </script>
   </head>
   <body>
@@ -31,10 +31,10 @@
         <section>
           <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
           <h1 class="code">DSL.using(java)<br>
-                 &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
-                 &nbsp;&nbsp;&nbsp;.at(SoftShake.eq(ch));</h1>
+            &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
+            &nbsp;&nbsp;&nbsp;.at(SoftShake.eq(ch));</h1>
           <p>
-            <a href="https://github.com/lesfurets">https://github.com/lesfurets/model-map</a>
+          <a href="https://github.com/lesfurets">https://github.com/lesfurets/model-map</a>
           </p>
         </section>
 
@@ -77,21 +77,21 @@
         </section>
 
         <section>
-            <section>
-                <p>Àpriori sur Java : c'est verbeux, mais on peut réduire le bruit avec un fluent API</p>
-            </section>
-            <section>
-                <p>Plusieurs nouveaux idiome nous le permettent : les streams, <code>java.time</code>, les lambda java 8
-                </p>
-                <p>Plusieurs librairies "en vogue" en fournissent : jOOQ, guava, etc.</p>
-            </section>
+          <section>
+            <p>Àpriori sur Java : c'est verbeux, mais on peut réduire le bruit avec un fluent API</p>
+          </section>
+          <section>
+            <p>Plusieurs nouveaux idiome nous le permettent : les streams, <code>java.time</code>, les lambda java 8
+            </p>
+            <p>Plusieurs librairies "en vogue" en fournissent : jOOQ, guava, etc.</p>
+          </section>
 
-            <section>
-                <p>Motivation 1 pour écrire un fluent API</p>
-                <p>model-map : Mapping bijectif de clef / valeur / modèle</p>
-                <p>Utilisé dans notre front comme dictionnaire, pour notre modèle de donnée C*, etc.</p>
-                <div class="code-wrapper">
-            <pre><code class="code lang-java" data-trim data-noescape>
+          <section>
+            <p>Motivation 1 pour écrire un fluent API</p>
+            <p>model-map : Mapping bijectif de clef / valeur / modèle</p>
+            <p>Utilisé dans notre front comme dictionnaire, pour notre modèle de donnée C*, etc.</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
 SampleModel sampleModel = new SampleModel();
 sampleModel.setAccount(new Account());
 sampleModel.getAccount().setEmail("chtijug@gmail.com");
@@ -104,70 +104,70 @@ Map<FieldId, Object> map = model.stream().collect(toMap(Entry::getKey, Entry::ge
 SampleModelWrapper newModel = map.entrySet().stream()
                             .collect(SampleModelWrapper.toFieldModel());
 System.out.println(newModel.getModel().getAccount().getEmail());
-            </code></pre>
-                </div>
-            </section>
-            <section>
-                <p>Motivation 2 pour écrire un fluent API</p>
-                <p>Utilisation de jOOQ dans notre code base, soit un modèle de colonne exprimé avec un DSL permettant de
-                    générer du SQL
-                <p>
-                <div class="code-wrapper">
-            <pre><code class="code lang-java" data-trim data-noescape>
+              </code></pre>
+            </div>
+          </section>
+          <section>
+            <p>Motivation 2 pour écrire un fluent API</p>
+            <p>Utilisation de jOOQ dans notre code base, soit un modèle de colonne exprimé avec un DSL permettant de
+            générer du SQL
+            <p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
 DSL.using(conn)
    .selectFrom(BO_INSURANCE)
    .where(BO_INSURANCE.STATUS.equal(CONFIRMED.getCode()))
    .stream()
    .map(InsuranceDAO::InsuranceDto)
    .collect(toList());
-            </code></pre>
-            </section>
-            <section>
-                <p>Motivation 3 pour écrire un fluent API</p>
-                <p>Exclusions assureurs (équivalent à une règle de validation) écrites sur le modèle OO</p>
-                <p>DETTE ! (c'est notre problème à résoudre)</p>
-                <div class="code-wrapper smaller">
-            <pre><code class="code lang-java" data-trim data-noescape>
+              </code></pre>
+          </section>
+          <section>
+            <p>Motivation 3 pour écrire un fluent API</p>
+            <p>Exclusions assureurs (équivalent à une règle de validation) écrites sur le modèle OO</p>
+            <p>DETTE ! (c'est notre problème à résoudre)</p>
+            <div class="code-wrapper smaller">
+              <pre><code class="code lang-java" data-trim data-noescape>
 AntecedentsAssurance antecedents = conducteur.getHistorique().getAntecedents();
 if (conducteur.getTypePermis() == ETypePermis.AUTO
             && !antecedents.isFormation125()
             && (vehicule.getDescription().is3roues() || !vehicule.getDescription().is3roues()
                         && vehicule.getDescription().getCylindree() > 50
                         && vehicule.getDescription().getCylindree() <= 125
-                        && DateHelper.isAfter("19800301", conducteur.getPermisConduireAuto()
-                                        .getDateObtention(), EPrecision.mois))) {
-    for (Assurance a : antecedents.getAssurances()) {
-        if ((DateHelper.isAfter(a.getDateDebut(), "20100131", EPrecision.jour) && a.getCylindree()
-                        .getIntervalle().getMin() > 50))
+                         && DateHelper.isAfter("19800301", conducteur.getPermisConduireAuto()
+                         .getDateObtention(), EPrecision.mois))) {
+                         for (Assurance a : antecedents.getAssurances()) {
+                         if ((DateHelper.isAfter(a.getDateDebut(), "20100131", EPrecision.jour) && a.getCylindree()
+                         .getIntervalle().getMin() > 50))
             return;
     }
     if (!antecedents.isAssurancePlus4Ans()) {
         throw new ExclusionException(USAGE);
     }
 }
-            </code></pre>
-            </section>
+              </code></pre>
+          </section>
 
-            <section>
-                <p>Ces 3 éléments nous permettent de créer un DSL basé sur model-map (fluent domain), inspiré par le DSL
-                    de jOOQ (fluent SQL)</p>
-            </section>
-            <section>
-                <p>Pourquoi un dsl ?</p>
-                <p>- auditabilité</p>
-                <p>- compliance</p>
-                <p>- gouvernance</p>
-                <p>(voir dernière slide)</p>
-            </section>
-            <section>
-                <p>État actuel : 400 classes d'exclusion et gouvernance basé sur le nom de la classe</p>
-                <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
-            </section>
+          <section>
+            <p>Ces 3 éléments nous permettent de créer un DSL basé sur model-map (fluent domain), inspiré par le DSL
+            de jOOQ (fluent SQL)</p>
+          </section>
+          <section>
+            <p>Pourquoi un dsl ?</p>
+            <p>- auditabilité</p>
+            <p>- compliance</p>
+            <p>- gouvernance</p>
+            <p>(voir dernière slide)</p>
+          </section>
+          <section>
+            <p>État actuel : 400 classes d'exclusion et gouvernance basé sur le nom de la classe</p>
+            <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
+          </section>
 
-            <section>
-                <p>Demo model-map : accesseurs du modèle</p>
-                <div class="code-wrapper">
-            <pre><code class="code lang-java" data-trim data-noescape>
+          <section>
+            <p>Demo model-map : accesseurs du modèle</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
 public class Account extends Identity {
 
     @SamplePath(field = SampleFieldId.LOGIN)
@@ -177,52 +177,52 @@ public class Account extends Identity {
     private String password;
 
 }
-            </code></pre>
-            </section>
-            <section>
-                <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
-            </section>
-            <section>
-                <p>Design du dsl</p>
-                <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération <code>StepWhen#validate</code> permet de retourner la règle (avec ou sans message)</p>
-                <div class="code-wrapper">
-            <pre><code class="code lang-java" data-trim data-noescape>
+              </code></pre>
+          </section>
+          <section>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+          </section>
+          <section>
+            <p>Design du dsl</p>
+            <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération <code>StepWhen#validate</code> permet de retourner la règle (avec ou sans message)</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
 public static final ValidationRule EMAIL_VALID = DSL
     .when(EMAIL.matches("\\w+[@]\\w+\\.com")
       .or(EMAIL.matches("\\w+[@]\\w+\\.fr")))
     .validate()
     .withMessage("email finishes with .com or .fr");
-            </code></pre>
-            </section>
+              </code></pre>
+          </section>
 
-            <section>
-                <p>Design du dsl</p>
-                <p>Un AST est disponible avec <code>ValidationRule#readable</code></p>
-                <div class="code-wrapper">
-                  <pre><code class="code lang-java" data-trim data-noescape>
+          <section>
+            <p>Design du dsl</p>
+            <p>Un AST est disponible avec <code>ValidationRule#readable</code></p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
 System.out.println(EMAIL_VALID.readable());
 &gt; When (email matches \w+[@]\w+\.com or email matches \w+[@]\w+\.fr)
 &gt;   validate with message "email finishes with .com or .fr"
-                  </code></pre>
-                </div>
-                <p>Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
-                <div class="code-wrapper">
-                  <pre><code class="code lang-java" data-trim data-noescape>
+              </code></pre>
+            </div>
+            <p>Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
 rules.stream()
     .map(rule -> rule.executeOn(model))
     .filter(Result::isInvalid)
     .map(Result::message)
     .collect(toList());
-                  </code></pre>
-                </div>
-            </section>
+              </code></pre>
+            </div>
+          </section>
 
-            <section>
-                <img data-transition="fade" width="50%" src="png/softshake/formulaire-auto.png">
-            </section>
-            <section>
-                <div class="code-wrapper small">
-                  <pre><code class="code lang-java" data-trim data-noescape>
+          <section>
+            <img data-transition="fade" width="50%" src="png/softshake/formulaire-auto.png">
+          </section>
+          <section>
+            <div class="code-wrapper small">
+              <pre><code class="code lang-java" data-trim data-noescape>
 public class Personne implements Serializable {
 
     @CoordonneesPath(field = COORD_NOM, constraint = SOUSCRIPTEUR)
@@ -244,13 +244,13 @@ public class Personne implements Serializable {
     private String dateNaissance;
 
 }
-                  </code></pre>
-                </div>
-            </section>
-            <section>
-                <p>Live code 1 : convertir en DSL</p>
-                <div class="code-wrapper small">
-                  <pre><code class="code lang-java" data-trim data-noescape>
+              </code></pre>
+            </div>
+          </section>
+          <section>
+            <p>Live code 1 : convertir en DSL</p>
+            <div class="code-wrapper small">
+              <pre><code class="code lang-java" data-trim data-noescape>
 public static boolean validateCountry(Account account) {
     if (account.getCountry() == null) {
         return true;
@@ -273,33 +273,33 @@ public static boolean validateCountry(Account account) {
     }
     return false;
 }
-                  </code></pre>
-                </div>
-            </section>
-            <section>
-                <p>JMH</p>
-                <div class="code-wrapper small">
-                  <pre><code class="code lang-java" data-trim data-noescape>
+              </code></pre>
+            </div>
+          </section>
+          <section>
+            <p>JMH</p>
+            <div class="code-wrapper small">
+              <pre><code class="code lang-java" data-trim data-noescape>
 Benchmark                              Mode   Samples         Mean   Mean error    Units
 o.m.BenchmarkOldRule.valid_email      thrpt        25     1860.553       42.269   ops/ms
 o.m.BenchmarkRule.valid_email         thrpt        25     1733.465       18.461   ops/ms
-                  </code></pre>
-                </div>
-                <p>Nouvelle règle légèrement plus lente</p>
-            </section>
+              </code></pre>
+            </div>
+            <p>Nouvelle règle légèrement plus lente</p>
+          </section>
 
-            <section>
-                <p>- bean validation : contrainte sur un modele</p>
-                <p>- dsl : resoud pas meme probleme</p>
-                <p>- utile pour des champs separes</p>
-            </section>
+          <section>
+            <p>- bean validation : contrainte sur un modele</p>
+            <p>- dsl : resoud pas meme probleme</p>
+            <p>- utile pour des champs separes</p>
+          </section>
 
-            <section>
-                <p>- gouvernance des regles (rappel)</p>
-                <p>- expressivite</p>
-                <p>- flexibilite ast</p>
-                <p>- mieux que bv</p>
-            </section>
+          <section>
+            <p>- gouvernance des regles (rappel)</p>
+            <p>- expressivite</p>
+            <p>- flexibilite ast</p>
+            <p>- mieux que bv</p>
+          </section>
 
         </section>
 
@@ -347,50 +347,50 @@ TODO
             <img width="50%" src="png/rnday/logo-transparent-vert.png">
           </section>
         </section>
-      </div>
-    </div>
-    <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
-    <script src="bower_components/reveal.js/js/reveal.js"></script>
-    <script>
-      // Full list of configuration options available here:
-      // https://github.com/hakimel/reveal.js#configuration
-      Reveal.initialize({
-        controls: false,
-        progress: true,
-        history: true,
-        center: true,
-        embedded: true,
-        mouseWheel: true,
-        viewDistance: 5,
+            </div>
+            </div>
+            <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+            <script src="bower_components/reveal.js/js/reveal.js"></script>
+            <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+  controls: false,
+  progress: true,
+  history: true,
+  center: true,
+  embedded: true,
+  mouseWheel: true,
+  viewDistance: 5,
 
-        width: 1280,
-        height: 900,
-        margin: 0,
+  width: 1280,
+  height: 900,
+  margin: 0,
 
-        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+  transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
 
-        // Optional libraries used to extend on reveal.js
-        dependencies: [
-          { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-          { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-        ]
-      });
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+  { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+  { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+  { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});
 
-      // navigation with mouse click
+// navigation with mouse click
 
-      window.addEventListener("mousedown", handleClick, false);
-      window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+window.addEventListener("mousedown", handleClick, false);
+window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
 
-      function handleClick(e) {
-        e.preventDefault();
-        if(e.button === 0) Reveal.next();
-        if(e.button === 2) Reveal.prev();
-      }
+function handleClick(e) {
+  e.preventDefault();
+  if(e.button === 0) Reveal.next();
+  if(e.button === 2) Reveal.prev();
+}
 
-    </script>
+            </script>
   </body>
 </html>
