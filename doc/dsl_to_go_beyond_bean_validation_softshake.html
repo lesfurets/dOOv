@@ -78,7 +78,7 @@
 
         <section>
             <section>
-                <p>À priori sur Java : c'est verbeux, mais on peut réduire le bruit avec un fluent API</p>
+                <p>Àpriori sur Java : c'est verbeux, mais on peut réduire le bruit avec un fluent API</p>
             </section>
             <section>
                 <p>Plusieurs nouveaux idiome nous le permettent : les streams, <code>java.time</code>, les lambda java 8
@@ -160,13 +160,13 @@ if (conducteur.getTypePermis() == ETypePermis.AUTO
                 <p>(voir dernière slide)</p>
             </section>
             <section>
-                <p>État actuel : 400 classes d'exclusion et absence de gouvernance</p>
+                <p>État actuel : 400 classes d'exclusion et gouvernance basé sur le nom de la classe</p>
                 <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
             </section>
 
             <section>
                 <p>Demo model-map : accesseurs du modèle</p>
-                <div class="code-wrapper smaller">
+                <div class="code-wrapper">
             <pre><code class="code lang-java" data-trim data-noescape>
 public class Account extends Identity {
 
@@ -185,9 +185,9 @@ public class Account extends Identity {
             <section>
                 <p>Design du dsl</p>
                 <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération <code>StepWhen#validate</code> permet de retourner la règle (avec ou sans message)</p>
-                <div class="code-wrapper smaller">
+                <div class="code-wrapper">
             <pre><code class="code lang-java" data-trim data-noescape>
-public static final StepValidate EMAIL_VALID = DSL
+public static final ValidationRule EMAIL_VALID = DSL
     .when(EMAIL.matches("\\w+[@]\\w+\\.com")
       .or(EMAIL.matches("\\w+[@]\\w+\\.fr")))
     .validate()
@@ -197,27 +197,95 @@ public static final StepValidate EMAIL_VALID = DSL
 
             <section>
                 <p>Design du dsl</p>
-                <p>Un AST est disponible avec <code>StepValidate#readable</code> et pour exécuter la règle il faut appeler <code>StepValidate#executeOn(FieldModel)</code></p>
-                <div class="code-wrapper smaller">
-            <pre><code class="code lang-java" data-trim data-noescape>
+                <p>Un AST est disponible avec <code>ValidationRule#readable</code></p>
+                <div class="code-wrapper">
+                  <pre><code class="code lang-java" data-trim data-noescape>
+System.out.println(EMAIL_VALID.readable());
+&gt; When (email matches \w+[@]\w+\.com or email matches \w+[@]\w+\.fr)
+&gt;   validate with message "email finishes with .com or .fr"
+                  </code></pre>
+                </div>
+                <p>Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
+                <div class="code-wrapper">
+                  <pre><code class="code lang-java" data-trim data-noescape>
 rules.stream()
     .map(rule -> rule.executeOn(model))
     .filter(Result::isInvalid)
     .map(Result::message)
     .collect(toList());
-            </code></pre>
+                  </code></pre>
+                </div>
             </section>
 
             <section>
-                <p>- montrer formulaire lf</p>
+                <img data-transition="fade" width="50%" src="png/softshake/formulaire-auto.png">
             </section>
             <section>
-                <p>- montrer codebase lf ?</p>
+                <div class="code-wrapper small">
+                  <pre><code class="code lang-java" data-trim data-noescape>
+public class Personne implements Serializable {
+
+    @CoordonneesPath(field = COORD_NOM, constraint = SOUSCRIPTEUR)
+    protected String nom;
+
+    @CoordonneesPath(field = COORD_PRENOM, constraint = SOUSCRIPTEUR)
+    protected String prenom;
+
+    @AutoPath(field = PRINCIPAL_SEXE, constraint = PRINCIPAL)
+    @AutoPath(field = SECONDAIRE_SEXE, constraint = SECONDAIRE)
+    @EmprunteurPath(field = EMPRUNTEUR_SEXE, constraint = EMPRUNTEUR)
+    @EmprunteurPath(field = COEMPRUNTEUR_SEXE, constraint = COEMPRUNTEUR)
+    private ESexe sexe;
+
+    @AutoPath(field = PRINCIPAL_NAISSANCE, constraint = PRINCIPAL)
+    @AutoPath(field = SECONDAIRE_NAISSANCE, constraint = SECONDAIRE)
+    @EmprunteurPath(field = EMPRUNTEUR_NAISSANCE, constraint = EMPRUNTEUR)
+    @EmprunteurPath(field = COEMPRUNTEUR_NAISSANCE, constraint = COEMPRUNTEUR)
+    private String dateNaissance;
+
+}
+                  </code></pre>
+                </div>
             </section>
             <section>
-                <p>live demo sample</p>
-                <p>- demo jmh</p>
-                <p>- legacy vs lambda</p>
+                <p>Live code 1 : convertir en DSL</p>
+                <div class="code-wrapper small">
+                  <pre><code class="code lang-java" data-trim data-noescape>
+public static boolean validateCountry(Account account) {
+    if (account.getCountry() == null) {
+        return true;
+    }
+    if (account.getLanguage() == null) {
+        return true;
+    }
+    if (account.getPhoneNumber() == null) {
+        return true;
+    }
+    if (account.getCountry().equals(Country.FR)
+                    && account.getLanguage().equals(Language.FR)
+                    && account.getPhoneNumber().startsWith("+33")) {
+        return true;
+    }
+    if (account.getCountry().equals(Country.UK)
+                    && account.getLanguage().equals(Language.EN)
+                    && account.getPhoneNumber().startsWith("+45")) {
+        return true;
+    }
+    return false;
+}
+                  </code></pre>
+                </div>
+            </section>
+            <section>
+                <p>JMH</p>
+                <div class="code-wrapper small">
+                  <pre><code class="code lang-java" data-trim data-noescape>
+Benchmark                              Mode   Samples         Mean   Mean error    Units
+o.m.BenchmarkOldRule.valid_email      thrpt        25     1860.553       42.269   ops/ms
+o.m.BenchmarkRule.valid_email         thrpt        25     1733.465       18.461   ops/ms
+                  </code></pre>
+                </div>
+                <p>Nouvelle règle légèrement plus lente</p>
             </section>
 
             <section>
