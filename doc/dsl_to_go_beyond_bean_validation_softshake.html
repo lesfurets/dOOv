@@ -77,41 +77,59 @@ if( window.location.search.match( /print-pdf/gi ) ) {
         </section>
 
         <section>
+
           <section>
             <h2>Fluent API</h2>
             <p>Àpriori sur Java : c'est verbeux, mais on peut réduire le bruit avec un Fluent API</p>
-          </section>
-          <section>
-            <p>Plusieurs nouveaux idiome nous le permettent : les streams, <code>java.time</code>, les lambda java 8</p>
-            <p>Plusieurs librairies "en vogue" en fournissent : jOOQ, guava, etc.</p>
-          </section>
-
-          <section>
-            <p>Motivation 1 pour écrire un fluent API</p>
-            <p>model-map : Mapping bijectif de clef / valeur / modèle</p>
-            <p>Utilisé dans notre front comme dictionnaire, pour notre modèle de donnée C*, etc.</p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
-SampleModel sampleModel = new SampleModel();
-sampleModel.setAccount(new Account());
-sampleModel.getAccount().setEmail("chtijug@gmail.com");
+// JUnit API
+assertEquals(9, fellowshipOfTheRing).hasSize(9));
+assertTrue(fellowshipOfTheRing.contains(frodo, sam));
+assertTrue(fellowshipOfTheRing.doesNotContain(sauron));
 
-// Domain model to map
-FieldModel model = new SampleModelWrapper(sampleModel);
-Map<FieldId, Object> map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
-
-// Map to domain model
-SampleModelWrapper newModel = map.entrySet().stream()
-                            .collect(SampleModelWrapper.toFieldModel());
-System.out.println(newModel.getModel().getAccount().getEmail());
+// AssertJ API (fluent)
+assertThat(fellowshipOfTheRing).hasSize(9)
+                               .contains(frodo, sam)
+                               .doesNotContain(sauron);
               </code></pre>
             </div>
           </section>
+
           <section>
-            <p>Motivation 2 pour écrire un fluent API</p>
-            <p>Utilisation de jOOQ dans notre code base, soit un modèle de colonne exprimé avec un DSL permettant de
-            générer du SQL
-            <p>
+            <h2>Fluent API</h2>
+            <p>Plusieurs nouveaux idiome depuis Java 8 nous facilitent la tâche : les streams, <code>java.time</code>, les lambdas, etc.</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+// java.time API
+Instant.ofEpochMilli(milli).atZone(ZoneId.systemDefault()).toLocalDateTime()
+              </code></pre>
+            </div>
+            <p>Plusieurs librairies populaire fournissent des API fluent : jOOQ, AssertJ, guava, etc.</p>
+          </section>
+
+          <section>
+            <h2>Fluent API : motivation 1</h2>
+            <p>model-map : Mapping bijectif typé de clef / valeur / modèle</p>
+            <p>Utilisé chez LesFurets comme dictionnaire front, pour notre modèle de donnée C*, etc.</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+// Domain model to map
+FieldModel model = new SampleModelWrapper(sampleModel1);
+Map&lt;FieldId, Object&gt; map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
+System.out.println(map.get(EMAIL));
+
+// Map to domain model
+SampleModelWrapper sampleModel2 = map.entrySet().stream()
+                            .collect(SampleModelWrapper.toFieldModel());
+System.out.println(sampleModel2.getModel().getAccount().getEmail());
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Fluent API : motivation 2</h2>
+            <p>Utilisation de jOOQ (Java Object Oriented Query) dans notre code base, soit un modèle de colonne exprimé avec un DSL (Domain Specific Language) permettant de générer du SQL<p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
 DSL.using(conn)
@@ -121,70 +139,70 @@ DSL.using(conn)
    .map(InsuranceDAO::InsuranceDto)
    .collect(toList());
               </code></pre>
-          </section>
-          <section>
-            <p>Motivation 3 pour écrire un fluent API</p>
-            <p>Exclusions assureurs (équivalent à une règle de validation) écrites sur le modèle OO</p>
-            <p>DETTE ! (c'est notre problème à résoudre)</p>
-            <div class="code-wrapper smaller">
-              <pre><code class="code lang-java" data-trim data-noescape>
-AntecedentsAssurance antecedents = conducteur.getHistorique().getAntecedents();
-if (conducteur.getTypePermis() == ETypePermis.AUTO
-            && !antecedents.isFormation125()
-            && (vehicule.getDescription().is3roues() || !vehicule.getDescription().is3roues()
-                        && vehicule.getDescription().getCylindree() > 50
-                        && vehicule.getDescription().getCylindree() <= 125
-                         && DateHelper.isAfter("19800301", conducteur.getPermisConduireAuto()
-                         .getDateObtention(), EPrecision.mois))) {
-                         for (Assurance a : antecedents.getAssurances()) {
-                         if ((DateHelper.isAfter(a.getDateDebut(), "20100131", EPrecision.jour) && a.getCylindree()
-                         .getIntervalle().getMin() > 50))
-            return;
-    }
-    if (!antecedents.isAssurancePlus4Ans()) {
-        throw new ExclusionException(USAGE);
-    }
-}
-              </code></pre>
+            </div>
           </section>
 
           <section>
-            <p>Ces 3 éléments nous permettent de créer un DSL basé sur model-map (fluent domain), inspiré par le DSL
-            de jOOQ (fluent SQL)</p>
+            <h2>Fluent API : motivation 3</h2>
+            <p>Exclusions assureurs (équivalent à une règle de validation) écrites sur le modèle objet. Code historique endetté</p>
+            <div class="code-wrapper smaller">
+              <pre><code class="code lang-java" data-trim data-noescape>
+TODO exemple pourrave
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Fluent API : motivation 3</h2>
+            <div class="code-wrapper smaller">
+              <pre><code class="code lang-java" data-trim data-noescape>
+TODO exemple DSL
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>DSL</h2>
+            <p>"A domain-specific language (DSL) is a computer language specialized to a particular application domain. This is in contrast to a general-purpose language (GPL), which is broadly applicable across domains"</p> 
+            <p>Avec model-map, on peut écrire un DSL pour nos exclusions assureurs, en s'inspirant de jOOQ</p>
+          </section>
+
+          <section>
+            <h2>Pourquoi un DSL ?</h2>
+            <p>- <strong>compliance</strong> : on peut s'assurer qu'elle correspond au cahier des charges</p>
+            <p>- <strong>gouvernance</strong> : on peut faire un catalogue de règle</p>
+            <p>- <strong>auditabilité</strong> : on peut auditer l'AST d'une règle</p>
           </section>
           <section>
-            <p>Pourquoi un dsl ?</p>
-            <p>- auditabilité</p>
-            <p>- compliance</p>
-            <p>- gouvernance</p>
-            <p>(voir dernière slide)</p>
-          </section>
-          <section>
-            <p>État actuel : 400 classes d'exclusion et gouvernance basé sur le nom de la classe</p>
+            <h2>Exclusions assureurs</h2>
+            <p>Hiérarchie de 492 classes endettées, aucune gouvernance ni auditabilité</p>
             <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
           </section>
 
           <section>
-            <p>Demo model-map : accesseurs du modèle</p>
+            <h2>Model-map</h2>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+          </section>
+
+          <section>
+            <h2>Live code model-map : accesseurs du modèle</h2>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
 public class Account extends Identity {
 
-    @SamplePath(field = SampleFieldId.LOGIN)
+    @SamplePath(field = SampleFieldId.LOGIN, readable= "account login")
     private String login;
 
-    @SamplePath(field = SampleFieldId.PASSWD, readable = "password")
+    @SamplePath(field = SampleFieldId.PASSWD, readable = "account password")
     private String password;
 
 }
               </code></pre>
           </section>
+
           <section>
-            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
-          </section>
-          <section>
-            <p>Design du dsl</p>
-            <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération <code>StepWhen#validate</code> permet de retourner la règle (avec ou sans message)</p>
+            <h2>Design du DSL</h2>
+            <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle (avec ou sans message)</p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
 public static final ValidationRule EMAIL_VALID = DSL
@@ -196,8 +214,8 @@ public static final ValidationRule EMAIL_VALID = DSL
           </section>
 
           <section>
-            <p>Design du dsl</p>
-            <p>Un AST est disponible avec <code>ValidationRule#readable</code></p>
+            <h2>Design du DSL</h2>
+            <p>Une règle lisible est disponible avec <code>ValidationRule#readable</code></p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
 System.out.println(EMAIL_VALID.readable());
@@ -216,10 +234,15 @@ rules.stream()
               </code></pre>
             </div>
           </section>
+          <section>
+            <h2>Design de l'AST</h2>
+            <p>TODO design ast / UML</p>
+          </section>
 
           <section>
             <img data-transition="fade" width="50%" src="png/softshake/formulaire-auto.png">
           </section>
+
           <section>
             <div class="code-wrapper small">
               <pre><code class="code lang-java" data-trim data-noescape>
@@ -247,11 +270,15 @@ public class Personne implements Serializable {
               </code></pre>
             </div>
           </section>
+
           <section>
-            <p>Live code 1 : convertir en DSL</p>
-            <div class="code-wrapper small">
+            <h2>Live code 1 : convertir en DSL</h2>
+            <div class="code-wrapper smaller">
               <pre><code class="code lang-java" data-trim data-noescape>
 public static boolean validateCountry(Account account) {
+    if (account == null) {
+        return true;
+    }
     if (account.getCountry() == null) {
         return true;
     }
@@ -276,8 +303,9 @@ public static boolean validateCountry(Account account) {
               </code></pre>
             </div>
           </section>
+
           <section>
-            <p>JMH</p>
+            <h2>JMH</h2>
             <div class="code-wrapper small">
               <pre><code class="code lang-java" data-trim data-noescape>
 Benchmark                              Mode   Samples         Mean   Mean error    Units
@@ -285,20 +313,29 @@ o.m.BenchmarkOldRule.valid_email      thrpt        25     1860.553       42.269 
 o.m.BenchmarkRule.valid_email         thrpt        25     1733.465       18.461   ops/ms
               </code></pre>
             </div>
-            <p>Nouvelle règle légèrement plus lente</p>
+            <p>Le DSL est aussi performant qu'une règle POJO</p>
           </section>
 
           <section>
-            <p>- bean validation : contrainte sur un modele</p>
-            <p>- dsl : resoud pas meme probleme</p>
-            <p>- utile pour des champs separes</p>
+            <h2>Bean validation</h2>
+            <p>Bean validation exprime aussi des contraintes sur un modèle, notre DSL est un engin de règle, qui se traduit en AST</p>
+            <p>- DSL fonctionne bien pour des validations conditionnelles</p>
+            <p>- DSL fonctionne bien pour une grappe d'objet</p>
           </section>
 
           <section>
-            <p>- gouvernance des regles (rappel)</p>
-            <p>- expressivite</p>
-            <p>- flexibilite ast</p>
-            <p>- mieux que bv</p>
+            <h2>DSL : Gouvernance des règles</h2>
+            <p>TODO</p>
+          </section>
+
+          <section>
+            <h2>DSL : Expressivité</h2>
+            <p>TODO</p>
+          </section>
+
+          <section>
+            <h2>DSL : AST</h2>
+            <p>TODO</p>
           </section>
 
         </section>
@@ -306,7 +343,7 @@ o.m.BenchmarkRule.valid_email         thrpt        25     1733.465       18.461 
         <section>
           <section>
             <h2>Model-Map available on Github</h2>
-            <p></p>
+            <p>TODO</p>
             <ul>
               <li>http://github.com/lesfurets/model-map</li>
               <li class="emptyline">Framework and examples</li>
