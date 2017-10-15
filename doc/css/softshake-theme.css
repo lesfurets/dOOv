@@ -39,6 +39,22 @@ body {
 
 .reveal em {
   color: white;
+  font-style: italic;
+}
+
+.reveal strong {
+  color: white;
+  font-weight: bold;
+}
+
+.reveal code {
+  font-family: monospace;
+  background-color: #424242;
+  padding: 0 5px;
+}
+
+.reveal p {
+  line-height: 1.25;
 }
 
 /*********************************************

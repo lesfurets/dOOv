@@ -46,7 +46,8 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             <div class="fragment">
               <h2>@dubreuia – Alexandre Dubreuil</h2>
               <ul>
-                <li>TODO</li>
+                <li>Québécois exilé à Paris depuis 2009</li>
+                <li>Software Architect at LesFurets.com</li>
               </ul>
             </div>
             <br><br>
@@ -80,7 +81,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 
           <section>
             <h2>Fluent API</h2>
-            <p>Àpriori sur Java : c'est verbeux, mais on peut réduire le bruit avec un Fluent API</p>
+            <p>Java c'est verbeux, mais on peut réduire le bruit et s'approcher du langage naturel avec un Fluent API</p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
 // JUnit API
@@ -98,14 +99,23 @@ assertThat(fellowshipOfTheRing).hasSize(9)
 
           <section>
             <h2>Fluent API</h2>
-            <p>Plusieurs nouveaux idiome depuis Java 8 nous facilitent la tâche : les streams, <code>java.time</code>, les lambdas, etc.</p>
+            <p>Plusieurs nouveaux idiomes depuis Java 8 nous facilitent la tâche (streams, lambdas, etc.)</p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
 // java.time API
 Instant.ofEpochMilli(milli).atZone(ZoneId.systemDefault()).toLocalDateTime()
               </code></pre>
             </div>
-            <p>Plusieurs librairies populaire fournissent des API fluent : jOOQ, AssertJ, guava, etc.</p>
+            <p>Plusieurs librairies populaires fournissent des API fluent : jOOQ, AssertJ, Apache Spark, etc.</p>
+            <div class="code-wrapper small">
+              <pre><code class="code lang-java" data-trim data-noescape>
+Dataset&lt;Row&gt; averagePrice = prices
+        .filter(value.&lt;String&gt;getAs("insurer").equals("COOL insurer"))
+        .groupBy("product")
+        .agg(avg("price").as("average"))
+        .orderBy(desc("average"));
+              </code></pre>
+            </div>
           </section>
 
           <section>
@@ -144,34 +154,54 @@ DSL.using(conn)
 
           <section>
             <h2>Fluent API : motivation 3</h2>
-            <p>Exclusions assureurs (équivalent à une règle de validation) écrites sur le modèle objet. Code historique endetté</p>
-            <div class="code-wrapper smaller">
+            <p>Exclusions assureurs sur le modèle objet (code historique endetté)</p>
+            <div class="code-wrapper small">
               <pre><code class="code lang-java" data-trim data-noescape>
-TODO exemple pourrave
+public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
+                  Vehicule vehicule, Void unused, Besoins besoins,
+                  Set&lt;EAbTestingScenario&gt; scenarios)
+                  throws ExclusionException {
+    if (besoins == null) {
+        return;
+    }
+    if (besoins.getDateDebutContrat() == null) {
+        return;
+    }
+    if (!DateHelper.isAfter(besoins.getDateDebutContrat(),
+                    DateHelper.ajouteJoursADate(DateHelper.getToday(), NBR_JOURS),
+                    DateHelper.EPrecision.jour)) {
+        throw new ExclusionException(DATE_EFFET_PLUS_60_JOURS);
+    }
+}
               </code></pre>
             </div>
           </section>
 
           <section>
             <h2>Fluent API : motivation 3</h2>
-            <div class="code-wrapper smaller">
+            <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
-TODO exemple DSL
+public ExclusionRule exclusionRule() {
+    return DSL.when(dateContrat().after(todayPlusDays(60)))
+                    .excludeFormules()
+                    .withMessage(DATE_EFFET_PLUS_60_JOURS)
+                    .exclusionRule();
+}
               </code></pre>
             </div>
           </section>
 
           <section>
             <h2>DSL</h2>
-            <p>"A domain-specific language (DSL) is a computer language specialized to a particular application domain. This is in contrast to a general-purpose language (GPL), which is broadly applicable across domains"</p> 
-            <p>Avec model-map, on peut écrire un DSL pour nos exclusions assureurs, en s'inspirant de jOOQ</p>
+            <p><em>"A domain-specific language (DSL) is a computer language specialized to a particular application domain. This is in contrast to a general-purpose language (GPL), which is broadly applicable across domains"</em></p> 
+            <p>Avec model-map, on crée un DSL pour nos exclusions assureurs, en s'inspirant de jOOQ</p>
           </section>
 
           <section>
             <h2>Pourquoi un DSL ?</h2>
-            <p>- <strong>compliance</strong> : on peut s'assurer qu'elle correspond au cahier des charges</p>
-            <p>- <strong>gouvernance</strong> : on peut faire un catalogue de règle</p>
-            <p>- <strong>auditabilité</strong> : on peut auditer l'AST d'une règle</p>
+            <p><strong>compliance</strong> : les règles correspondent aux cahiers des charges</p>
+            <p><strong>gouvernance</strong> : catalogue de règles correctement nommées</p>
+            <p><strong>auditabilité</strong> : valider les règles grâce à l'AST</p>
           </section>
           <section>
             <h2>Exclusions assureurs</h2>
@@ -199,17 +229,18 @@ public class Account extends Identity {
 }
               </code></pre>
           </section>
+        </section>
 
+        <section>
           <section>
             <h2>Design du DSL</h2>
-            <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle (avec ou sans message)</p>
+            <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle</p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
-public static final ValidationRule EMAIL_VALID = DSL
-    .when(EMAIL.matches("\\w+[@]\\w+\\.com")
-      .or(EMAIL.matches("\\w+[@]\\w+\\.fr")))
-    .validate()
-    .withMessage("email finishes with .com or .fr");
+DSL.when(EMAIL.matches("\\w+[@]\\w+\\.com")
+     .or(EMAIL.matches("\\w+[@]\\w+\\.fr")))
+   .validate()
+   .withMessage("email finishes with .com or .fr");
               </code></pre>
           </section>
 
@@ -236,7 +267,8 @@ rules.stream()
           </section>
           <section>
             <h2>Design de l'AST</h2>
-            <p>TODO design ast / UML</p>
+            <p><em>"In computer science, an abstract syntax tree (AST), or just syntax tree, is a tree representation of the abstract syntactic structure of source code written in a programming language"</em></p>
+            <p>TODO diagram</p>
           </section>
 
           <section>
@@ -303,57 +335,84 @@ public static boolean validateCountry(Account account) {
               </code></pre>
             </div>
           </section>
+        </section>
 
+        <section>
           <section>
             <h2>JMH</h2>
             <div class="code-wrapper small">
               <pre><code class="code lang-java" data-trim data-noescape>
-Benchmark                              Mode   Samples         Mean   Mean error    Units
-o.m.BenchmarkOldRule.valid_email      thrpt        25     1860.553       42.269   ops/ms
-o.m.BenchmarkRule.valid_email         thrpt        25     1733.465       18.461   ops/ms
+Benchmark                          Mode  Samples      Mean  Mean error   Units
+o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
+o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
               </code></pre>
             </div>
             <p>Le DSL est aussi performant qu'une règle POJO</p>
           </section>
 
           <section>
-            <h2>Bean validation</h2>
-            <p>Bean validation exprime aussi des contraintes sur un modèle, notre DSL est un engin de règle, qui se traduit en AST</p>
-            <p>- DSL fonctionne bien pour des validations conditionnelles</p>
-            <p>- DSL fonctionne bien pour une grappe d'objet</p>
+            <h2>vs Bean validation</h2>
+            <p>Bean validation exprime aussi des contraintes sur un modèle, TODO vs DSL</p>
+            <p>- TODO DSL pour grappe d'objet</p>
           </section>
 
           <section>
             <h2>DSL : Gouvernance des règles</h2>
-            <p>TODO</p>
+            <p>Utilisation du registry et du readable pour règle pour lister les règles par groupe</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+Registry.ACCOUNT.stream()
+                .map(ValidationRule::readable)
+                .forEach(System.out::println);
+              </code></pre>
+            </div>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+When (account email matches \w+[@]\w+\.com or account email matches \w+[@]\w+\.fr), 
+    validate with message "email finishes with .com or .fr"
+When (match any [((account country equals FR and ...),
+                 ((account country equals UK and ...)]), 
+    validate with empty message
+              </code></pre>
+            </div>
+            <p></p>
           </section>
 
           <section>
             <h2>DSL : Expressivité</h2>
-            <p>TODO</p>
+            <p>Expression des règles en langage naturel</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+DSL.when(emprunteurNaissance().ageAt(pretDateDeblocage()))
+                              .greaterOrEqual(90))
+   .excludeFormules()
+   .exclusionRule();
+              </code></pre>
+            </div>
           </section>
 
           <section>
             <h2>DSL : AST</h2>
-            <p>TODO</p>
+            <p>L'AST permet d'afficher la règle de manière structuée et de montrer le noeud évaluant à false</p>
+            <p><em>When (match any [((account country equals FR and account language equals FR) and <span class="strike">account phone number starts with +33</span>), ...]), validate with empty message</em></p>
           </section>
 
         </section>
 
         <section>
           <section>
-            <h2>Model-Map available on Github</h2>
+            <h2>Model-Map et DSL disponibles sur Github</h2>
             <p>TODO</p>
             <ul>
               <li>http://github.com/lesfurets/model-map</li>
-              <li class="emptyline">Framework and examples</li>
+              <li class="emptyline">Framework et exemples</li>
               <li>Apache Licence</li>
-              <li>Try it and contribute !</li>
+              <li>Essayez et contribuez !</li>
             </ul>
           </section>
           <section>
             <h2>Thank You!</h2>
-            <img width="50%" src="png/rnday/logo-transparent-vert.png">
+            <img style="background-color:#34495e" width="50%" src="png/softshake/logo-transparent.png">
           </section>
         </section>
             </div>
