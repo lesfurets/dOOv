@@ -253,10 +253,14 @@ System.out.println(EMAIL_VALID.readable());
 &gt;   validate with message "email finishes with .com or .fr"
               </code></pre>
             </div>
-            <p>Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
+          </section>
+
+          <section>
+            <h2>Design du DSL</h2>
+            <p>Une interface registry est disponible <code>ValidationRule#registerOn(Registry)</code>. Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
-rules.stream()
+Registry.ACCOUNT.stream()
     .map(rule -> rule.executeOn(model))
     .filter(Result::isInvalid)
     .map(Result::message)
@@ -264,6 +268,7 @@ rules.stream()
               </code></pre>
             </div>
           </section>
+
           <section>
             <h2>Design de l'AST</h2>
             <p><em>"In computer science, an abstract syntax tree (AST), or just syntax tree, is a tree representation of the abstract syntactic structure of source code written in a programming language"</em></p>
@@ -350,9 +355,37 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
           </section>
 
           <section>
-            <h2>vs Bean validation</h2>
-            <p>Bean validation exprime aussi des contraintes sur un modèle, TODO vs DSL</p>
-            <p>- TODO DSL pour grappe d'objet</p>
+            <h2>Beyond Bean Validation</h2>
+            <p>Bean validation exprime des contraintes sur les champs : difficile de faire de la validation croisée</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+public class Account {
+    @Pattern(regexp = "(FR)|(UK)")
+    private String country;
+
+    @Pattern(regexp = "???")
+    private String phoneNumber;
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Beyond Bean Validation</h2>
+            <p>Bean validation n'est pas exprimé en langage naturel et n'a pas d'AST</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+@Size(min = 10, max = 200, message = "About Me must be between 10 and 200 characters")
+private String aboutMe;
+              </code></pre>
+            </div>
+            <p>DSL :</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+userAboutMe().length().between(10, 200).validate().readable()
+> When user about me length is between 10 and 200, validate with message...
+              </code></pre>
+            </div>
           </section>
 
           <section>
@@ -378,6 +411,12 @@ When (match any [((account country equals FR and ...),
           </section>
 
           <section>
+            <h2>DSL : Auditabilié</h2>
+            <p>L'AST permet d'afficher la règle de manière structuée</p>
+            <p><em>When (match any [((account country equals FR and account language equals FR) and ...), ...]), validate with empty message</em></p>
+          </section>
+
+          <section>
             <h2>DSL : Expressivité</h2>
             <p>Expression des règles en langage naturel</p>
             <div class="code-wrapper">
@@ -389,19 +428,11 @@ DSL.when(emprunteurNaissance().ageAt(pretDateDeblocage()))
               </code></pre>
             </div>
           </section>
-
-          <section>
-            <h2>DSL : AST</h2>
-            <p>L'AST permet d'afficher la règle de manière structuée et de montrer le noeud évaluant à false</p>
-            <p><em>When (match any [((account country equals FR and account language equals FR) and <span class="strike">account phone number starts with +33</span>), ...]), validate with empty message</em></p>
-          </section>
-
         </section>
 
         <section>
           <section>
             <h2>Model-Map et DSL disponibles sur Github</h2>
-            <p>TODO</p>
             <ul>
               <li>http://github.com/lesfurets/model-map</li>
               <li class="emptyline">Framework et exemples</li>
