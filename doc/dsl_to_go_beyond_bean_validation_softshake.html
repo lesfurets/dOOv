@@ -119,40 +119,12 @@ Dataset&lt;Row&gt; averagePrice = prices
           </section>
 
           <section>
-            <h2>Fluent API : motivation 1</h2>
-            <p>model-map : Mapping bijectif typé de clef / valeur / modèle. Utilisé chez LesFurets comme dictionnaire front, pour notre modèle de donnée C*, etc.</p>
-            <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-// Domain model to map
-FieldModel model = new SampleModelWrapper(sampleModel1);
-Map&lt;FieldId, Object&gt; map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
-System.out.println(map.get(EMAIL));
-
-// Map to domain model
-SampleModelWrapper sampleModel2 = map.entrySet().stream()
-                            .collect(SampleModelWrapper.toFieldModel());
-System.out.println(sampleModel2.getModel().getAccount().getEmail());
-              </code></pre>
-            </div>
+            <h2>DSL</h2>
+            <p><em>"A domain-specific language (DSL) is a computer language specialized to a particular application domain. This is in contrast to a general-purpose language (GPL), which is broadly applicable across domains"</em></p> 
           </section>
 
           <section>
-            <h2>Fluent API : motivation 2</h2>
-            <p>Utilisation de jOOQ (Java Object Oriented Query) dans notre code base, soit un modèle de colonne exprimé avec un DSL (Domain Specific Language) permettant de générer du SQL<p>
-            <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-DSL.using(conn)
-   .selectFrom(BO_INSURANCE)
-   .where(BO_INSURANCE.STATUS.equal(CONFIRMED.getCode()))
-   .stream()
-   .map(InsuranceDAO::InsuranceDto)
-   .collect(toList());
-              </code></pre>
-            </div>
-          </section>
-
-          <section>
-            <h2>Fluent API : motivation 3</h2>
+            <h2>Génèse du DSL : étape 1</h2>
             <p>Exclusions assureurs sur le modèle objet (code historique endetté)</p>
             <div class="code-wrapper small">
               <pre><code class="code lang-java" data-trim data-noescape>
@@ -177,7 +149,7 @@ public void check(FieldContext context, FormuleMoto formule, Conducteur conducte
           </section>
 
           <section>
-            <h2>Fluent API : motivation 3</h2>
+            <h2>Génèse du DSL : étape 1</h2>
             <div class="code-wrapper">
               <pre><code class="code lang-java" data-trim data-noescape>
 public ExclusionRule exclusionRule() {
@@ -191,26 +163,47 @@ public ExclusionRule exclusionRule() {
           </section>
 
           <section>
-            <h2>DSL</h2>
-            <p><em>"A domain-specific language (DSL) is a computer language specialized to a particular application domain. This is in contrast to a general-purpose language (GPL), which is broadly applicable across domains"</em></p> 
-            <p>Avec model-map, on crée un DSL pour nos exclusions assureurs, en s'inspirant de jOOQ</p>
+            <h2>Exclusions assureurs</h2>
+            <p>Hiérarchie de 492 classes endettées, aucune gouvernance ni auditabilité</p>
+            <p>TODO capture maintenance</p>
+            <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
           </section>
 
           <section>
-            <h2>Pourquoi un DSL ?</h2>
-            <p><strong>compliance</strong> : les règles correspondent aux cahiers des charges</p>
-            <p><strong>gouvernance</strong> : catalogue de règles correctement nommées</p>
-            <p><strong>auditabilité</strong> : valider les règles grâce à l'AST</p>
+            <h2>Génèse du DSL : étape 2</h2>
+            <p>model-map : Mapping bijectif typé de clef / valeur / modèle. Utilisé chez LesFurets comme dictionnaire front, pour notre modèle de donnée C*, etc.</p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+// LIVE DEMO
+SampleModel model = new SampleModel();
+model.setAccount(new Account());
+model.getAccount().setEmail("chtijug@gmail.com");
+System.out.println(model.getAccount().getEmail());
+
+FieldModel fieldModel = new SampleModelWrapper(model);
+System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
+
+fieldModel.set(EMAIL, "lesfurets@gmail.com");
+System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
+              </code></pre>
+            </div>
           </section>
+
           <section>
-            <h2>Exclusions assureurs</h2>
-            <p>Hiérarchie de 492 classes endettées, aucune gouvernance ni auditabilité</p>
-            <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
+            <h2>Model-map</h2>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_1.png">
           </section>
 
           <section>
             <h2>Model-map</h2>
             <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+          </section>
+
+          <section>
+            <h2>TODO</h2>
+            <p>- parler de oo -> annotation -> codegen -> field info</p>
+            <p>- nous on a le modele de clef au milieu (au lieu de oo) grace field info</p>
+            <p>- field info : classe avec statiques comme dans jooq</p>
           </section>
 
           <section>
@@ -228,9 +221,40 @@ public class Account extends Identity {
 }
               </code></pre>
           </section>
+
+          <section>
+            <h2>Génèse du DSL : étape 3</h2>
+            <p>Utilisation de jOOQ (Java Object Oriented Query) dans notre code base, soit un modèle de colonne exprimé avec un DSL (Domain Specific Language) permettant de générer du SQL<p>
+            <p>TODO donner plus de contexte sur jooq (on se base dessus)<p>
+            <p>TODO + strongly typed<p>
+            <div class="code-wrapper">
+              <pre><code class="code lang-java" data-trim data-noescape>
+DSL.using(conn)
+   .selectFrom(BO_INSURANCE)
+   .where(BO_INSURANCE.STATUS.equal(CONFIRMED.getCode()))
+   .stream()
+   .map(InsuranceDAO::InsuranceDto)
+   .collect(toList());
+              </code></pre>
+            </div>
+          </section>
         </section>
 
         <section>
+          <section>
+            <h2>TODO</h2>
+            <p>- type safe + methodes dispo par type + vs bean validation (compilation type)</p>
+            <p>- float, integer -> ce qui est dispo</p>
+          </section>
+
+          <section>
+            <h2>Pourquoi un DSL ?</h2>
+            <p><strong>compliance</strong> : les règles correspondent aux cahiers des charges</p>
+            <p><strong>auditabilité</strong> : validation extérieur à l'équipe de développement</p>
+            <p><strong>gouvernance</strong> : catalogue de règles correctement nommées</p>
+            <p><strong>expressivité</strong> : efficacité pour les développeurs</p>
+          </section>
+
           <section>
             <h2>Design du DSL</h2>
             <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle</p>
@@ -281,6 +305,7 @@ Registry.ACCOUNT.stream()
 
           <section>
             <div class="code-wrapper small">
+              <p>TODO delete et mettre mdl4 ui</p>
               <pre><code class="code lang-java" data-trim data-noescape>
 public class Personne implements Serializable {
 
@@ -352,6 +377,11 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
               </code></pre>
             </div>
             <p>Le DSL est aussi performant qu'une règle POJO</p>
+          </section>
+
+          <section>
+            <h2>Beyond Bean Validation</h2>
+            <p>TODO les regles sont separres</p>
           </section>
 
           <section>
@@ -432,6 +462,11 @@ DSL.when(emprunteurNaissance().ageAt(pretDateDeblocage()))
 
         <section>
           <section>
+            <h2>What's next</h2>
+            <p>TODO</p>
+          </section>
+
+          <section>
             <h2>Model-Map et DSL disponibles sur Github</h2>
             <ul>
               <li>http://github.com/lesfurets/model-map</li>
@@ -440,10 +475,12 @@ DSL.when(emprunteurNaissance().ageAt(pretDateDeblocage()))
               <li>Essayez et contribuez !</li>
             </ul>
           </section>
+
           <section>
             <h2>Thank You!</h2>
             <img style="background-color:#34495e" width="50%" src="png/softshake/logo-transparent.png">
           </section>
+
         </section>
             </div>
             </div>
