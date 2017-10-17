@@ -19,6 +19,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
   document.getElementsByTagName( 'head' )[0].appendChild( link );
 }
     </script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
   </head>
   <body>
     <div class="footer">
@@ -83,7 +84,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             <h2>Fluent API</h2>
             <p>Java c'est verbeux, mais on peut réduire le bruit et s'approcher du langage naturel avec un Fluent API</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 // JUnit API
 assertEquals(9, fellowshipOfTheRing).hasSize(9));
 assertTrue(fellowshipOfTheRing.contains(frodo, sam));
@@ -101,14 +102,14 @@ assertThat(fellowshipOfTheRing).hasSize(9)
             <h2>Fluent API</h2>
             <p>Plusieurs nouveaux idiomes depuis Java 8 nous facilitent la tâche (streams, lambdas, etc.)</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 // java.time API
 Instant.ofEpochMilli(milli).atZone(ZoneId.systemDefault()).toLocalDateTime()
               </code></pre>
             </div>
             <p>Plusieurs librairies populaires fournissent des API fluent : jOOQ, AssertJ, Apache Spark, etc.</p>
             <div class="code-wrapper small">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 Dataset&lt;Row&gt; averagePrice = prices
         .filter(value.&lt;String&gt;getAs("insurer").equals("COOL insurer"))
         .groupBy("product")
@@ -127,7 +128,7 @@ Dataset&lt;Row&gt; averagePrice = prices
             <h2>Génèse du DSL : étape 1</h2>
             <p>Exclusions assureurs sur le modèle objet (code historique endetté)</p>
             <div class="code-wrapper small">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
                   Vehicule vehicule, Void unused, Besoins besoins,
                   Set&lt;EAbTestingScenario&gt; scenarios)
@@ -151,7 +152,7 @@ public void check(FieldContext context, FormuleMoto formule, Conducteur conducte
           <section>
             <h2>Génèse du DSL : étape 1</h2>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public ExclusionRule exclusionRule() {
     return DSL.when(dateContrat().after(todayPlusDays(60)))
                     .excludeFormules()
@@ -165,16 +166,56 @@ public ExclusionRule exclusionRule() {
           <section>
             <h2>Exclusions assureurs</h2>
             <p>Hiérarchie de 492 classes endettées, aucune gouvernance ni auditabilité</p>
-            <p>TODO capture maintenance</p>
             <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
           </section>
 
           <section>
             <h2>Génèse du DSL : étape 2</h2>
-            <p>model-map : Mapping bijectif typé de clef / valeur / modèle. Utilisé chez LesFurets comme dictionnaire front, pour notre modèle de donnée C*, etc.</p>
+            <p><strong>model-map</strong> : Mapping bijectif typé de clef / valeur / modèle. Utilisé chez LesFurets comme dictionnaire front, pour notre modèle de donnée C*, etc.</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-// LIVE DEMO
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account extends Identity {
+
+    @SamplePath(field = SampleFieldId.LOGIN,
+                readable = "account login")
+    private String login;
+
+    @SamplePath(field = SampleFieldId.PASSWD,
+                readable = "account password")
+    private String password;
+
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_1.png">
+          </section>
+
+          <section>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+          </section>
+
+          <section>
+            <h2>Model-map : socle du DSL</h2>
+            <p>Grâce aux annotation du domain model, la code génération crée la classe <code>SampleFieldIdInfo</code> contenant les clefs typées</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public static final EnumFieldInfo&lt;Country&gt; COUNTRY = FieldInfoProvider
+                .&lt;Country&gt; enumField()
+                .fieldId(SampleFieldId.COUNTRY)
+                .readable("account country")
+                .type(Country.class)
+                .build(ALL);
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Live code 1 : model-map accesseurs du modèle</h2>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 SampleModel model = new SampleModel();
 model.setAccount(new Account());
 model.getAccount().setEmail("chtijug@gmail.com");
@@ -190,46 +231,12 @@ System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
           </section>
 
           <section>
-            <h2>Model-map</h2>
-            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_1.png">
-          </section>
-
-          <section>
-            <h2>Model-map</h2>
-            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
-          </section>
-
-          <section>
-            <h2>TODO</h2>
-            <p>- parler de oo -> annotation -> codegen -> field info</p>
-            <p>- nous on a le modele de clef au milieu (au lieu de oo) grace field info</p>
-            <p>- field info : classe avec statiques comme dans jooq</p>
-          </section>
-
-          <section>
-            <h2>Live code model-map : accesseurs du modèle</h2>
+            <h2>Génèse du DSL étape 3 : jOOQ</h2>
+            <p>Utilisation de jOOQ (Java Object Oriented Query) dans notre code base</p>
+            <p><em>jOOQ generates Java code from your database and lets you build type safe SQL queries through its fluent API</em></p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-public class Account extends Identity {
-
-    @SamplePath(field = SampleFieldId.LOGIN, readable= "account login")
-    private String login;
-
-    @SamplePath(field = SampleFieldId.PASSWD, readable = "account password")
-    private String password;
-
-}
-              </code></pre>
-          </section>
-
-          <section>
-            <h2>Génèse du DSL : étape 3</h2>
-            <p>Utilisation de jOOQ (Java Object Oriented Query) dans notre code base, soit un modèle de colonne exprimé avec un DSL (Domain Specific Language) permettant de générer du SQL<p>
-            <p>TODO donner plus de contexte sur jooq (on se base dessus)<p>
-            <p>TODO + strongly typed<p>
-            <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-DSL.using(conn)
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+<span class="dsl">DSL</span>.using(conn)
    .selectFrom(BO_INSURANCE)
    .where(BO_INSURANCE.STATUS.equal(CONFIRMED.getCode()))
    .stream()
@@ -238,15 +245,20 @@ DSL.using(conn)
               </code></pre>
             </div>
           </section>
+
+          <section>
+            <h2>Génèse du DSL étape 3 : jOOQ</h2>
+            <p>On s'inspire de jOOQ qui introspecte la base de donnée et génère des classes d'info typées (équivalent aux <code>FieldInfo</code>)</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public final TableField&lt;Record, Integer&gt; ID = createField(
+                "id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+              </code></pre>
+            </div>
+          </section>
         </section>
 
         <section>
-          <section>
-            <h2>TODO</h2>
-            <p>- type safe + methodes dispo par type + vs bean validation (compilation type)</p>
-            <p>- float, integer -> ce qui est dispo</p>
-          </section>
-
           <section>
             <h2>Pourquoi un DSL ?</h2>
             <p><strong>compliance</strong> : les règles correspondent aux cahiers des charges</p>
@@ -256,22 +268,22 @@ DSL.using(conn)
           </section>
 
           <section>
-            <h2>Design du DSL</h2>
+            <h2>Design du DSL : point d'entré et opération terminale</h2>
             <p>Point d'entré <code>org.modelmap.core.dsl.DSL#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-DSL.when(EMAIL.matches("\\w+[@]\\w+\\.com")
-     .or(EMAIL.matches("\\w+[@]\\w+\\.fr")))
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DSL.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+     .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
    .validate()
    .withMessage("email finishes with .com or .fr");
               </code></pre>
           </section>
 
           <section>
-            <h2>Design du DSL</h2>
-            <p>Une règle lisible est disponible avec <code>ValidationRule#readable</code></p>
+            <h2>Design du DSL : langage naturel</h2>
+            <p>Une règle en langage naturel est disponible avec <code>ValidationRule#readable</code></p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 System.out.println(EMAIL_VALID.readable());
 &gt; When (email matches \w+[@]\w+\.com or email matches \w+[@]\w+\.fr)
 &gt;   validate with message "email finishes with .com or .fr"
@@ -280,15 +292,40 @@ System.out.println(EMAIL_VALID.readable());
           </section>
 
           <section>
-            <h2>Design du DSL</h2>
-            <p>Une interface registry est disponible <code>ValidationRule#registerOn(Registry)</code>. Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
+            <h2>Design du DSL : gouvernance</h2>
+            <p>Il est possible d'ajouter une règle dans un ou plusieurs registres <code>ValidationRule#registerOn(Registry)</code></p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-Registry.ACCOUNT.stream()
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DSL.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+     .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
+   .validate()
+   .registerOn(REGISTRY_ACCOUNT);
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Design du DSL : exécution</h2>
+            <p>Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+REGISTRY_ACCOUNT.stream()
     .map(rule -> rule.executeOn(model))
     .filter(Result::isInvalid)
     .map(Result::message)
     .collect(toList());
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Design du DSL : type safety</h2>
+            <p>Les conditions sont disponibles par types, et les arguments sont type safe et validés par le compilateur</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+   DSL.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+//       ^^^^^^^^^^^^^^^^^^^  -->>-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//            date field        is           type safe here
               </code></pre>
             </div>
           </section>
@@ -300,32 +337,33 @@ Registry.ACCOUNT.stream()
           </section>
 
           <section>
-            <img data-transition="fade" width="50%" src="png/softshake/formulaire-auto.png">
+            <img data-transition="fade" src="png/softshake/formulaire-account.png">
           </section>
 
           <section>
             <div class="code-wrapper small">
-              <p>TODO delete et mettre mdl4 ui</p>
-              <pre><code class="code lang-java" data-trim data-noescape>
-public class Personne implements Serializable {
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account extends Identity {
 
-    @CoordonneesPath(field = COORD_NOM, constraint = SOUSCRIPTEUR)
-    protected String nom;
+    @SamplePath(field = SampleFieldId.TIMEZONE, 
+                readable = "account timezone")
+    private Timezone timezone;
 
-    @CoordonneesPath(field = COORD_PRENOM, constraint = SOUSCRIPTEUR)
-    protected String prenom;
+    @SamplePath(field = SampleFieldId.PHONE_NUMBER, 
+                readable = "account phone number")
+    private String phoneNumber;
 
-    @AutoPath(field = PRINCIPAL_SEXE, constraint = PRINCIPAL)
-    @AutoPath(field = SECONDAIRE_SEXE, constraint = SECONDAIRE)
-    @EmprunteurPath(field = EMPRUNTEUR_SEXE, constraint = EMPRUNTEUR)
-    @EmprunteurPath(field = COEMPRUNTEUR_SEXE, constraint = COEMPRUNTEUR)
-    private ESexe sexe;
+    @SamplePath(field = SampleFieldId.EMAIL, 
+                readable = "account email")
+    private String email;
 
-    @AutoPath(field = PRINCIPAL_NAISSANCE, constraint = PRINCIPAL)
-    @AutoPath(field = SECONDAIRE_NAISSANCE, constraint = SECONDAIRE)
-    @EmprunteurPath(field = EMPRUNTEUR_NAISSANCE, constraint = EMPRUNTEUR)
-    @EmprunteurPath(field = COEMPRUNTEUR_NAISSANCE, constraint = COEMPRUNTEUR)
-    private String dateNaissance;
+    @SamplePath(field = SampleFieldId.EMAIL_ACCEPTED, 
+                readable = "account email accepted")
+    private boolean acceptEmail;
+
+    @SamplePath(field = SampleFieldId.EMAILS_PREFERENCES, 
+                readable = "account préférences mail")
+    private Collection<EmailType> emailTypes = new HashSet<>();
 
 }
               </code></pre>
@@ -333,9 +371,9 @@ public class Personne implements Serializable {
           </section>
 
           <section>
-            <h2>Live code 1 : convertir en DSL</h2>
+            <h2>Live code 2 : convertir en DSL</h2>
             <div class="code-wrapper smaller">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public static boolean validateCountry(Account account) {
     if (account == null) {
         return true;
@@ -370,7 +408,7 @@ public static boolean validateCountry(Account account) {
           <section>
             <h2>JMH</h2>
             <div class="code-wrapper small">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>
 Benchmark                          Mode  Samples      Mean  Mean error   Units
 o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
 o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
@@ -380,38 +418,64 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
           </section>
 
           <section>
-            <h2>Beyond Bean Validation</h2>
-            <p>TODO les regles sont separres</p>
-          </section>
-
-          <section>
-            <h2>Beyond Bean Validation</h2>
-            <p>Bean validation exprime des contraintes sur les champs : difficile de faire de la validation croisée</p>
+            <h2>Beyond Bean Validation : types</h2>
+            <p>Les règles du DSL sont fortements typés, et les erreurs de types sont détectés à la compilation</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public class Account {
-    @Pattern(regexp = "(FR)|(UK)")
-    private String country;
 
-    @Pattern(regexp = "???")
-    private String phoneNumber;
+    // TODO example type bean validation
+
 }
               </code></pre>
             </div>
           </section>
 
           <section>
-            <h2>Beyond Bean Validation</h2>
+            <h2>Beyond Bean Validation : validation complexe</h2>
+            <p>Bean validation exprime des contraintes sur les champs : difficile de faire de la validation croisée</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account {
+
+    @Pattern(regexp = "(FR)|(UK)")
+    private String country;
+
+    @Pattern(regexp = "???")
+    private String phoneNumber;
+
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Beyond Bean Validation : quantité de règles</h2>
+            <p>Les règles DSL ne sont pas directement sur le modèle : utile lorsqu'on a un catalogue complexe de règle</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account {
+
+     // TODO example catalogue bean validation
+
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Beyond Bean Validation : langage naturel</h2>
             <p>Bean validation n'est pas exprimé en langage naturel et n'a pas d'AST</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 @Size(min = 10, max = 200, message = "About Me must be between 10 and 200 characters")
 private String aboutMe;
               </code></pre>
             </div>
-            <p>DSL :</p>
+            <p></p>
+            <h2>DSL</h2>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 userAboutMe().length().between(10, 200).validate().readable()
 > When user about me length is between 10 and 200, validate with message...
               </code></pre>
@@ -422,14 +486,14 @@ userAboutMe().length().between(10, 200).validate().readable()
             <h2>DSL : Gouvernance des règles</h2>
             <p>Utilisation du registry et du readable afficher les règles par groupe</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 Registry.ACCOUNT.stream()
                 .map(ValidationRule::readable)
                 .forEach(System.out::println);
               </code></pre>
             </div>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 When (account email matches \w+[@]\w+\.com or account email matches \w+[@]\w+\.fr), 
     validate with message "email finishes with .com or .fr"
 When (match any [((account country equals FR and ...),
@@ -441,17 +505,30 @@ When (match any [((account country equals FR and ...),
           </section>
 
           <section>
-            <h2>DSL : Auditabilié</h2>
-            <p>L'AST permet d'afficher la règle de manière structuée</p>
-            <p><em>When (match any [((account country equals FR and account language equals FR) and ...), ...]), validate with empty message</em></p>
+            <h2>DSL : Auditabilité</h2>
+            <p>L'AST permet d'afficher la règle de manière structurée</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+When
+  match any
+    - <span class="field">account country</span> <span class="operator">equals</span> 'FR' <span class="logical">and</span>
+      <span class="field">account language</span> <span class="operator">equals</span> 'FR' <span class="logical">and</span>
+      <span class="field">account phone number</span> <span class="operator">starts with</span> '+33'
+    - <span class="field">account country</span> <span class="operator">equals</span> 'UK' <span class="logical">and</span>
+      <span class="field">account language</span> <span class="operator">equals</span> 'EN' <span class="logical">and</span>
+      <span class="field">account phone number</span> <span class="operator">starts with</span> '+45'
+validate with
+  empty message
+              </code></pre>
+            </div>
           </section>
 
           <section>
             <h2>DSL : Expressivité</h2>
             <p>Expression des règles en langage naturel</p>
             <div class="code-wrapper">
-              <pre><code class="code lang-java" data-trim data-noescape>
-DSL.when(emprunteurNaissance().ageAt(pretDateDeblocage()))
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DSL.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
                               .greaterOrEqual(90))
    .excludeFormules()
    .exclusionRule();
@@ -462,15 +539,33 @@ DSL.when(emprunteurNaissance().ageAt(pretDateDeblocage()))
 
         <section>
           <section>
+            <h2>TODO</h2>
+            <ul>
+              <li>bean validation gestion des erreurs</li>
+              <li>dsl ajouter des contraintes du langage metier (cadre dev)</li>
+              <li>debug</li>
+              <li>syntaxe dsl vs java mieux ou pas (different)</li>
+              <li>slide pro / cons</li>
+              <li>prerequis model-map (annotations + codegen)</li>
+            </ul>
+          </section>
+
+          <section>
             <h2>What's next</h2>
-            <p>TODO</p>
+            <ul>
+              <li>Rename model-map to DOOV (domain object oriented validation)</li>
+              <li>Add code generator options for different styles</li>
+              <li>Support most java types</li>
+              <li>Add different readable formats</li>
+              <li>TODO ast optim</li>
+              <li>TODO ast fails node</li>
+            </ul>
           </section>
 
           <section>
             <h2>Model-Map et DSL disponibles sur Github</h2>
             <ul>
-              <li>http://github.com/lesfurets/model-map</li>
-              <li class="emptyline">Framework et exemples</li>
+              <li><a href="http://github.com/lesfurets/model-map">http://github.com/lesfurets/model-map</a> (framework et exemples)</li>
               <li>Apache Licence</li>
               <li>Essayez et contribuez !</li>
             </ul>
