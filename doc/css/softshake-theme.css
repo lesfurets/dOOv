@@ -404,9 +404,6 @@ pre mark .pun,
 code mark .pun {
   color: #000 !important;
 }
-pre .dsl .pln {
-  color: indianred; 
-}
 pre .field .pln {
   color: darkseagreen;
 }
