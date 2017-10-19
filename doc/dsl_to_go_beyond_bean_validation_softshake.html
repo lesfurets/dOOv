@@ -550,10 +550,8 @@ DSL.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
 
         <section>
           <section>
-            <h2>DSL vs POJO</h2>
-            <p>On comprend qu'un DSL ne sert pas le même but que Bean Validation, quelles sont les différences avec un POJO ?</p>
-            <p></p>
-            <h2>Pros DSL</h2>
+            <p>Quels sont les avantages de notre DSL vs POJO ?</p>
+            <h2>Avantages</h2>
             <ul>
               <li>DSL s'exprime dans une syntaxe declarative</li>
               <li>DSL peut limiter des contraintes métiers</li>
@@ -561,9 +559,10 @@ DSL.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
               <li>DSL peut afficher quels noeuds de l'arbre ne valident pas</li>
             </ul>
             <p></p>
-            <h2>& Cons DSL</h2>
+            <h2>Inconvénients</h2>
             <ul>
               <li>DSL s'exprime dans une syntaxe declarative</li>
+              <li>DSL nécessite l'annotation et la code génération du modèle</li>
               <li>DSL plus difficile à debug</li>
             </ul>
           </section>
@@ -591,19 +590,19 @@ DSL...
           <section>
             <h2>What's next</h2>
             <ul>
-              <li><strike>Rename model-map to DOOV (domain object oriented validation)</strike> <strong>DONE!</strong></li>
+              <li><strike>Rename model-map to dOOv (domain object oriented validation)</strike> <strong>DONE!</strong></li>
+              <li><strike>Support most java types of standard library</strike> <strong>DONE!</strong></li>
               <li>Add different readable formats (html, markdown, etc.)</li>
               <li>Add code generator options for different styles</li>
-              <li>Support all java types for standard library</li>
+              <li>Add AST failed node and debug support</li>
               <li>Add AST optimisation options</li>
-              <li>Add AST failed node debug support</li>
             </ul>
           </section>
 
           <section>
             <h2>Model-Map et DSL disponibles sur Github</h2>
             <ul>
-              <li><a href="http://github.com/lesfurets/model-map">http://github.com/lesfurets/model-map</a> (framework et exemples)</li>
+              <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework et exemples)</li>
               <li>Apache Licence</li>
               <li>Essayez et contribuez !</li>
             </ul>
