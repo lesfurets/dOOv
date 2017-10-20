@@ -35,7 +35,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
             &nbsp;&nbsp;&nbsp;.at(SoftShake.eq(ch));</h1>
           <p>
-          <a href="https://github.com/lesfurets">https://github.com/lesfurets/model-map</a>
+          <a href="https://github.com/lesfurets">https://github.com/lesfurets/dOOv</a>
           </p>
         </section>
 
@@ -228,7 +228,7 @@ public static final EnumFieldInfo&lt;Country&gt; COUNTRY = FieldInfoProvider
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 SampleModel model = new SampleModel();
 model.setAccount(new Account());
-model.getAccount().setEmail("chtijug@gmail.com");
+model.getAccount().setEmail("softshake@geneva.ch");
 System.out.println(model.getAccount().getEmail());
 
 FieldModel fieldModel = new SampleModelWrapper(model);
@@ -258,7 +258,7 @@ DSL.using(conn)
 
           <section>
             <h2>Génèse du DSL : étape 3</h2>
-            <p>On s'inspire de jOOQ qui introspecte la base de donnée et génère des classes d'info typées (équivalent aux <code>FieldInfo</code>)</p>
+            <p>On s'inspire de jOOQ qui introspecte la base de données et génère des classes d'info typées (équivalent aux <code>FieldInfo</code>)</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public final TableField&lt;Record, Integer&gt; ID = createField(
@@ -330,7 +330,7 @@ REGISTRY_ACCOUNT.stream()
 
           <section>
             <h2>Design du DSL : type safety</h2>
-            <p>Les conditions sont disponibles par types, et les arguments sont type safe et validés par le compilateur</p>
+            <p>Les conditions sont disponibles par types, et les arguments sont "type safe" et validés par le compilateur</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
    DSL.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
