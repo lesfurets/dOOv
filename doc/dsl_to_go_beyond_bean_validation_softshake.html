@@ -86,9 +86,9 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 // JUnit API
-assertEquals(9, fellowshipOfTheRing).hasSize(9));
+assertEquals(9, fellowshipOfTheRing.size());
 assertTrue(fellowshipOfTheRing.contains(frodo, sam));
-assertTrue(fellowshipOfTheRing.doesNotContain(sauron));
+assertFalse(fellowshipOfTheRing.contains(sauron));
 
 // AssertJ API (fluent)
 assertThat(fellowshipOfTheRing).hasSize(9)
@@ -592,6 +592,7 @@ DSL...
             <ul>
               <li><strike>Rename model-map to dOOv (domain object oriented validation)</strike> <strong>DONE!</strong></li>
               <li><strike>Support most java types of standard library</strike> <strong>DONE!</strong></li>
+              <li>Add extension points to define own DSL conditions</li>
               <li>Add different readable formats (html, markdown, etc.)</li>
               <li>Add code generator options for different styles</li>
               <li>Add AST failed node and debug support</li>
