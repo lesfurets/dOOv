@@ -461,11 +461,10 @@ DSL.when(userBirthdate().ageAt(today()).greaterOrEquals(18L)
               </code></pre>
             </div>
           </section>
-        </section>
 
-        <section>
           <section>
-            <h2>JMH</h2>
+            <h2>Performance - Java Microbenchmark Harness</h2>
+            <p>On utilise JMH pour évaluer les performances du DSL</p>
             <div class="code-wrapper small">
               <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>
 Benchmark                          Mode  Samples      Mean  Mean error   Units
@@ -473,9 +472,11 @@ o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
 o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
               </code></pre>
             </div>
-            <p>Le DSL est aussi performant qu'une règle POJO</p>
+            <p>Le DSL est très proche des performances d'une règle POJO</p>
           </section>
+        </section>
 
+        <section>
           <section>
             <h2>Beyond Bean Validation : types</h2>
             <p>Les règles du DSL sont fortements typés : les erreurs sont détectés à la compilation</p>
