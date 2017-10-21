@@ -349,10 +349,10 @@ REGISTRY_ACCOUNT.stream()
 
           <section>
             <h2>Design de l'AST : DSL, when, matchAny ...</h2>
-            <p>L'AST commence toujours par un token <code>when</code>, puis on compose un predicat :</p>
+            <p>L'AST commence toujours par un token <code>when</code>, puis on compose un prédicat :</p>
             <ul>
                 <li>En utilisant directement un champ</li>
-                <li>En composant des predicats sur plusieurs champs<br/>
+                <li>En composant des prédicats sur plusieurs champs<br/>
                 avec <code>matchAll</code>, <code>matchAny</code>, ou <code>matchOne</code></li>
             </ul>
             <img data-transition="fade" src="png/doov_simple_ast.png" width="90%">
@@ -361,16 +361,16 @@ REGISTRY_ACCOUNT.stream()
           <section>
             <h2>Design de l'AST : Champs Numeric et Enuméré</h2>
             <p>L'AST reprend les opérations classiques sur les prédicats numériques:<br/>
-              <code>lesserThan</code>, <code>greaterThan</code>, etc qui peuvent être appliqués<br/>
-              sur des valeurs numériques ou un autre champs numérique
+              <code>lesserThan</code>, <code>greaterThan</code>, etc. qui peuvent être appliquées<br/>
+              sur des valeurs numériques ou un autre champ numérique
             </p>
             <img data-transition="fade" src="png/doov_numeric_and_types_field_ast.png" width="90%">
           </section>
 
           <section>
             <h2>Design de l'AST : Champs String et Boolean</h2>
-              <p>On retrouve les opérations de base sur les <code>String</code>,<br/>
-                <code>matches</code> et <code>contains</code> qui applique des expressions régulières
+              <p>On retrouve les opérations de base sur les <code>String</code> :<br/>
+                <code>matches</code> et <code>contains</code> qui prennent en paramètre des expressions régulières
               </p>
               <img data-transition="fade" src="png/doov_string_and_boolean_field_ast.png" width="90%">
           </section>
@@ -378,7 +378,7 @@ REGISTRY_ACCOUNT.stream()
           <section>
             <h2>Design de l'AST : Champs Date, Time et DateTime</h2>
               <p>Les champs <code>Temporal</code> possèdent des opérateurs qui peuvent appliquer des fonctions.
-              <code>today()</code>, <code>todayPlusDays()</code>, etc permettent de définir des dates qui seront
+              <code>today()</code>, <code>todayPlusDays()</code>, etc. permettent de définir des dates qui seront
               évaluées à l'exécution de la règle.
               </p>
               <img data-transition="fade" src="png/doov_temporal_field_ast.png" width="90%">
