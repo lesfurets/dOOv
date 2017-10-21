@@ -343,11 +343,51 @@ REGISTRY_ACCOUNT.stream()
           <section>
             <h2>Design de l'AST</h2>
             <p><em>"In computer science, an abstract syntax tree (AST), or just syntax tree, is a tree representation of the abstract syntactic structure of source code written in a programming language"</em></p>
-            <img data-transition="fade" src="png/softshake/ast.png">
+            <img data-transition="fade" src="png/doov_full_ast.png" width="90%">
           </section>
 
           <section>
-            <h2>Sample UI</h2>
+            <h2>Design de l'AST : DSL, when, matchAny ...</h2>
+            <p>L'AST commence toujours par un token <code>when</code>, puis on compose un predicat :</p>
+            <ul>
+                <li>En utilisant directement un champ</li>
+                <li>En composant des predicats sur plusieurs champs<br/>
+                avec <code>matchAll</code>, <code>matchAny</code>, ou <code>matchOne</code></li>
+            </ul>
+            <img data-transition="fade" src="png/doov_simple_ast.png" width="90%">
+          </section>
+
+          <section>
+            <h2>Design de l'AST : Champs Numeric et Enuméré</h2>
+            <p>L'AST reprend les opérations classiques sur les prédicats numériques:<br/>
+              <code>lesserThan</code>, <code>greaterThan</code>, etc qui peuvent être appliqués<br/>
+              sur des valeurs numériques ou un autre champs numérique
+            </p>
+            <img data-transition="fade" src="png/doov_numeric_and_types_field_ast.png" width="90%">
+          </section>
+
+          <section>
+            <h2>Design de l'AST : Champs String et Boolean</h2>
+              <p>On retrouve les opérations de base sur les <code>String</code>,<br/>
+                <code>matches</code> et <code>contains</code> qui applique des expressions régulières
+              </p>
+              <img data-transition="fade" src="png/doov_string_and_boolean_field_ast.png" width="90%">
+          </section>
+
+          <section>
+            <h2>Design de l'AST : Champs Date, Time et DateTime</h2>
+              <p>Les champs <code>Temporal</code> possèdent des opérateurs qui peuvent appliquer des fonctions.
+              <code>today()</code>, <code>todayPlusDays()</code>, etc permettent de définir des dates qui seront
+              évaluées à l'exécution de la règle.
+              </p>
+              <img data-transition="fade" src="png/doov_temporal_field_ast.png" width="90%">
+          </section>
+        </section>
+        
+        <section>
+          <section>
+            <h2>It's time to play !</h2>
+            <p>Essayons d'écrire une règle de validation sur une IHM</p>
             <img data-transition="fade" src="png/softshake/formulaire-account.png">
           </section>
 
@@ -592,8 +632,9 @@ DSL...
             <ul>
               <li><strike>Rename model-map to dOOv (domain object oriented validation)</strike> <strong>DONE!</strong></li>
               <li><strike>Support most java types of standard library</strike> <strong>DONE!</strong></li>
-              <li>Add extension points to define own DSL conditions</li>
               <li>Add different readable formats (html, markdown, etc.)</li>
+              <li>Collections support with <code>contains()</code>, <code>isEmpty()</code>, <code>hasSize()</code>, etc</li>
+              <li>Add extension points to define own DSL conditions</li>
               <li>Add code generator options for different styles</li>
               <li>Add AST failed node and debug support</li>
               <li>Add AST optimisation options</li>
@@ -601,7 +642,9 @@ DSL...
           </section>
 
           <section>
-            <h2>Model-Map et DSL disponibles sur Github</h2>
+            <h2>Enjoy dOOv.io</h2>
+            <img data-transition="fade" src="png/doov_io_small.png" width="50%">
+            <p><a href="http://www.dOOv.io">http://www.dOOv.io</a></p>
             <ul>
               <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework et exemples)</li>
               <li>Apache Licence</li>
