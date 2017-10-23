@@ -342,14 +342,14 @@ REGISTRY_ACCOUNT.stream()
           </section>
 
           <section>
-            <h2>Design de l'AST</h2>
+            <h2>Design de l'arbre de syntaxe</h2>
             <p><em>"In computer science, an abstract syntax tree (AST), or just syntax tree, is a tree representation of the abstract syntactic structure of source code written in a programming language"</em></p>
             <img data-transition="fade" src="png/doov_full_ast.png" width="90%">
           </section>
 
           <section>
-            <h2>Design de l'AST : DSL, when, matchAny ...</h2>
-            <p>L'AST commence toujours par un token <code>when</code>, puis on compose un prédicat :</p>
+            <h2>Design de l'arbre de syntaxe : DSL, when, matchAny ...</h2>
+            <p>L'arbre de syntaxe commence toujours par un token <code>when</code>, puis on compose un prédicat :</p>
             <ul>
                 <li>En utilisant directement un champ</li>
                 <li>En composant des prédicats sur plusieurs champs<br/>
@@ -359,7 +359,7 @@ REGISTRY_ACCOUNT.stream()
           </section>
 
           <section>
-            <h2>Design de l'AST : Champs Numeric et Enuméré</h2>
+            <h2>Design de l'arbre de syntaxe : Champs Numeric et Enuméré</h2>
             <p>L'AST reprend les opérations classiques sur les prédicats numériques:<br/>
               <code>lesserThan</code>, <code>greaterThan</code>, etc. qui peuvent être appliquées<br/>
               à une valeur numérique ou un autre champ numérique
@@ -368,7 +368,7 @@ REGISTRY_ACCOUNT.stream()
           </section>
 
           <section>
-            <h2>Design de l'AST : Champs String et Boolean</h2>
+            <h2>Design de l'arbre de syntaxe : Champs String et Boolean</h2>
               <p>On retrouve les opérations de base sur les <code>String</code> :<br/>
                 <code>matches</code> et <code>contains</code> qui prennent en paramètre des expressions régulières
               </p>
@@ -376,7 +376,7 @@ REGISTRY_ACCOUNT.stream()
           </section>
 
           <section>
-            <h2>Design de l'AST : Champs Date, Time et DateTime</h2>
+            <h2>Design de l'arbre de syntaxe : Champs Date, Time et DateTime</h2>
               <p>Les champs <code>Temporal</code> possèdent des opérateurs qui peuvent appliquer des fonctions.
               <code>today()</code>, <code>todayPlusDays()</code>, etc. permettent de définir des dates qui seront
               évaluées à l'exécution de la règle.
@@ -517,7 +517,7 @@ public class Account {
 
           <section>
             <h2>Beyond Bean Validation : langage naturel</h2>
-            <p>Bean validation n'est pas exprimé en langage naturel et n'a pas d'AST</p>
+            <p>Bean validation n'est pas exprimé en langage naturel et n'a pas d'arbre de syntaxe</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 @Size(min = 10, max = 200,
@@ -559,7 +559,7 @@ When (match any [((account country equals FR and ...),
 
           <section>
             <h2>DSL : Auditabilité</h2>
-            <p>L'AST permet d'afficher la règle de manière structurée</p>
+            <p>L'arbre de syntaxe permet d'afficher la règle de manière structurée</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 When
@@ -638,11 +638,6 @@ DSL...
               <li>Collections support with <code>contains()</code>, <code>isEmpty()</code>, <code>hasSize()</code>, etc</li>
               <li>Add extension points to define own DSL conditions</li>
               <li>Add code generator options for different styles</li>
-              <li>Add AST failed node and debug support</li>
-              <li>Add AST optimisation options</li>
-              <li>Add data on nodes</li>
-              <li>Add visit pattern on ast</li>
-              <li>Add predicates on stepcondition</li>
             </ul>
           </section>
 
