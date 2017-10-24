@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>dOOv.io</title>
+    <title>dOOv, a fluent API for typesafe domain model validation</title>
     <meta name="description" content="dOOv, a fluent API for typesafe domain model validation">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -14,36 +14,75 @@ html {
 }
 body {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 36px;
+  font-size: 3vw;
   font-weight: normal;
   letter-spacing: -0.02em;
   color: #eeeeee; 
   background-color: #0D1517;
   background-image: url("png/dark-bg-dots.png"), radial-gradient(circle 1000px at top center, #144F5A 40%, #0D1517 60%);
   background-image: url("png/dark-bg-dots.png"), -webkit-radial-gradient(top center, circle 1000px, #144F5A 40%, #0D1517 60%);
-  background-image: url("png/dark-bg-dots.png"), radial-gradient(circle 1000px at top center, #144F5A 40%, #0D1517 60%);
-  text-align: center;
 }
 .logo {
-  margin: 0 auto;
-  width: 66%;
+  text-align: center;
+  margin: auto;
+  width: 55%;
 }
 .description {
-  margin: 0 auto;
-  width: 66%;
+  text-align: center;
+  margin: auto;
 }
-a {
+.code {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 80%;
+  background-color: white;
+  padding: 4px;
+}
+.java {
+  padding: 20px;
+  background-color: #333333;
+  font-family: monospace;
+  font-size: 2vw;
+  text-align: left;
+}
+.github {
+  margin-top: 40px;
+}
+a.button {
+  background-color: black;
+  padding: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
   color: white;
   font-family: monospace;
+  text-decoration: none;
 }
-    </style>
+  </style>
   </head>
   <body>
     <div class="logo">
-      <img class="logo" src="png/doov_io_logo_dark_large.png">
+      <a href="http://github.com/lesfurets/dOOv">
+        <img class="logo" alt="dOOv on GitHub" src="png/doov_io_logo_dark_large.png">
+      </a>
     </div>
     <div class="description">
-      <a class="description" href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a>
+        Write business rules in a refreshing way
+    </div>
+    <div class="code">
+        <div class="java">
+            DSL.when(<font color="#efef8f">userBirthdate</font>().ageAt(<font color="#efef8f">today</font>()).greaterOrEquals(<font color="#8cd0d3">18</font>)<br/>
+            &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountEmail</font>().length().lesserOrEquals(<font color="#efef8f">maxEmailSize</font>()))<br/>
+            &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">ccountCountry</font>().eq(<font color="#98fb98">Country</font>.FR))<br/>
+            &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountPhoneNumber</font>().startsWith(<font color="#cc9393">"+33"</font>)))<br/>
+            &nbsp;&nbsp;&nbsp;.validate();
+        </div>
+    </div>
+    <div class="description">
+      dOOv, a fluent API for typesafe domain model validation
+    </div>
+    <div class="description github">
+      <a class="button" href="http://github.com/lesfurets/dOOv">Meet dOOv on GitHub >></a>
     </div>
   </body>
 </html>
