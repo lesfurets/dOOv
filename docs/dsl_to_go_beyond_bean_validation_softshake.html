@@ -274,13 +274,13 @@ public final TableField&lt;Record, Integer&gt; ID = createField(
             <h2>Pourquoi un DSL ?</h2>
             <p><strong>compliance</strong> : les règles correspondent aux cahiers des charges</p>
             <p><strong>auditabilité</strong> : validation sans regarder le contenu du code</p>
-            <p><strong>gouvernance</strong> : catalogue de règles identifiables</p>
+            <p><strong>gouvernance</strong> : maintenance du catalogue de règles</p>
             <p><strong>expressivité</strong> : efficacité pour les développeurs</p>
           </section>
 
           <section>
-            <h2>Design du DSL : point d'entré et opération terminale</h2>
-            <p>Point d'entré <code>DOOV#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle</p>
+            <h2>Design du DSL : point d'entré et règle</h2>
+            <p>Le point d'entré est <code>DOOV#when(StepCondition)</code> et l'opération <code>StepWhen#validate</code> permet de retourner la règle</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
@@ -317,7 +317,7 @@ DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
 
           <section>
             <h2>Design du DSL : exécution</h2>
-            <p>Pour exécuter la règle il faut appeler <code>ValidationRule#executeOn(FieldModel)</code></p>
+            <p>L'opération terminale <code>ValidationRule#executeOn(FieldModel)</code><br>exécute la règle</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 REGISTRY_ACCOUNT.stream()
