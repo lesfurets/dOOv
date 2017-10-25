@@ -165,7 +165,7 @@ public void check(FieldContext context, FormuleMoto formule, Conducteur conducte
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public ExclusionRule exclusionRule() {
-    return DSL.when(dateContrat().after(todayPlusDays(60)))
+    return DOOV.when(dateContrat().after(todayPlusDays(60)))
                     .excludeFormules()
                     .withMessage(DATE_EFFET_PLUS_60_JOURS)
                     .exclusionRule();
@@ -280,10 +280,10 @@ public final TableField&lt;Record, Integer&gt; ID = createField(
 
           <section>
             <h2>Design du DSL : point d'entré et opération terminale</h2>
-            <p>Point d'entré <code>DSL#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle</p>
+            <p>Point d'entré <code>DOOV#when(StepCondition)</code>, opération terminale <code>StepWhen#validate</code> permet de retourner la règle</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DSL.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
      .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
    .validate()
    .withMessage("email finishes with .com or .fr");
@@ -307,7 +307,7 @@ System.out.println(EMAIL_VALID.readable());
             <p>Il est possible d'ajouter une règle dans un ou plusieurs registry <code>ValidationRule#registerOn(Registry)</code></p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DSL.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
      .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
    .validate()
    .registerOn(REGISTRY_ACCOUNT);
@@ -334,9 +334,9 @@ REGISTRY_ACCOUNT.stream()
             <p>Les conditions sont disponibles par types, et les arguments sont "type safe" et validés par le compilateur</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-   DSL.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
-//       ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//            date field                  is type safe here
+   DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+//        ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//             date field                  is type safe here
               </code></pre>
             </div>
           </section>
@@ -452,12 +452,12 @@ public static boolean validateAccount(User user, Account account, Configuration 
             <h2>Live code 2 : DSL</h2>
             <div class="code-wrapper small">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DSL.when(userBirthdate().ageAt(today()).greaterOrEquals(18L)
-                .and(accountEmail().length().lesserOrEquals(configurationMaxEmailSize()))
-                .and(accountCountry().eq(Country.FR))
-                .and(accountPhoneNumber().startsWith("+33")))
-                .validate()
-                .registerOn(REGISTRY_ACCOUNT, VALID_ACCOUNT);
+DOOV.when(userBirthdate().ageAt(today()).greaterOrEquals(18L)
+     .and(accountEmail().length().lesserOrEquals(configurationMaxEmailSize()))
+     .and(accountCountry().eq(Country.FR))
+     .and(accountPhoneNumber().startsWith("+33")))
+     .validate()
+     .registerOn(REGISTRY_ACCOUNT, VALID_ACCOUNT);
               </code></pre>
             </div>
           </section>
@@ -582,10 +582,10 @@ validate with
             <p>Expression des règles en langage naturel</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DSL.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
-                              .greaterOrEqual(90))
-   .excludeFormules()
-   .exclusionRule();
+DOOV.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
+                               .greaterOrEqual(90))
+    .excludeFormules()
+    .exclusionRule();
               </code></pre>
             </div>
           </section>
@@ -625,7 +625,7 @@ DSL.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
             <p>Annoter votre modèle, exécuter le code générateur, puis écrivez vos règles :</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DSL...
+DOOV...
               </code></pre>
             </div>
           </section>
