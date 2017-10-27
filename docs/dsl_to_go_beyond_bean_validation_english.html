@@ -275,7 +275,7 @@ public final TableField&lt;Record, Integer&gt; ID = createField(
             <p><strong>compliance</strong> : the rules correspond to the specification documents</p>
             <p><strong>auditability</strong> : understand a rule without looking at the code</p>
             <p><strong>governance</strong> : maintenance of the rules catalogue</p>
-            <p><strong>expressivity</strong> : productivity for developers</p>
+            <p><strong>clarity</strong> : productivity for developers</p>
           </section>
 
           <section>
@@ -414,7 +414,7 @@ public class Account extends Identity {
           </section>
 
           <section>
-            <h2>Live code 2 : convertir en DSL</h2>
+            <h2>Live code 2 : rewrite with dOOv</h2>
             <div class="code-wrapper smaller">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public static boolean validateAccount(User user, Account account, Configuration config) {
@@ -455,7 +455,7 @@ DOOV.when(userBirthdate().ageAt(today()).greaterOrEquals(18L)
 
           <section>
             <h2>Performance - Java Microbenchmark Harness</h2>
-            <p>On utilise JMH pour évaluer les performances du DSL</p>
+            <p>We use JMH to check the performance of the DSL</p>
             <div class="code-wrapper small">
               <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>
 Benchmark                          Mode  Samples      Mean  Mean error   Units
@@ -463,14 +463,14 @@ o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
 o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
               </code></pre>
             </div>
-            <p>Le DSL est très proche des performances d'une règle POJO</p>
+            <p>Performance of the DSL and POJO code are very close</p>
           </section>
         </section>
 
         <section>
           <section>
             <h2>Beyond Bean Validation : types</h2>
-            <p>Les règles du DSL sont fortements typés : les erreurs sont détectés à la compilation</p>
+            <p>DSL rules are strongly typed : type issues are visible during the java compilation</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public class Account {
@@ -484,8 +484,8 @@ public class Account {
           </section>
 
           <section>
-            <h2>Beyond Bean Validation : validation complexe</h2>
-            <p>Bean validation exprime des contraintes sur les champs : difficile de faire de la validation croisée</p>
+            <h2>Beyond Bean Validation : complex validation</h2>
+            <p>Bean Validation constraints are based on field annotation but the cross validation between fields are only available through the extension mechanism</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public class Account {
@@ -502,14 +502,17 @@ public class Account {
           </section>
 
           <section>
-            <h2>Beyond Bean Validation : syntaxe versus cohérence</h2>
-            <p>Bean validation peut faire des contrôles de syntaxe, dOOv peut faire en plus des contrôles de cohérence : ce qui est nécessaire pour un catalogue de règles métiers</p>
-            <p>Les règles DSL ne sont donc pas directement sur le modèle</p>
+            <h2>Beyond Bean Validation : syntax versus consistency</h2>
+            <ul>
+              <li>Bean Validation allows syntax validation, dOOv allows consistency checks</li>
+              <li>DSL rules are written outside the domain model and referenced in a rule registry</li>
+            </ul>
           </section>
 
           <section>
-            <h2>Beyond Bean Validation : langage naturel</h2>
-            <p>Bean validation n'est pas exprimé en langage naturel et n'a pas d'arbre de syntaxe</p>
+            <h2>Beyond Bean Validation : natural language</h2>
+            <p>Bean validation rules are not written with a natural language syntax<br/>
+            and does not provide a syntax tree</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 @Size(min = 10, max = 200,
@@ -528,8 +531,8 @@ userAboutMe().length().between(10, 200).validate().readable()
           </section>
 
           <section>
-            <h2>DSL : Gouvernance des règles</h2>
-            <p>Utilisation du registry et du readable afficher les règles par groupe</p>
+            <h2>DSL : Rules governance</h2>
+            <p>DSL rules can be streamed from the registry and displayed in a readable format using <code>readable()</code></p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 Registry.ACCOUNT.stream()
@@ -537,6 +540,7 @@ Registry.ACCOUNT.stream()
                 .forEach(System.out::println);
               </code></pre>
             </div>
+            <br/>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 When (account email matches \w+[@]\w+\.com or account email matches \w+[@]\w+\.fr), 
@@ -550,8 +554,8 @@ When (match any [((account country equals FR and ...),
           </section>
 
           <section>
-            <h2>DSL : Auditabilité</h2>
-            <p>L'arbre de syntaxe permet d'afficher la règle de manière structurée</p>
+            <h2>DSL : Auditability</h2>
+            <p>The syntax tree allows to pretty print the rule</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 When
@@ -567,43 +571,30 @@ validate with
               </code></pre>
             </div>
           </section>
-
-          <section>
-            <h2>DSL : Expressivité</h2>
-            <p>Expression des règles en langage naturel</p>
-            <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DOOV.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
-                               .greaterOrEqual(90))
-    .excludeFormules()
-    .exclusionRule();
-              </code></pre>
-            </div>
-          </section>
         </section>
 
         <section>
           <section>
-            <p>Quels sont les avantages de notre DSL vs POJO ?</p>
-            <h2>Avantages</h2>
+            <p>What are the benefits of our DSL versus POJO code?</p>
+            <h2>Pros</h2>
             <ul>
-              <li>DSL s'exprime dans une syntaxe declarative</li>
-              <li>DSL peut limiter des contraintes métiers</li>
-              <li>DSL permet l'auditabilité et la gouvernance</li>
-              <li>DSL peut afficher quels noeuds de l'arbre ne valident pas</li>
+              <li>DSL is expressed in a declarative syntax</li>
+              <li>DSL enforces a specific writing pattern</li>
+              <li>DSL enables auditability and gouvernance</li>
+              <li>DSL can display which node of the tree are invalid</li>
             </ul>
             <p></p>
-            <h2>Inconvénients</h2>
+            <h2>Cons</h2>
             <ul>
-              <li>DSL s'exprime dans une syntaxe declarative</li>
-              <li>DSL nécessite l'annotation et la code génération du modèle</li>
-              <li>DSL plus difficile à debug</li>
+              <li>DSL is expressed in a declarative syntax</li>
+              <li>DSL works with an annotated model and code generation</li>
+              <li>DSL is more difficult to debug</li>
             </ul>
           </section>
 
           <section>
-            <h2>Pre-requis / installation</h2>
-            <p>Ajouter <code>doov-core</code> pour dépendre du DSL et des annotations</p>
+            <h2>Prerequisite / installation</h2>
+            <p>Add <code>doov-core</code> as a dependency to use annotations and framework</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>
 &lt;dependency&gt;
@@ -613,7 +604,7 @@ DOOV.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
 &lt;/dependency&gt;
               </code></pre>
             </div>
-            <p>Annoter votre modèle, exécuter le code générateur, puis écrivez vos règles :</p>
+            <p>Decorate your model, run the code generator and write your rules:</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 DOOV...
@@ -638,15 +629,10 @@ DOOV...
             <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="40%">
             <p><a href="http://www.dOOv.io">http://www.dOOv.io</a></p>
             <ul>
-              <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework et exemples)</li>
+              <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework and examples)</li>
               <li>Apache Licence</li>
-              <li>Essayez et contribuez !</li>
+              <li>Try and contribute!</li>
             </ul>
-          </section>
-
-          <section>
-            <h2>Thank You!</h2>
-            <img style="background-color:#34495e" width="50%" src="png/softshake/logo-transparent.png">
           </section>
 
         </section>
