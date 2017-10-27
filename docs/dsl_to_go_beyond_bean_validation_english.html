@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DSL.using(java).toGoBeyond(BeanValidation).at(SoftShake.eq(ch));</title>
+    <meta name="description" content="Fluent, stream-like API's are great for writing type checked code, taking advantage of Java 8 functions and lambdas. Perhaps the best example of such project is jOOQ, which creates a fluent Java DSL for SQL. But what about creating your own DSL to manipulate and validate your model? We created an open-source framework for generating validation DSLs from a domain model. This presentation will demonstrate the efficiency and expressiveness of this framework to define validation constraints. We will refactor complex legacy business rules during a live code session.">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/softshake-theme.css" id="theme">
+    <script>
+if( window.location.search.match( /print-pdf/gi ) ) {
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = 'css/print/pdf.css';
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+}
+    </script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+  </head>
+  <body>
+    <div class="footer">
+      <img class="logo-lesfurets" src="png/logo_lesfurets_blanc.png">
+      <img class="logo-lesfurets" src="png/doov_io_logo_dark_small.png">
+      <img class="logo-rnday" src="png/softshake/logo-transparent.png">
+    </div>
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
+          <div class="container-grid-2">
+            <h1 class="code">DSL.using(java)<br>
+              &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
+              &nbsp;&nbsp;&nbsp;.at(SoftShake.eq(ch));</h1>
+            <p align="right"><img class="logo herve-francois" src="png/doov_io_logo_clear_small.png" width="30%"></p>
+        </div>
+        </section>
+
+        <section>
+          <section>
+            <h2>Welcome to the Furets !</h2>
+          </section>
+          <section>
+            <div class="fragment">
+              <h2>@dubreuia – Alexandre Dubreuil</h2>
+              <ul>
+                <li>French canadian working in Paris since 2009</li>
+                <li>Software Architect at LesFurets.com</li>
+              </ul>
+            </div>
+            <br><br>
+            <div class="fragment">
+              <h2>@gdigugli – Gilles Di Guglielmo</h2>
+              <ul>
+                <li>Designer of sweet cooked software since 1999</li>
+                <li>Software Architect at LesFurets.com</li>
+              </ul>
+            </div>
+          </section>
+          <section>
+            <img width="50%" src="png/logo_lesfurets.png">
+            <p></p>
+            <ul class="fragment">
+              <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
+              <li class="emptyline">1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
+
+              <li>22 Developers, 2 DevOps, 4 Architects</li>
+              <li class="emptyline">19 production servers including Load balancers, Frontend, Backend, Databases, BI</li>
+
+              <li>1 release per day</li>
+              <li class="emptyline">9 years of code history<br/></li>
+
+              <li>3M quotes/year, 40% of market share, 4M of customers</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+
+          <section>
+            <h2>Fluent API</h2>
+            <p>Java is verbose, but you can reduce the noise and express code like natural language with a fluent API</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+// JUnit API
+assertEquals(9, fellowshipOfTheRing.size());
+assertTrue(fellowshipOfTheRing.contains(frodo, sam));
+assertFalse(fellowshipOfTheRing.contains(sauron));
+
+// AssertJ API (fluent)
+assertThat(fellowshipOfTheRing).hasSize(9)
+                               .contains(frodo, sam)
+                               .doesNotContain(sauron);
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Fluent API</h2>
+            <p>New elements in Java 8 makes it easier to write a fluent API</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+// java.time API
+Instant.ofEpochMilli(milli)
+       .atZone(ZoneId.systemDefault())
+       .toLocalDateTime();
+
+// java stream API
+list.stream().filter(Objects::nonNull)
+             .collect(Collectors.joining(" ");
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Fluent API</h2>
+            <p>Many popular libraries propose fluent APIs like<br><strong>jOOQ</strong>, <strong>AssertJ</strong>, <strong>Apache Spark</strong>, etc.</p>
+            <div class="code-wrapper small">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+Dataset&lt;Row&gt; averagePrice = prices
+        .filter(value.&lt;String&gt;getAs("insurer").equals("COOL insurer"))
+        .groupBy("product")
+        .agg(avg("price").as("average"))
+        .orderBy(desc("average"));
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>DSL</h2>
+            <p><em>"A domain-specific language (DSL) is a computer language specialized to a particular application domain. This is in contrast to a general-purpose language (GPL), which is broadly applicable across domains"</em></p> 
+          </section>
+
+          <section>
+            <h2>Genesis of the DSL : step 1</h2>
+            <p>Insurer exclusions based on object model (legacy code)</p>
+            <div class="code-wrapper small">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
+                  Vehicule vehicule, Void unused, Besoins besoins,
+                  Set&lt;EAbTestingScenario&gt; scenarios)
+                  throws ExclusionException {
+    if (besoins == null) {
+        return;
+    }
+    if (besoins.getDateDebutContrat() == null) {
+        return;
+    }
+    if (!DateHelper.isAfter(besoins.getDateDebutContrat(),
+                    DateHelper.ajouteJoursADate(DateHelper.getToday(), NBR_JOURS),
+                    DateHelper.EPrecision.jour)) {
+        throw new ExclusionException(DATE_EFFET_PLUS_60_JOURS);
+    }
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Genesis of the DSL : step 1</h2>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public ExclusionRule exclusionRule() {
+    return DOOV.when(dateContrat().after(todayPlusDays(60)))
+                    .excludeFormules()
+                    .withMessage(DATE_EFFET_PLUS_60_JOURS)
+                    .exclusionRule();
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Insurer exclusions</h2>
+            <p>Hierarchy of 492 legacy classes, no governance or auditability</p>
+            <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
+          </section>
+
+          <section>
+            <h2>Genesis of the DSL : step 2</h2>
+            <p><strong>model-map</strong> : Typed two way mapping framework from key value to model. Used at LesFurets as a frontend dictionnary, Cassandra data model, etc.</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account extends Identity {
+
+    @SamplePath(field = SampleFieldId.LOGIN,
+                readable = "account login")
+    private String login;
+
+    @SamplePath(field = SampleFieldId.PASSWD,
+                readable = "account password")
+    private String password;
+
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_1.png">
+          </section>
+
+          <section>
+            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+          </section>
+
+          <section>
+            <h2>Model-map : a foundation for the DSL</h2>
+            <p>Using annotations on the domain model, the code generation creates a class <code>FieldIdInfo</code> that contains the typed keys</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public static final EnumFieldInfo&lt;Country&gt; COUNTRY = FieldInfoProvider
+                .&lt;Country&gt; enumField()
+                .fieldId(SampleFieldId.COUNTRY)
+                .readable("account country")
+                .type(Country.class)
+                .build(ALL);
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Live code 1 : model-map</h2>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+SampleModel model = new SampleModel();
+model.setAccount(new Account());
+model.getAccount().setEmail("softshake@geneva.ch");
+System.out.println(model.getAccount().getEmail());
+
+FieldModel fieldModel = new SampleModelWrapper(model);
+System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
+
+fieldModel.set(EMAIL, "lesfurets@gmail.com");
+System.out.println(fieldModel.&lt;String&gt; get(EMAIL));
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Genesis of the DSL : step 3</h2>
+            <p>Usage of jOOQ (Java Object Oriented Query) in our code base</p>
+            <p><em>jOOQ generates Java code from your database and lets you build type safe SQL queries through its fluent API</em></p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DSL.using(conn)
+   .selectFrom(BO_INSURANCE)
+   .where(BO_INSURANCE.STATUS.equal(CONFIRMED.getCode()))
+   .stream()
+   .map(InsuranceDAO::InsuranceDto)
+   .collect(toList());
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Genesis of the DSL : step 3</h2>
+            <p>We use a similar mechanism as jOOQ that introspects the database, generates typed info classes (equivalent to our <code>FieldInfo</code>)</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public final TableField&lt;Record, Integer&gt; ID = createField(
+                "id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+              </code></pre>
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Why a DSL ?</h2>
+            <p><strong>compliance</strong> : the rules correspond to the specification documents</p>
+            <p><strong>auditability</strong> : understand a rule without looking at the code</p>
+            <p><strong>governance</strong> : maintenance of the rules catalogue</p>
+            <p><strong>expressivity</strong> : productivity for developers</p>
+          </section>
+
+          <section>
+            <h2>DSL's design: entry point</h2>
+            <p>The entry point is <code>DOOV#when(StepCondition)</code> and the operation <code>StepWhen#validate</code> returns the validation rule</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+      .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
+    .validate()
+    .withMessage("email finishes with .com or .fr");
+              </code></pre>
+          </section>
+
+          <section>
+            <h2>DSL's design: natural language</h2>
+            <p>A natural language version of the rule is available with <code>ValidationRule#readable</code></p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+System.out.println(EMAIL_VALID.readable());
+&gt; When (email matches '\w+[@]\w+\.com' or email matches '\w+[@]\w+\.fr')
+&gt;   validate with message "email finishes with .com or .fr"
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>DSL's design: governance</h2>
+            <p>You can add the rule in one or many registry with <code>ValidationRule#registerOn(Registry)</code></p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+     .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
+   .validate()
+   .registerOn(REGISTRY_ACCOUNT);
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>DSL's design: execution</h2>
+            <p>The terminal operation <code>ValidationRule#executeOn(FieldModel)</code><br>executes the rule</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+REGISTRY_ACCOUNT.stream()
+    .map(rule -> rule.executeOn(model))
+    .filter(Result::isInvalid)
+    .map(Result::message)
+    .collect(toList());
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>DSL's design: type safety</h2>
+            <p>The available operations depend on the field type, and the arguments are type safe and validated by the compiler</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+   DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+//        ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//             date field                  is type safe here
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Syntax tree design</h2>
+            <p><em>"In computer science, an abstract syntax tree (AST), or just syntax tree, is a tree representation of the abstract syntactic structure of source code written in a programming language"</em></p>
+            <img data-transition="fade" src="png/doov_full_ast.png" width="90%">
+          </section>
+
+          <section>
+            <h2>Syntax tree design: DSL, when, matchAny...</h2>
+            <p>The syntax tree always starts with <code>when</code> then you compose a predidate by:
+            <ul>
+                <li>using a field</li>
+                <li>composing predicates on many other fields with<br/><code>matchAll</code>, <code>matchAny</code>, ou <code>matchOne</code></li>
+            </ul>
+            <img data-transition="fade" src="png/doov_simple_ast.png" width="90%">
+          </section>
+
+          <section>
+            <h2>Syntax tree design: Numeric fields and enumerated fields</h2>
+            <p>The syntax tree implements classic operations on numeric predicates like <code>lesserThan</code>, <code>greaterThan</code>, etc. that takes a numeric value or another numeric field as a parameter</p>
+            <img data-transition="fade" src="png/doov_numeric_and_types_field_ast.png" width="90%">
+          </section>
+
+          <section>
+            <h2>Syntax tree design: string field and boolean field</h2>
+            <p>We have operations that are available on the <code>String</code> type like <code>matches</code> and <code>contains</code> that takes a regular expressions as a parameter</p>
+            <img data-transition="fade" src="png/doov_string_and_boolean_field_ast.png" width="90%">
+          </section>
+
+          <section>
+            <h2>Syntax tree design: data field, time field, etc.</h2>
+            <p>Fields of <code>Temporal</code> type have operators that can apply functions like <code>today()</code>, <code>todayPlusDays()</code>, etc. so that the dates are only evaluated at execution time</p>
+            <img data-transition="fade" src="png/doov_temporal_field_ast.png" width="90%">
+          </section>
+        </section>
+        
+        <section>
+          <section>
+            <h2>It's time to play!</h2>
+            <p>Let's try to write a validation rule on an IHM</p>
+            <img data-transition="fade" src="png/softshake/formulaire-account.png">
+          </section>
+
+          <section>
+            <div class="code-wrapper small">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account extends Identity {
+
+    @SamplePath(field = SampleFieldId.TIMEZONE, 
+                readable = "account timezone")
+    private Timezone timezone;
+
+    @SamplePath(field = SampleFieldId.PHONE_NUMBER, 
+                readable = "account phone number")
+    private String phoneNumber;
+
+    @SamplePath(field = SampleFieldId.EMAIL, 
+                readable = "account email")
+    private String email;
+
+    @SamplePath(field = SampleFieldId.EMAIL_ACCEPTED, 
+                readable = "account email accepted")
+    private boolean acceptEmail;
+
+    @SamplePath(field = SampleFieldId.EMAILS_PREFERENCES, 
+                readable = "account préférences mail")
+    private Collection<EmailType> emailTypes = new HashSet<>();
+
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Live code 2 : convertir en DSL</h2>
+            <div class="code-wrapper smaller">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public static boolean validateAccount(User user, Account account, Configuration config) {
+    if (config == null) {
+        return false;
+    }
+    if (user == null || user.getBirthDate() == null) {
+        return false;
+    }
+    if (account == null || account.getCountry() == null || account.getPhoneNumber() == null) {
+        return false;
+    }
+    if (YEARS.between(user.getBirthDate(), LocalDate.now()) >= 18
+                    && account.getEmail().length() <= config.getMaxEmailSize()
+                    && account.getCountry().equals(Country.FR) 
+                    && account.getPhoneNumber().startsWith("+33")) {
+        return true;
+    }
+    return false;
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Live code 2 : DSL</h2>
+            <div class="code-wrapper small">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DOOV.when(userBirthdate().ageAt(today()).greaterOrEquals(18L)
+     .and(accountEmail().length().lesserOrEquals(configurationMaxEmailSize()))
+     .and(accountCountry().eq(Country.FR))
+     .and(accountPhoneNumber().startsWith("+33")))
+     .validate()
+     .registerOn(REGISTRY_ACCOUNT, VALID_ACCOUNT);
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Performance - Java Microbenchmark Harness</h2>
+            <p>On utilise JMH pour évaluer les performances du DSL</p>
+            <div class="code-wrapper small">
+              <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>
+Benchmark                          Mode  Samples      Mean  Mean error   Units
+o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
+o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
+              </code></pre>
+            </div>
+            <p>Le DSL est très proche des performances d'une règle POJO</p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Beyond Bean Validation : types</h2>
+            <p>Les règles du DSL sont fortements typés : les erreurs sont détectés à la compilation</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account {
+
+    @NotNull @Email
+    private Email email;
+
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Beyond Bean Validation : validation complexe</h2>
+            <p>Bean validation exprime des contraintes sur les champs : difficile de faire de la validation croisée</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+public class Account {
+
+    @Pattern(regexp = "(FR)|(UK)")
+    private String country;
+
+    @Pattern(regexp = "???")
+    private String phoneNumber;
+
+}
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Beyond Bean Validation : syntaxe versus cohérence</h2>
+            <p>Bean validation peut faire des contrôles de syntaxe, dOOv peut faire en plus des contrôles de cohérence : ce qui est nécessaire pour un catalogue de règles métiers</p>
+            <p>Les règles DSL ne sont donc pas directement sur le modèle</p>
+          </section>
+
+          <section>
+            <h2>Beyond Bean Validation : langage naturel</h2>
+            <p>Bean validation n'est pas exprimé en langage naturel et n'a pas d'arbre de syntaxe</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+@Size(min = 10, max = 200,
+      message = "About Me must be between 10 and 200 characters")
+private String aboutMe;
+              </code></pre>
+            </div>
+            <p></p>
+            <h2>DSL</h2>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+userAboutMe().length().between(10, 200).validate().readable()
+> When user about me length is between 10 and 200, validate with message...
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>DSL : Gouvernance des règles</h2>
+            <p>Utilisation du registry et du readable afficher les règles par groupe</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+Registry.ACCOUNT.stream()
+                .map(ValidationRule::readable)
+                .forEach(System.out::println);
+              </code></pre>
+            </div>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+When (account email matches \w+[@]\w+\.com or account email matches \w+[@]\w+\.fr), 
+    validate with message "email finishes with .com or .fr"
+When (match any [((account country equals FR and ...),
+                 ((account country equals UK and ...)]), 
+    validate with empty message
+              </code></pre>
+            </div>
+            <p></p>
+          </section>
+
+          <section>
+            <h2>DSL : Auditabilité</h2>
+            <p>L'arbre de syntaxe permet d'afficher la règle de manière structurée</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+When
+  match any
+    - <span class="field">account country</span> <span class="operator">equals</span> 'FR' <span class="logical">and</span>
+      <span class="field">account language</span> <span class="operator">equals</span> 'FR' <span class="logical">and</span>
+      <span class="field">account phone number</span> <span class="operator">starts with</span> '+33'
+    - <span class="field">account country</span> <span class="operator">equals</span> 'UK' <span class="logical">and</span>
+      <span class="field">account language</span> <span class="operator">equals</span> 'EN' <span class="logical">and</span>
+      <span class="field">account phone number</span> <span class="operator">starts with</span> '+45'
+validate with
+  empty message
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>DSL : Expressivité</h2>
+            <p>Expression des règles en langage naturel</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DOOV.when(emprunteurNaissance().ageAt(dateDeblocagePret()))
+                               .greaterOrEqual(90))
+    .excludeFormules()
+    .exclusionRule();
+              </code></pre>
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <p>Quels sont les avantages de notre DSL vs POJO ?</p>
+            <h2>Avantages</h2>
+            <ul>
+              <li>DSL s'exprime dans une syntaxe declarative</li>
+              <li>DSL peut limiter des contraintes métiers</li>
+              <li>DSL permet l'auditabilité et la gouvernance</li>
+              <li>DSL peut afficher quels noeuds de l'arbre ne valident pas</li>
+            </ul>
+            <p></p>
+            <h2>Inconvénients</h2>
+            <ul>
+              <li>DSL s'exprime dans une syntaxe declarative</li>
+              <li>DSL nécessite l'annotation et la code génération du modèle</li>
+              <li>DSL plus difficile à debug</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Pre-requis / installation</h2>
+            <p>Ajouter <code>doov-core</code> pour dépendre du DSL et des annotations</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>
+&lt;dependency&gt;
+  &lt;groupId&gt;io.doov&lt;/groupId&gt;
+  &lt;artifactId&gt;doov-core&lt;/artifactId&gt;
+  &lt;version&gt;LATEST&lt;/version&gt;
+&lt;/dependency&gt;
+              </code></pre>
+            </div>
+            <p>Annoter votre modèle, exécuter le code générateur, puis écrivez vos règles :</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+DOOV...
+              </code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>What's next</h2>
+            <ul>
+              <li><strike>Rename model-map to dOOv (domain object oriented validation)</strike> <strong>DONE!</strong></li>
+              <li><strike>Support most java types of standard library</strike> <strong>DONE!</strong></li>
+              <li><strike>Add different readable formats (html, markdown, etc.)</strike> <strong>DONE!</strong></li>
+              <li>Collections support with <code>contains()</code>, <code>isEmpty()</code>, <code>hasSize()</code>, etc</li>
+              <li>Add extension points to define own DSL conditions</li>
+              <li>Add code generator options for different styles</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Enjoy dOOv.io</h2>
+            <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="40%">
+            <p><a href="http://www.dOOv.io">http://www.dOOv.io</a></p>
+            <ul>
+              <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework et exemples)</li>
+              <li>Apache Licence</li>
+              <li>Essayez et contribuez !</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Thank You!</h2>
+            <img style="background-color:#34495e" width="50%" src="png/softshake/logo-transparent.png">
+          </section>
+
+        </section>
+            </div>
+            </div>
+            <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+            <script src="bower_components/reveal.js/js/reveal.js"></script>
+            <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+  controls: false,
+  progress: true,
+  history: true,
+  center: true,
+  embedded: true,
+  mouseWheel: true,
+  viewDistance: 5,
+
+  width: 1280,
+  height: 900,
+  margin: 0,
+
+  transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+  { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+  { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+  { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});
+
+// navigation with mouse click
+
+window.addEventListener("mousedown", handleClick, false);
+window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+
+function handleClick(e) {
+  e.preventDefault();
+  if(e.button === 0) Reveal.next();
+  if(e.button === 2) Reveal.prev();
+}
+
+            </script>
+  </body>
+</html>
