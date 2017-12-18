@@ -18,6 +18,7 @@ package io.doov.sample.field;
 import io.doov.core.PathConstraint;
 
 public enum SampleConstraint implements PathConstraint {
+
     NONE(""), //
     USER("getUser()"), //
     ACCOUNT("getAccount()"), //
