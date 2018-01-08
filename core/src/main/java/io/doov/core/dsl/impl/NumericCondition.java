@@ -161,15 +161,6 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
 
     abstract BiFunction<N, Integer, N> timesFunction();
 
-    // when
-
-    public final NumericCondition<N> when(StepCondition condition) {
-        return numericCondition(field, whenMetadata(field, condition),
-                        (model, context) -> condition.predicate().test(model, context)
-                                        ? valueModel(model, field)
-                                        : Optional.empty());
-    }
-
     // identity
 
     abstract N identity();

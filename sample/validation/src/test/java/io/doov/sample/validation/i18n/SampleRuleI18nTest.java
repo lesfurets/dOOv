@@ -14,7 +14,18 @@ import static io.doov.core.dsl.time.TemporalAdjuster.firstDayOfMonth;
 import static io.doov.sample.field.SampleFieldIdInfo.accountCreationDate;
 import static io.doov.sample.field.SampleFieldIdInfo.accountEmail;
 import static io.doov.sample.field.SampleFieldIdInfo.userBirthdate;
-import static io.doov.sample.validation.SampleRules.*;
+import static io.doov.sample.validation.SampleRules.RULE_ACCOUNT;
+import static io.doov.sample.validation.SampleRules.RULE_ACCOUNT_2;
+import static io.doov.sample.validation.SampleRules.RULE_AGE_2;
+import static io.doov.sample.validation.SampleRules.RULE_EMAIL;
+import static io.doov.sample.validation.SampleRules.RULE_FIRST_NAME;
+import static io.doov.sample.validation.SampleRules.RULE_ID;
+import static io.doov.sample.validation.SampleRules.RULE_MIN;
+import static io.doov.sample.validation.SampleRules.RULE_SUM;
+import static io.doov.sample.validation.SampleRules.RULE_USER;
+import static io.doov.sample.validation.SampleRules.RULE_USER_2;
+import static io.doov.sample.validation.SampleRules.RULE_USER_ADULT;
+import static io.doov.sample.validation.SampleRules.RULE_USER_ADULT_FIRSTDAY;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,11 +34,21 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
+import io.doov.core.BaseFieldModel;
 import io.doov.core.dsl.DOOV;
-import io.doov.core.dsl.field.*;
+import io.doov.core.dsl.field.LocalDateFieldInfo;
+import io.doov.core.dsl.field.LongFieldInfo;
+import io.doov.core.dsl.field.StringFieldInfo;
 import io.doov.core.dsl.lang.ValidationRule;
-import io.doov.core.dsl.meta.*;
+import io.doov.core.dsl.meta.BinaryMetadata;
+import io.doov.core.dsl.meta.DefaultOperator;
+import io.doov.core.dsl.meta.Element;
+import io.doov.core.dsl.meta.ElementType;
+import io.doov.core.dsl.meta.LeafMetadata;
+import io.doov.core.dsl.meta.NaryMetadata;
+import io.doov.core.dsl.meta.SyntaxTree;
 import io.doov.core.dsl.meta.ast.AstLineVisitor;
+import io.doov.sample2.field.Sample2FieldIdInfo;
 
 public class SampleRuleI18nTest {
     private static void print(SyntaxTree tree) {
@@ -276,11 +297,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_DOUBLE_TEMPORAL() {
-        final ValidationRule rule = DOOV
-                        .when(userBirthdate().with(firstDayOfMonth())
-                                        .ageAt(accountCreationDate().with(firstDayOfMonth()))
-                                        .lesserThan(18))
-                        .validate();
+        final ValidationRule rule = DOOV.when(userBirthdate().with(firstDayOfMonth()).ageAt(accountCreationDate().with(firstDayOfMonth())).lesserThan(18)).validate();
         assertThat(rule.getRootMetadata()).isInstanceOf(LeafMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(FIELD_PREDICATE);
         final List<Element> elts = ((LeafMetadata) rule.getRootMetadata()).stream().collect(toList());
@@ -307,8 +324,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_match_any() {
-        final ValidationRule rule = DOOV.when(matchAny(accountEmail().startsWith("a"),
-                        accountEmail().startsWith("b"))).validate();
+        final ValidationRule rule = DOOV.when(matchAny(accountEmail().startsWith("a"), accountEmail().startsWith("b"))).validate();
         assertThat(rule.getRootMetadata()).isInstanceOf(NaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(NARY_PREDICATE);
         assertThat(rule.getRootMetadata().children().get(0)).isInstanceOf(LeafMetadata.class);
@@ -324,8 +340,8 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_count_greater_than_2() {
-        ValidationRule rule = DOOV.when(count(accountEmail().startsWith("a"),
-                        accountEmail().startsWith("b")).greaterThan(2)).validate();
+        ValidationRule rule = DOOV.when(count(accountEmail().startsWith("a"), accountEmail().startsWith("b")).greaterThan(2)).validate();
+        rule.executeOn(new BaseFieldModel(Sample2FieldIdInfo.values()));
         assertThat(rule.getRootMetadata()).isInstanceOf(BinaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(BINARY_PREDICATE);
         assertThat(rule.getRootMetadata().children().get(0)).isInstanceOf(NaryMetadata.class);

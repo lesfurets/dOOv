@@ -108,17 +108,6 @@ public class NumericTest {
     }
 
     @Test
-    public void should_when_works_like_java() {
-        assertThat(configurationMinAge().when(userFullName().isNull()).eq(0)).validates(model);
-
-        configuration.setMinAge(18);
-        user.setLastName("Toto");
-        assertThat(configurationMinAge().when(userLastName().isNotNull()).eq(18)).validates(model);
-        assertThat(configurationMinAge().when(userLastName().eq("Toto")).eq(18)).validates(model);
-        assertThat(configurationMinAge().when(userLastName().eq("Titi")).eq(18)).doesNotValidate(model);
-    }
-
-    @Test
     public void should_sum_works_like_java() {
         assertThat(sum(configurationMinAge(), configurationMaxEmailSize()).eq(0)).validates(model);
 
