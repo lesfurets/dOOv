@@ -158,6 +158,31 @@ body {
 }
 
 /*********************************************
+ * LAYOUT
+ *********************************************/
+
+.reveal .center {
+  text-align: center;
+}
+
+.reveal .flushleft {
+  text-align: left;
+}
+
+.reveal .flushright {
+  text-align: right;
+}
+
+.reveal .horizontal {
+  white-space: nowrap;
+}
+
+.reveal .horizontal .column {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/*********************************************
  * Flex box layout
  *********************************************/
 
