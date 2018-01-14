@@ -22,6 +22,9 @@ import java.util.Locale;
 import io.doov.core.FieldId;
 import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.lang.*;
+import io.doov.core.dsl.mapping.DefaultConditionalBiMappingRule;
+import io.doov.core.dsl.mapping.DefaultConditionalMappingRule;
+import io.doov.core.dsl.mapping.DefaultConditionalNaryMappingRule;
 import io.doov.core.dsl.meta.MetadataVisitor;
 
 public class DefaultStepWhen<F extends FieldId & DslId> implements StepWhen<F> {
@@ -40,6 +43,24 @@ public class DefaultStepWhen<F extends FieldId & DslId> implements StepWhen<F> {
     @Override
     public ValidationRule<F> validate() {
         return new DefaultValidationRule<>(this);
+    }
+
+    @Override
+    public <I, O, T extends FieldId & DslId> ConditionalMappingRule<I, O, F, T> then(
+                    SimpleMappingRule<I, O, F, T> mappingRule) {
+        return new DefaultConditionalMappingRule<>(validate(), mappingRule);
+    }
+
+    @Override
+    public <I, J, O, T extends FieldId & DslId> ConditionalBiMappingRule<I, J, O, F, T> then(
+                    BiMappingRule<I, J, O, F, T> mappingRule) {
+        return new DefaultConditionalBiMappingRule<>(validate(), mappingRule);
+    }
+
+    @Override
+    public <O, T extends FieldId & DslId> ConditionalNaryMappingRule<O, F, T> then(
+                    NaryMappingRule<O, F, T> mappingRule) {
+        return new DefaultConditionalNaryMappingRule<>(validate(), mappingRule);
     }
 
     @Override

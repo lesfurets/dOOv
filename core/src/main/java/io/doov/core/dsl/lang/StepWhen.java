@@ -25,4 +25,13 @@ public interface StepWhen<F extends FieldId & DslId> extends Readable, SyntaxTre
 
     ValidationRule<F> validate();
 
+    <I, O, T extends FieldId & DslId> ConditionalMappingRule<I, O, F, T> then(
+                                    SimpleMappingRule<I, O, F, T> map);
+
+    <I, J, O, T extends FieldId & DslId> ConditionalBiMappingRule<I, J, O, F, T> then(
+                    BiMappingRule<I, J, O, F, T> map);
+
+    <O, T extends FieldId & DslId> ConditionalNaryMappingRule<O, F, T> then(
+                    NaryMappingRule<O, F, T> map);
+
 }

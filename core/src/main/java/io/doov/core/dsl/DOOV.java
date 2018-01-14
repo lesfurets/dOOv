@@ -21,13 +21,14 @@ import static java.util.Arrays.asList;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import io.doov.core.FieldId;
 import io.doov.core.dsl.field.BaseFieldInfo;
 import io.doov.core.dsl.field.NumericFieldInfo;
 import io.doov.core.dsl.impl.*;
-import io.doov.core.dsl.lang.StepCondition;
-import io.doov.core.dsl.lang.StepWhen;
+import io.doov.core.dsl.lang.*;
+import io.doov.core.dsl.mapping.*;
 
 public class DOOV {
 
@@ -73,6 +74,25 @@ public class DOOV {
     @SafeVarargs
     public static <F extends FieldId & DslId> StepCondition<F> matchNone(StepCondition<F>... steps) {
         return LogicalNaryCondition.matchNone(asList(steps));
+    }
+
+    // mapping
+
+    public static <I, F extends FieldId & DslId> StepMap<I, F> map(BaseFieldInfo<I, F> inFieldInfo) {
+        return new DefaultStepMap<>(inFieldInfo);
+    }
+
+    public static <I, J, F extends FieldId & DslId> BiStepMap<I, J, F> map(BaseFieldInfo<I, F> inFieldInfo, BaseFieldInfo<J, F> in2FieldInfo) {
+        return new DefaultBiStepMap<>(inFieldInfo, in2FieldInfo);
+    }
+
+    @SafeVarargs
+    public static <F extends FieldId & DslId> NaryStepMap<F> map(BaseFieldInfo<?, F>... inFieldInfo) {
+        return new DefaultNaryStepMap<>(Arrays.asList(inFieldInfo));
+    }
+
+    public static <I, F extends FieldId & DslId> StaticStepMap<I, F> map(Supplier<I> input) {
+        return new DefaultStaticStepMap<>(input);
     }
 
     // min
