@@ -179,17 +179,19 @@ assertThat(fellowshipOfTheRing).hasSize(9)
 
           <section>
             <h2>Fluent API</h2>
-            <p>New elements in Java 8 makes it easier to write a fluent API.<br/> It is also type-safe and fast</p>
+            <p>New elements in Java 8 makes it easier to write a fluent API</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-// java.time API
-Instant.ofEpochMilli(milli)
-       .atZone(ZoneId.systemDefault())
-       .toLocalDateTime();
+// java.util.function (io.doov.core.dsl.impl.LogicalBinaryCondition)
+left.predicate().and(right.predicate()).test(model, context)
 
-// java stream API
-list.stream().filter(Objects::nonNull)
-             .collect(Collectors.joining(" ");
+// java.util.stream (io.doov.core.dsl.impl.LogicalNaryCondition)
+steps.stream().anyMatch(s -&gt; s.predicate().test(model, context))
+
+// lambda and method reference (io.doov.core.dsl.impl.NumericCondition)
+predicate(greaterThanMetadata(field, value),
+          (model, context) -&gt; Optional.ofNullable(value),
+          (l, r) -&gt; greaterThanFunction().apply(l, r));
               </code></pre>
             </div>
           </section>
@@ -539,7 +541,7 @@ REGISTRY_ACCOUNT.stream()
           </section>
 
           <section>
-            <h2>Syntax tree design: DSL, when, matchAny...</h2>
+            <h2>Syntax tree design: DSL, when, match any...</h2>
             <p>The syntax tree always starts with <code>when</code> then you compose a predidate by:<br/><strong>using a field</strong> or by <strong>composing predicates</strong> on other fields with<br/><code>matchAll</code>, <code>matchAny</code>, or <code>matchOne</code>.
             <img data-transition="fade" src="png/doov_simple_ast.png" width="90%">
           </section>
@@ -624,7 +626,7 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
 
           <section>
             <h2>Performance - comparing with other frameworks</h2>
-            <p>We tested the performance of dOOv against the Bean Validation benchmark<br/>and dOOv is faster in every category</p>
+            <p>We tested the performance of dOOv against the Bean Validation benchmark<br/>and dOOv is faster in every category (hint: reflection API)</p>
             <img data-transition="fade" src="https://beastie.lesfurets.com/wp-content/uploads/sites/64/2017/12/chart-simple-validation-benchmark.png" width="50%">
             <p><a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark</a></p>
           </section>
@@ -731,7 +733,7 @@ B & C
 
           <section>
             <h2>Goal</h2>
-            <p>With the rules catalog in place, we now have <strong>compliance</strong>, <strong>auditability</strong>, <strong>governance</strong>, <strong>clarity</strong>.
+            <p>We migrated our 492 business rules to dOOv,<br/> we now have <strong>compliance</strong>, <strong>auditability</strong>, <strong>governance</strong>, <strong>clarity</strong>.
           </section>
 
           <section>
