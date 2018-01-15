@@ -98,8 +98,13 @@ if( window.location.search.match( /print-pdf/gi ) ) {
           </section>
 
           <section>
+            <h2>Insurer business rules</h2>
+            <img data-transition="fade" width="80%" src="png/lf_scatter_gather_doov.jpg">
+          </section>
+
+          <section>
             <h2>Insurers partners</h2>
-            <p>We have 71 live insurers, on 5 products, each with <strong>business validation rules</strong>, that filter prospects based on their profile</p>
+            <p>We have 71 live insurers, on 5 products, each with <strong>business validation rules</strong>,<br/>that filter prospects based on their profile</p>
           </section>
 
           <section>
@@ -213,11 +218,12 @@ Dataset&lt;Row&gt; averagePrice = prices
             <h2>Meet dOOv!</h2>
             <p><strong>D</strong>omain <strong>O</strong>bject <strong>O</strong>riented <strong>V</strong>alidation</p>
             <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="40%">
+            <p>dOOv is a fluent API for typesafe domain model validation</p>
           </section>
 
           <section>
             <h2>dOOv ecosystem</h2>
-            <img class="logo herve-francois" src="png/doov_bricks.png" width="75%">
+            <img class="logo herve-francois" src="png/doov_ecosystem.svg" width="75%">
           </section>
 
           <section>
@@ -618,7 +624,7 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
 
           <section>
             <h2>Performance - comparing with other frameworks</h2>
-            <p>We tested the performance of dOOv against the Bean Validation benchmark</p>
+            <p>We tested the performance of dOOv against the Bean Validation benchmark<br/>and dOOv is faster in every category</p>
             <img data-transition="fade" src="https://beastie.lesfurets.com/wp-content/uploads/sites/64/2017/12/chart-simple-validation-benchmark.png" width="50%">
             <p><a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark</a></p>
           </section>
@@ -690,27 +696,28 @@ B & C
 
           <section>
             <h2>Beyond Bean Validation: syntax versus consistency</h2>
+            <p>&nbsp;</p>
             <div class="horizontal">
               <div class="column column-2">
                 <div>
-                  Bean Validation allows syntax validation</br>&nbsp;</br>&nbsp;
+                  <strong style="color:#59B2AC">Bean Validation</strong> allows syntax validation</br>&nbsp;</br>&nbsp;
                 </div>
                 <div>
-                  Bean Validation rules are written on the model</br>&nbsp;</br>&nbsp;
+                  <strong style="color:#59B2AC">Bean Validation</strong> rules are written on the model</br>&nbsp;</br>&nbsp;
                 </div>
                 <div>
-                  Bean Validation works as-is
+                  <strong style="color:#59B2AC">Bean Validation</strong> works as-is
                 </div>
               </div>
               <div class="column column-2">
                 <div>
-                  dOOv allows consistency checks</br>&nbsp;</br>&nbsp;</br>&nbsp;
+                  <strong style="color:#ec7f00">dOOv</strong> allows consistency checks</br>&nbsp;</br>&nbsp;
                 </div>
                 <div>
-                  dOOv rules are writtent outside of the, allowing complex checks</br>&nbsp;</br>&nbsp;
+                  <strong style="color:#ec7f00">dOOv</strong> rules are writtent outside of the model, allowing complex checks</br>&nbsp;</br>&nbsp;
                 </div>
                 <div>
-                  dOOv needs code generation for the DSL
+                  <strong style="color:#ec7f00">dOOv</strong> needs code generation
                 </div>
               </div>
             </div>
@@ -729,7 +736,7 @@ B & C
 
           <section>
             <h2>Roadmap</h2>
-            <p>Next step is extending the DSL to create a object to object mapping framework (dOOm?). It will feature the same AST to text and statistics functionnalities.</p>
+            <p>Next step is extending the DSL to create an <strong>object to object mapping framework</strong> (Domain Object Oriented Mapping, <code>dOOm</code>?). It will feature the same AST to text and statistics functionnalities.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 DOOV.map(userEmail().to(insurerEmail())
@@ -745,10 +752,11 @@ DOOV.map(userEmail().to(insurerEmail())
 
           <section>
             <h2>Enjoy dOOv.io</h2>
-            <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="40%">
+            <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="33%">
             <p><a href="http://www.dOOv.io">http://www.dOOv.io</a></p>
             <ul>
               <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework and examples)</li>
+              <li><a href="https://repo1.maven.org/maven2/io/doov">https://repo1.maven.org/maven2/io/doov</a> (maven central: <strong>1.3.0</strong>)</li>
               <li>Apache Licence</li>
               <li>Try and contribute!</li>
             </ul>
