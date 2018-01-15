@@ -19,7 +19,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
   document.getElementsByTagName( 'head' )[0].appendChild( link );
 }
     </script>
-    <!--<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>-->
+    <script async src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
   </head>
   <body>
     <div class="footer">
@@ -35,7 +35,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
           <div class="container-grid-2">
             <h1 class="code">DSL.using(java)<br>
               &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
-              &nbsp;&nbsp;&nbsp;.at(SoftShake.eq(ch));</h1>
+              &nbsp;&nbsp;&nbsp;.at(Snowcamp.eq(fr));</h1>
             <p align="right"><img class="logo herve-francois" src="png/doov_io_logo_clear_small.png" width="30%"></p>
         </div>
         </section>
@@ -85,18 +85,21 @@ if( window.location.search.match( /print-pdf/gi ) ) {
           </section>
 
           <section>
-            <h2>LesFurets context</h2>
-            <img data-transition="fade" width="80%" src="png/pps.png">
+            <img data-transition="fade" width="66%" src="png/lf_car_journey.png">
           </section>
 
           <section>
-            <h2>LesFurets context</h2>
-            <img data-transition="fade" width="80%" src="png/scatter_gather.jpg">
+            <img data-transition="fade" width="66%" src="png/lf_com_car_price_sheet.png">
           </section>
 
           <section>
-            <h2>LesFurets context</h2>
-            <p>We have 71 live insurers, on 5 products, each with business validation rules, that filter prospects based on their profile</p>
+            <h2>LesFurets service orchestration</h2>
+            <img data-transition="fade" width="80%" src="png/lf_scatter_gather.jpg">
+          </section>
+
+          <section>
+            <h2>Insurers partners</h2>
+            <p>We have 71 live insurers, on 5 products, each with <strong>business validation rules</strong>, that filter prospects based on their profile</p>
           </section>
 
           <section>
@@ -138,6 +141,7 @@ public void check(FieldContext context, FormuleMoto formule, Conducteur conducte
             <li><strong>governance</strong>: maintenance of the rules catalogue</li>
             <li><strong>clarity</strong>: productivity for developers</li>
             </ul>
+            <p>Same rule, more <strong>fluent</strong>:</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public ExclusionRule exclusionRule() {
@@ -213,12 +217,12 @@ Dataset&lt;Row&gt; averagePrice = prices
 
           <section>
             <h2>dOOv ecosystem</h2>
-            <img class="logo herve-francois" src="png/doov_bricks.png" width="90%">
+            <img class="logo herve-francois" src="png/doov_bricks.png" width="75%">
           </section>
 
           <section>
             <h2>Model-map: deep accessors</h2>
-            <p>We developed a typed, null-safe, two way mapping framework from key value to model.</p>
+            <p>We developed a typed, null-safe, two way mapping framework<br/>from <strong>key value to model</strong>.</p>
             <div class="horizontal">
               <div class="column">
                 <p><strong>object</strong></p>
@@ -269,7 +273,7 @@ wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob
           </section>
 
           <section>
-            <h2>How to write a rule?</h2>
+            <h2>How to write a validation rule?</h2>
             <div class="horizontal">
               <div class="column">
                 <p><strong>key model</strong></p>
@@ -353,12 +357,7 @@ REGISTRY_DEFAULT.stream()
 
         <section>
           <section>
-            <h2>Example</h2>
-          </section>
-
-          <section>
-            <h2>Sample code</h2>
-            <p>Let's follow a simple example in dOOv's code</p>
+            <h2>Live code</h2>
           </section>
 
           <section>
@@ -366,25 +365,25 @@ REGISTRY_DEFAULT.stream()
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public class Account extends Identity {
 
-    @SamplePath(field = SampleFieldId.TIMEZONE, 
+    @SamplePath(field = SampleFieldId.TIMEZONE,
                 readable = "account timezone")
     private Timezone timezone;
 
-    @SamplePath(field = SampleFieldId.PHONE_NUMBER, 
+    @SamplePath(field = SampleFieldId.PHONE_NUMBER,
                 readable = "account phone number")
     private String phoneNumber;
 
-    @SamplePath(field = SampleFieldId.EMAIL, 
+    @SamplePath(field = SampleFieldId.EMAIL,
                 readable = "account email")
     private String email;
 
-    @SamplePath(field = SampleFieldId.EMAIL_ACCEPTED, 
+    @SamplePath(field = SampleFieldId.EMAIL_ACCEPTED,
                 readable = "account email accepted")
     private boolean acceptEmail;
 
-    @SamplePath(field = SampleFieldId.EMAILS_PREFERENCES, 
+    @SamplePath(field = SampleFieldId.EMAILS_PREFERENCES,
                 readable = "account préférences mail")
-    private Collection<EmailType> emailTypes = new HashSet<>();
+    private Collection&lt;EmailType&gt; emailTypes = new HashSet&lt;&gt;();
 
 }
               </code></pre>
@@ -463,11 +462,14 @@ DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
     .validate()
     .withMessage("email finishes with .com or .fr");
               </code></pre>
+            </div>
+            <p class="fragment">This is <strong>lazy</strong></p>
           </section>
 
           <section>
             <h2>Natural language</h2>
-            <p>A natural language version of the rule is available with <code>ValidationRule#readable</code></p>
+            <p>A natural language version of the rule is available with <code>ValidationRule#readable</code>.</p>
+            <p>This makes <strong>auditability</strong> and <strong>compliance</strong> possible.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 System.out.println(EMAIL_VALID.readable());
@@ -478,8 +480,9 @@ System.out.println(EMAIL_VALID.readable());
           </section>
 
           <section>
-            <h2>Governance by registry</h2>
+            <h2>Validation rule registry</h2>
             <p>You can add the rule in one or many registry with <code>ValidationRule#registerOn(Registry)</code></p>
+            <p>This makes <strong>governance</strong> possible.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
@@ -506,12 +509,19 @@ REGISTRY_ACCOUNT.stream()
 
           <section>
             <h2>Type safety</h2>
-            <p>The available operations depend on the field type, and the arguments are type safe and validated by the compiler</p>
+            <p>The available operations depend on the field type, and the arguments are type safe and validated <strong>by the compiler</strong></p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
    DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
 //        ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //             date field                  is type safe here
+              </code></pre>
+            </div>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
+   DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+//                              ^^^^^
+//                        only for date field
               </code></pre>
             </div>
           </section>
@@ -524,11 +534,7 @@ REGISTRY_ACCOUNT.stream()
 
           <section>
             <h2>Syntax tree design: DSL, when, matchAny...</h2>
-            <p>The syntax tree always starts with <code>when</code> then you compose a predidate by:
-            <ul>
-                <li>using a field</li>
-                <li>composing predicates on many other fields with<br/><code>matchAll</code>, <code>matchAny</code>, ou <code>matchOne</code></li>
-            </ul>
+            <p>The syntax tree always starts with <code>when</code> then you compose a predidate by:<br/><strong>using a field</strong> or by <strong>composing predicates</strong> on other fields with<br/><code>matchAll</code>, <code>matchAny</code>, or <code>matchOne</code>.
             <img data-transition="fade" src="png/doov_simple_ast.png" width="90%">
           </section>
 
@@ -552,25 +558,26 @@ REGISTRY_ACCOUNT.stream()
 
           <section>
             <h2>Why a syntax tree?</h2>
-            <p>We can output a multi-language human readable rules catalog, check out <code>io.doov.sample.validation.ast.RulesVisitorTest</code></p>
+            <p>We can output a multi-language human readable rules catalog in multiple formats (text, markdown, HTML, etc.), check out <code>io.doov.sample.validation.ast.RulesVisitorTest</code></p>
+            <img data-transition="fade" src="png/doov_rules_visitor_test.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
-            <p>Our html rules catalog shows all our insurers</p>
-            <img data-transition="fade" src="png/exclusions_april.png" width="90%">
+            <p>Using the registry, we can generate a HTML validation rules catalog,<br/>grouped by insurers and by insurance product</p>
+            <img data-transition="fade" src="png/doov_exclusions_insurer.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
-            <p>Then the human-readable rules for each insurance products</p>
-            <img data-transition="fade" src="png/exclusions_april_conducteur.png" width="90%">
+            <p>Then the syntax tree makes it possible to generate a HTML human-readable rule. Notice how the elements from the tree are <strong>tokenized</strong> (operator, fields, etc.)
+            <img data-transition="fade" src="png/doov_exclusions_insurer_conducteur.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
-            <p>You can also see all rules that applies for a specific field (e.g. what rules validates the field <code>EMAIL</code>)</p>
-            <img data-transition="fade" src="png/exclusions_april_date_naissance.png" width="90%">
+            <p>Also, the syntax tree makes it possible to see <strong>all the rules that applies for a specific field</strong>, for example the driver's date of birth.</p>
+            <img data-transition="fade" src="png/doov_exclusions_insurer_date_naissance.png" width="90%">
           </section>
 
           <section>
@@ -580,17 +587,14 @@ REGISTRY_ACCOUNT.stream()
 
           <section>
             <h2>Execution statistics</h2>
+            <p>We make daily statistics that helps us shape the business,<br/>by removing or tweaking rules as needed</p>
             <img data-transition="fade" src="png/doov_failure_cause.png" width="90%">
           </section>
 
           <section>
             <h2>Execution statistics</h2>
-            <p>We make daily statistics that helps us shape the business, by removing or tweaking rules as needed</p>
-          </section>
-
-          <section>
-            <h2>Execution statistics</h2>
             <p>We also rewrite the execution rules by simplifying the predicate tree, to show the minimal predicate that fails. This is a complex problem we are currently working on.</p>
+            <img data-transition="fade" src="png/doov_failure_cause_simplify.png" width="90%">
           </section>
         </section>
 
@@ -614,12 +618,14 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
 
           <section>
             <h2>Performance - comparing with other frameworks</h2>
-            <p>TODO</p>
+            <p>We tested the performance of dOOv against the Bean Validation benchmark</p>
+            <img data-transition="fade" src="https://beastie.lesfurets.com/wp-content/uploads/sites/64/2017/12/chart-simple-validation-benchmark.png" width="50%">
+            <p><a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark</a></p>
           </section>
 
           <section>
-            <h2>Beyond Bean Validation : types</h2>
-            <p>DSL rules are strongly typed : type issues are visible during the java compilation</p>
+            <h2>Beyond Bean Validation: types</h2>
+            <p>Bean Validation rules are not strongly typed since it's annotation based. This code will fail at compile time, but your IDE won't be able to tell you why.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public class Account {
@@ -633,8 +639,8 @@ public class Account {
           </section>
 
           <section>
-            <h2>Beyond Bean Validation : complex validation</h2>
-            <p>Bean Validation constraints are based on field annotation but the cross validation between fields are only available through the extension mechanism</p>
+            <h2>Beyond Bean Validation: complex validation</h2>
+            <p>Because Bean Validation constraints are based on field annotation, cross validation between fields are only available through the extension mechanism.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 public class Account {
@@ -651,8 +657,8 @@ public class Account {
           </section>
 
           <section>
-            <h2>Beyond Bean Validation : natural language</h2>
-            <p>Bean validation rules are not written with a natural language syntax and does not provide a syntax tree</p>
+            <h2>Beyond Bean Validation: natural language</h2>
+            <p>Bean Validation rules are not written with a natural language syntax and does not provide a syntax tree</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
 @Size(min = 10, max = 200,
@@ -670,12 +676,44 @@ userAboutMe().length().between(10, 200).validate().readable()
             </div>
           </section>
 
+<!--
+canonique / normale
+count(p1, p2, p3) >= 2
+(p1 n p2) u (...)
+
+reduction / simplification : faire liste
+eventuellement detection simplifications
+(A | B) & C
+A & C
+B & C
+-->
+
           <section>
-            <h2>Beyond Bean Validation : syntax versus consistency</h2>
-            <ul>
-              <li>Bean Validation allows syntax validation, dOOv allows consistency checks</li>
-              <li>DSL rules are written outside the domain model and referenced in a rule registry</li>
-            </ul>
+            <h2>Beyond Bean Validation: syntax versus consistency</h2>
+            <div class="horizontal">
+              <div class="column column-2">
+                <div>
+                  Bean Validation allows syntax validation</br>&nbsp;
+                </div>
+                <div>
+                  Bean Validation rules are written on the model</br>&nbsp;
+                </div>
+                <div>
+                  Bean Validation works as-is
+                </div>
+              </div>
+              <div class="column column-2">
+                <div>
+                  dOOv allows consistency checks</br>&nbsp;</br>&nbsp;
+                </div>
+                <div>
+                  dOOv rules are writtent outside of the, allowing complex checks</br>&nbsp;
+                </div>
+                <div>
+                  dOOv needs code generation for the DSL
+                </div>
+              </div>
+            </div>
           </section>
         </section>
 
@@ -685,11 +723,21 @@ userAboutMe().length().between(10, 200).validate().readable()
           </section>
 
           <section>
+            <h2>Goal</h2>
+            <p>With the rules catalog in place, we now have <strong>compliance</strong>, <strong>auditability</strong>, <strong>governance</strong>, <strong>clarity</strong>.
+          </section>
+
+          <section>
             <h2>Roadmap</h2>
-            <p>With the AST, we are writing a mapping framework. We'll be able to output the resulting mapping catalog.</p>
+            <p>Next step is extending the DSL to create a object to object mapping framework (dOOm?). It will feature the same AST to text and statistics functionnalities.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DOOV.map(userEmail().to(insurerEmail());
+DOOV.map(userEmail().to(insurerEmail())
+    .map(userFirstName(), userLastName())
+      .using(StringJoiner)
+      .to(insurerFullName())
+    .when(userCountry().eq(FR))
+      .map(userPhone().to(insurerPhone()))
               </code></pre>
             </div>
             <p>Stay tuned for the next versions!</p>

@@ -182,6 +182,11 @@ body {
   vertical-align: top;
 }
 
+.reveal .horizontal .column.column-2 {
+  width: 40%;
+  white-space: normal;
+}
+
 /*********************************************
  * Flex box layout
  *********************************************/
@@ -347,7 +352,7 @@ body {
   left: 0;
   position: absolute;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
 }
 .footer .link {
   display: block;
