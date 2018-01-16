@@ -46,11 +46,11 @@ public class ExampleUser {
 
     public class WithKeyValueModel {
 
-        public FieldModel asFielModel(SampleModel model) {
+        public FieldModel<SampleFieldId> asFielModel(SampleModel model) {
             return new SampleModelWrapper(model);
         }
 
-        public LocalDate readSomeStuff(FieldModel fieldModel) {
+        public LocalDate readSomeStuff(FieldModel<SampleFieldId> fieldModel) {
             return fieldModel.get(SampleFieldId.BIRTHDATE);
         }
 

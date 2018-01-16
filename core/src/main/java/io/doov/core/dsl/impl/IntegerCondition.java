@@ -16,30 +16,30 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-import io.doov.core.dsl.DslField;
-import io.doov.core.dsl.DslModel;
+import io.doov.core.FieldId;
+import io.doov.core.dsl.*;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.meta.PredicateMetadata;
 
-public class IntegerCondition extends NumericCondition<Integer> {
+public class IntegerCondition<F extends FieldId & DslId> extends NumericCondition<Integer, F> {
 
-    public IntegerCondition(DslField field) {
+    public IntegerCondition(DslField<F> field) {
         super(field);
     }
 
-    public IntegerCondition(DslField field, PredicateMetadata metadata, BiFunction<DslModel, Context, Optional<Integer>> value) {
+    public IntegerCondition(DslField<F> field, PredicateMetadata metadata, BiFunction<DslModel<F>, Context, Optional<Integer>> value) {
         super(field, metadata, value);
     }
 
-    public IntegerCondition(NumericCondition<Long> condition) {
+    public IntegerCondition(NumericCondition<Long, F> condition) {
         super(condition.field, condition.metadata,
                 (model, context) -> condition.function.apply(model, context).map(Long::intValue));
     }
 
     @Override
-    NumericCondition<Integer> numericCondition(DslField field, PredicateMetadata metadata,
-            BiFunction<DslModel, Context, Optional<Integer>> value) {
-        return new IntegerCondition(field, metadata, value);
+    NumericCondition<Integer, F> numericCondition(DslField<F> field, PredicateMetadata metadata,
+            BiFunction<DslModel<F>, Context, Optional<Integer>> value) {
+        return new IntegerCondition<>(field, metadata, value);
     }
 
     @Override

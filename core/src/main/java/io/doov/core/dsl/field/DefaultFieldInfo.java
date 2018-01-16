@@ -14,18 +14,18 @@ package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
 import io.doov.core.FieldInfo;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.DefaultCondition;
 
-public class DefaultFieldInfo<T> implements FieldInfo, BaseFieldInfo<T> {
+public class DefaultFieldInfo<T, F extends FieldId & DslId> implements FieldInfo<F>, BaseFieldInfo<T, F> {
 
-    private final FieldId fieldId;
+    private final F fieldId;
     private final String readable;
     private final Class<?> type;
     private final Class<?>[] genericTypes;
-    private final FieldId[] siblings;
+    private final F[] siblings;
 
-    public DefaultFieldInfo(FieldId fieldId, String readable, Class<?> type, Class<?>[] genericTypes,
-            FieldId... siblings) {
+    public DefaultFieldInfo(F fieldId, String readable, Class<?> type, Class<?>[] genericTypes, F[] siblings) {
         this.fieldId = fieldId;
         this.readable = readable;
         this.type = type;
@@ -34,7 +34,7 @@ public class DefaultFieldInfo<T> implements FieldInfo, BaseFieldInfo<T> {
     }
 
     @Override
-    public FieldId id() {
+    public F id() {
         return fieldId;
     }
 
@@ -49,7 +49,7 @@ public class DefaultFieldInfo<T> implements FieldInfo, BaseFieldInfo<T> {
     }
 
     @Override
-    public FieldId[] siblings() {
+    public F[] siblings() {
         return siblings;
     }
 
@@ -59,7 +59,7 @@ public class DefaultFieldInfo<T> implements FieldInfo, BaseFieldInfo<T> {
     }
 
     @Override
-    public DefaultCondition<T> getDefaultCondition() {
+    public DefaultCondition<T, F> getDefaultCondition() {
         return new DefaultCondition<>(this);
     }
 

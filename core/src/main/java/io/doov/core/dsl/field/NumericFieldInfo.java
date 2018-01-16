@@ -15,71 +15,73 @@
  */
 package io.doov.core.dsl.field;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.NumericCondition;
 import io.doov.core.dsl.lang.StepCondition;
 
-public interface NumericFieldInfo<N extends Number> extends BaseFieldInfo<N> {
+public interface NumericFieldInfo<N extends Number, F extends FieldId & DslId> extends BaseFieldInfo<N, F> {
 
     // lesser than
 
-    default StepCondition lesserThan(N value) {
+    default StepCondition<F> lesserThan(N value) {
         return getNumericCondition().lesserThan(value);
     }
 
-    default StepCondition lesserOrEquals(N value) {
+    default StepCondition<F> lesserOrEquals(N value) {
         return getNumericCondition().lesserOrEquals(value);
     }
 
-    default StepCondition lesserThan(NumericFieldInfo<N> field) {
+    default StepCondition<F> lesserThan(NumericFieldInfo<N, F> field) {
         return getNumericCondition().lesserThan(field);
     }
 
-    default StepCondition lesserOrEquals(NumericFieldInfo<N> field) {
+    default StepCondition<F> lesserOrEquals(NumericFieldInfo<N, F> field) {
         return getNumericCondition().lesserOrEquals(field);
     }
 
     // greater than
 
-    default StepCondition greaterThan(N value) {
+    default StepCondition<F> greaterThan(N value) {
         return getNumericCondition().greaterThan(value);
     }
 
-    default StepCondition greaterThan(NumericFieldInfo<N> field) {
+    default StepCondition<F> greaterThan(NumericFieldInfo<N, F> field) {
         return getNumericCondition().greaterThan(field);
     }
 
-    default StepCondition greaterOrEquals(N value) {
+    default StepCondition<F> greaterOrEquals(N value) {
         return getNumericCondition().greaterOrEquals(value);
     }
 
-    default StepCondition greaterOrEquals(NumericFieldInfo<N> field) {
+    default StepCondition<F> greaterOrEquals(NumericFieldInfo<N, F> field) {
         return getNumericCondition().greaterOrEquals(field);
     }
 
     // between
 
-    default StepCondition between(N minIncluded, N maxExcluded) {
+    default StepCondition<F> between(N minIncluded, N maxExcluded) {
         return getNumericCondition().between(minIncluded, maxExcluded);
     }
 
-    default StepCondition between(NumericFieldInfo<N> minIncluded, NumericFieldInfo<N> maxExcluded) {
+    default StepCondition<F> between(NumericFieldInfo<N, F> minIncluded, NumericFieldInfo<N, F> maxExcluded) {
         return getNumericCondition().between(minIncluded, maxExcluded);
     }
 
     // times
 
-    default NumericCondition<N> times(int multiplier) {
+    default NumericCondition<N, F> times(int multiplier) {
         return getNumericCondition().times(multiplier);
     }
 
     // when
 
-    default NumericCondition<N> when(StepCondition condition) {
+    default NumericCondition<N, F> when(StepCondition<F> condition) {
         return getNumericCondition().when(condition);
     }
 
     // abstract
 
-    NumericCondition<N> getNumericCondition();
+    NumericCondition<N, F> getNumericCondition();
 
 }

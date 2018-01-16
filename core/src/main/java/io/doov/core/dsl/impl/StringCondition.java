@@ -17,54 +17,54 @@ import static io.doov.core.dsl.meta.LeafMetadata.*;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import io.doov.core.dsl.DslField;
-import io.doov.core.dsl.DslModel;
+import io.doov.core.FieldId;
+import io.doov.core.dsl.*;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.lang.StepCondition;
 import io.doov.core.dsl.meta.LeafMetadata;
 
-public class StringCondition extends DefaultCondition<String> {
+public class StringCondition<F extends FieldId & DslId> extends DefaultCondition<String, F> {
 
-    public StringCondition(DslField field) {
+    public StringCondition(DslField<F> field) {
         super(field);
     }
 
-    public StringCondition(DslField field, LeafMetadata metadata,
-            BiFunction<DslModel, Context, Optional<String>> value) {
+    public StringCondition(DslField<F> field, LeafMetadata metadata,
+            BiFunction<DslModel<F>, Context, Optional<String>> value) {
         super(field, metadata, value);
     }
 
-    public final StepCondition contains(String value) {
+    public final StepCondition<F> contains(String value) {
         return predicate(containsMetadata(field, value),
                 (model, context) -> Optional.ofNullable(value),
                 String::contains);
     }
 
-    public final StepCondition matches(String value) {
+    public final StepCondition<F> matches(String value) {
         return predicate(matchesMetadata(field, value),
                 (model, context) -> Optional.ofNullable(value),
                 String::matches);
     }
 
-    public final StepCondition startsWith(String value) {
+    public final StepCondition<F> startsWith(String value) {
         return predicate(startsWithMetadata(field, value),
                 (model, context) -> Optional.ofNullable(value),
                 String::startsWith);
     }
 
-    public final StepCondition endsWith(String value) {
+    public final StepCondition<F> endsWith(String value) {
         return predicate(endsWithMetadata(field, value),
                 (model, context) -> Optional.ofNullable(value),
                 String::endsWith);
     }
 
-    public IntegerCondition length() {
-        return new IntegerCondition(field, lengthIsMetadata(field),
+    public IntegerCondition<F> length() {
+        return new IntegerCondition<>(field, lengthIsMetadata(field),
                 (model, context) -> Optional.ofNullable(model.<String> get(field.id())).map(String::length));
     }
 
-    public IntegerCondition parseInt() {
-        return new IntegerCondition(field, fieldMetadata(field),
+    public IntegerCondition<F> parseInt() {
+        return new IntegerCondition<>(field, fieldMetadata(field),
                 (model, context) -> Optional.ofNullable(model.<String> get(field.id())).map(Integer::parseInt));
     }
 

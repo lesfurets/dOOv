@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 
 import io.doov.core.FieldModel;
+import io.doov.sample.field.SampleFieldId;
 
 public class SampleModels {
 
@@ -59,7 +60,7 @@ public class SampleModels {
         return model;
     }
 
-    public static FieldModel wrapper() {
+    public static FieldModel<SampleFieldId> wrapper() {
         return new SampleModelWrapper(sample());
     }
 }

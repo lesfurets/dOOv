@@ -24,21 +24,21 @@ import io.doov.core.dsl.DslId;
 /**
  * {@code FieldModel} implementation based on {@code java.util.Map}
  */
-public class BaseFieldModel implements FieldModel {
+public class BaseFieldModel<F extends FieldId & DslId> implements FieldModel<F> {
 
-    private final Map<FieldId, Object> values;
-    private final List<FieldInfo> fieldInfos;
+    private final Map<F, Object> values;
+    private final List<FieldInfo<F>> fieldInfos;
 
-    public BaseFieldModel(List<FieldInfo> fieldInfos) {
+    public BaseFieldModel(List<FieldInfo<F>> fieldInfos) {
         this(new HashMap<>(), fieldInfos);
     }
 
-    public BaseFieldModel(Map<FieldId, Object> values, List<FieldInfo> fieldInfos) {
+    public BaseFieldModel(Map<F, Object> values, List<FieldInfo<F>> fieldInfos) {
         this.values = values;
         this.fieldInfos = fieldInfos;
     }
 
-    public BaseFieldModel(FieldModel fieldModel) {
+    public BaseFieldModel(FieldModel<F> fieldModel) {
         this(fieldModel.getFieldInfos());
         setAll(fieldModel);
     }
@@ -48,46 +48,46 @@ public class BaseFieldModel implements FieldModel {
     }
 
     @Override
-    public List<FieldInfo> getFieldInfos() {
+    public List<FieldInfo<F>> getFieldInfos() {
         return fieldInfos;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T get(DslId fieldId) {
+    public <T> T get(F fieldId) {
         return (T) values.get(fieldId);
     }
 
     @Override
-    public void set(FieldId fieldId, Object value) {
+    public <T> void set(F fieldId, T value) {
         values.put(fieldId, value);
         Arrays.stream(siblingsOf(fieldId)).forEach(s -> values.put(s, value));
     }
 
     private static final FieldId[] NO_SIBLINGS = new FieldId[] {};
 
-    private FieldId[] siblingsOf(FieldId fieldId) {
-        Optional<FieldInfo> sublings = fieldInfos.stream().filter(info -> info.id() == fieldId).findFirst();
-        return sublings.isPresent() ? sublings.get().siblings() : NO_SIBLINGS;
+    private F[] siblingsOf(F fieldId) {
+        Optional<FieldInfo<F>> sublings = fieldInfos.stream().filter(info -> info.id() == fieldId).findFirst();
+        return sublings.map(FieldInfo::siblings).orElse((F[]) NO_SIBLINGS);
     }
 
     @Override
-    public Iterator<Entry<FieldId, Object>> iterator() {
+    public Iterator<Entry<F, Object>> iterator() {
         return values.entrySet().iterator();
     }
 
     @Override
-    public Spliterator<Entry<FieldId, Object>> spliterator() {
+    public Spliterator<Entry<F, Object>> spliterator() {
         return new HashSet<>(values.entrySet()).spliterator();
     }
 
     @Override
-    public Stream<Entry<FieldId, Object>> stream() {
+    public Stream<Entry<F, Object>> stream() {
         return new HashSet<>(values.entrySet()).stream();
     }
 
     @Override
-    public Stream<Entry<FieldId, Object>> parallelStream() {
+    public Stream<Entry<F, Object>> parallelStream() {
         return new HashSet<>(values.entrySet()).parallelStream();
     }
 

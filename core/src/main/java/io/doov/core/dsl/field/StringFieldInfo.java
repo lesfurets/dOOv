@@ -16,17 +16,18 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.StringCondition;
 
-public class StringFieldInfo extends DefaultFieldInfo<String> implements TextFieldInfo {
+public class StringFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<String, F> implements TextFieldInfo<F> {
 
-    public StringFieldInfo(FieldId fieldId, String readable, FieldId[] siblings) {
+    public StringFieldInfo(F fieldId, String readable, F[] siblings) {
         super(fieldId, readable, String.class, new Class[] {}, siblings);
     }
 
     @Override
-    public StringCondition getStringCondition() {
-        return new StringCondition(this);
+    public StringCondition<F> getStringCondition() {
+        return new StringCondition<>(this);
     }
 
 }

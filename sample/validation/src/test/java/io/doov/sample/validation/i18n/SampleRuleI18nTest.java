@@ -12,7 +12,6 @@ import static io.doov.core.dsl.meta.MetadataType.NARY_PREDICATE;
 import static io.doov.core.dsl.meta.i18n.ResourceBundleProvider.BUNDLE;
 import static io.doov.core.dsl.time.TemporalAdjuster.firstDayOfMonth;
 import static io.doov.sample.field.SampleFieldIdInfo.*;
-import static io.doov.sample.validation.SampleRules.*;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.YEARS;
 import static java.util.stream.Collectors.toList;
@@ -21,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Locale;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import io.doov.core.dsl.DOOV;
@@ -30,9 +30,18 @@ import io.doov.core.dsl.lang.ValidationRule;
 import io.doov.core.dsl.meta.*;
 import io.doov.core.dsl.meta.ast.AstLineVisitor;
 import io.doov.core.dsl.time.LocalDateSuppliers;
+import io.doov.sample.field.SampleFieldId;
 import io.doov.sample.field.SampleFieldIdInfo;
+import io.doov.sample.validation.SampleRules;
 
 public class SampleRuleI18nTest {
+
+    static SampleRules REGISTRY_DEFAULT;
+    @BeforeAll
+    public static void init() {
+        REGISTRY_DEFAULT = new SampleRules();
+    }
+
     private static void print(SyntaxTree tree) {
         final StringBuilder sb = new StringBuilder();
         tree.accept(new AstLineVisitor(sb, BUNDLE, Locale.FRANCE), 0);
@@ -41,7 +50,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_EMAIL() {
-        final ValidationRule rule = RULE_EMAIL;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_EMAIL;
         assertThat(rule.getRootMetadata()).isInstanceOf(BinaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(BINARY_PREDICATE);
         assertThat(rule.getRootMetadata().children().get(0)).isInstanceOf(LeafMetadata.class);
@@ -54,7 +63,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_ACCOUNT() {
-        final ValidationRule rule = RULE_ACCOUNT;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_ACCOUNT;
         assertThat(rule.getRootMetadata()).isInstanceOf(NaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(NARY_PREDICATE);
         assertThat(rule.getRootMetadata().children()).hasSize(3);
@@ -74,7 +83,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_ACCOUNT_2() {
-        final ValidationRule rule = RULE_ACCOUNT_2;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_ACCOUNT_2;
 
         assertThat(rule.getRootMetadata()).isInstanceOf(BinaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(BINARY_PREDICATE);
@@ -95,7 +104,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_USER() {
-        final ValidationRule rule = RULE_USER;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_USER;
         assertThat(rule.getRootMetadata()).isInstanceOf(BinaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(BINARY_PREDICATE);
         assertThat(rule.getRootMetadata().children().get(0)).isInstanceOf(NaryMetadata.class);
@@ -116,7 +125,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_USER_2() {
-        final ValidationRule rule = RULE_USER_2;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_USER_2;
         assertThat(rule.getRootMetadata()).isInstanceOf(BinaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(BINARY_PREDICATE);
         assertThat(rule.getRootMetadata().children().get(0)).isInstanceOf(LeafMetadata.class);
@@ -141,7 +150,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_USER_ADULT() {
-        final ValidationRule rule = RULE_USER_ADULT;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_USER_ADULT;
         assertThat(rule.getRootMetadata()).isInstanceOf(LeafMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(FIELD_PREDICATE);
         final List<Element> elts = ((LeafMetadata) rule.getRootMetadata()).stream().collect(toList());
@@ -160,7 +169,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_USER_ADULT_FIRSTDAY() {
-        final ValidationRule rule = RULE_USER_ADULT_FIRSTDAY;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_USER_ADULT_FIRSTDAY;
         assertThat(rule.getRootMetadata()).isInstanceOf(LeafMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(FIELD_PREDICATE);
         final List<Element> elts = ((LeafMetadata) rule.getRootMetadata()).stream().collect(toList());
@@ -183,7 +192,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_FIRST_NAME() {
-        final ValidationRule rule = RULE_FIRST_NAME;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_FIRST_NAME;
         assertThat(rule.getRootMetadata()).isInstanceOf(NaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(NARY_PREDICATE);
         assertThat(rule.getRootMetadata().children()).hasSize(1);
@@ -205,7 +214,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_ID() {
-        final ValidationRule rule = RULE_ID;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_ID;
         assertThat(rule.getRootMetadata()).isInstanceOf(LeafMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(FIELD_PREDICATE);
         final List<Element> elts = ((LeafMetadata) rule.getRootMetadata()).stream().collect(toList());
@@ -219,7 +228,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_AGE_2() {
-        final ValidationRule rule = RULE_AGE_2;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_AGE_2;
         assertThat(rule.getRootMetadata()).isInstanceOf(LeafMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(FIELD_PREDICATE);
         final List<Element> elts = ((LeafMetadata) rule.getRootMetadata()).stream().collect(toList());
@@ -239,7 +248,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_SUM() {
-        final ValidationRule rule = RULE_SUM;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_SUM;
         assertThat(rule.getRootMetadata()).isInstanceOf(BinaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(BINARY_PREDICATE);
         assertThat(rule.getRootMetadata().children().get(0)).isInstanceOf(NaryMetadata.class);
@@ -260,7 +269,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_RULE_MIN() {
-        final ValidationRule rule = RULE_MIN;
+        final ValidationRule rule = REGISTRY_DEFAULT.RULE_MIN;
         assertThat(rule.getRootMetadata()).isInstanceOf(BinaryMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(BINARY_PREDICATE);
         assertThat(rule.getRootMetadata().children().get(0)).isInstanceOf(NaryMetadata.class);
@@ -422,7 +431,7 @@ public class SampleRuleI18nTest {
 
     @Test
     public void test_eq_today_plus_1_day() {
-        ValidationRule rule = DOOV.when(SampleFieldIdInfo.userBirthdate().eq(LocalDateSuppliers.today().plus(1, DAYS))).validate();
+        ValidationRule rule = DOOV.when(SampleFieldIdInfo.userBirthdate().eq(LocalDateSuppliers.<SampleFieldId>today().plus(1, DAYS))).validate();
         assertThat(rule.getRootMetadata()).isInstanceOf(LeafMetadata.class);
         assertThat(rule.getRootMetadata().type()).isEqualTo(FIELD_PREDICATE);
         final List<Element> elts = ((LeafMetadata) rule.getRootMetadata()).stream().collect(toList());

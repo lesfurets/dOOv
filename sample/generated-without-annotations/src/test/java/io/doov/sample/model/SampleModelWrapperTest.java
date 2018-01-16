@@ -27,8 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import io.doov.core.FieldInfo;
-import io.doov.sample.field.SampleFieldIdInfo;
-import io.doov.sample.field.SampleTag;
+import io.doov.sample.field.*;
 
 public class SampleModelWrapperTest {
 
@@ -47,14 +46,14 @@ public class SampleModelWrapperTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void should_contains_all_field_info(String name, FieldInfo field) {
+    public void should_contains_all_field_info(String name, FieldInfo<SampleFieldId> field) {
         assertThat(wrapper.getFieldInfos()).contains(field);
         assertThat(wrapper.getFieldIds()).contains(field.id());
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void should_be_null_when_clear_all(String name, FieldInfo field) {
+    public void should_be_null_when_clear_all(String name, FieldInfo<SampleFieldId> field) {
         if (field.type().isPrimitive()) {
             return;
         }
@@ -64,7 +63,7 @@ public class SampleModelWrapperTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void should_be_null_when_clear_tag(String name, FieldInfo field) {
+    public void should_be_null_when_clear_tag(String name, FieldInfo<SampleFieldId> field) {
         if (field.type().isPrimitive()) {
             return;
         }
@@ -77,13 +76,13 @@ public class SampleModelWrapperTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void should_not_throw_NPE_when_null_value_set(String name, FieldInfo field) {
+    public void should_not_throw_NPE_when_null_value_set(String name, FieldInfo<SampleFieldId> field) {
         wrapper.set(field.id(), null);
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public <T> void should_return_same_value_when_updated(String name, FieldInfo field) throws Exception {
+    public <T> void should_return_same_value_when_updated(String name, FieldInfo<SampleFieldId> field) throws Exception {
         Object value = value(field);
         wrapper.set(field.id(), value);
 
@@ -94,7 +93,7 @@ public class SampleModelWrapperTest {
         }
     }
 
-    private void assertValueNull(FieldInfo field) {
+    private void assertValueNull(FieldInfo<SampleFieldId> field) {
         Object value = wrapper.get(field.id());
         if (Number.class.isAssignableFrom(field.type())) {
             assertThat(((Number) value).longValue()).isEqualTo(0);
@@ -112,6 +111,8 @@ public class SampleModelWrapperTest {
             return Short.MAX_VALUE;
         } else if (field.type().equals(Double.class) || field.type().equals(Double.TYPE)) {
             return Double.MAX_VALUE;
+        } else if (field.type().equals(Float.class) || field.type().equals(Float.TYPE)) {
+            return Float.MAX_VALUE;
         } else if (field.type().equals(Byte.class) || field.type().equals(Byte.TYPE)) {
             return Byte.MAX_VALUE;
         } else if (field.type().equals(Boolean.class) || field.type().equals(Boolean.TYPE)) {

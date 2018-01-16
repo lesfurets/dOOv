@@ -16,17 +16,18 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.FloatCondition;
 
-public class FloatFieldInfo extends DefaultFieldInfo<Float> implements NumericFieldInfo<Float> {
+public class FloatFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<Float, F> implements NumericFieldInfo<Float, F> {
 
-    public FloatFieldInfo(FieldId fieldId, String readable, Class<?> type, FieldId[] siblings) {
+    public FloatFieldInfo(F fieldId, String readable, Class<?> type, F[] siblings) {
         super(fieldId, readable, type, new Class[] {}, siblings);
     }
 
     @Override
-    public FloatCondition getNumericCondition() {
-        return new FloatCondition(this);
+    public FloatCondition<F> getNumericCondition() {
+        return new FloatCondition<>(this);
     }
 
 }

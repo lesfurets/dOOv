@@ -15,8 +15,10 @@
  */
 package io.doov.core.dsl;
 
-public interface DslModel {
+public interface DslModel<F extends DslId> {
 
-    <T> T get(DslId id);
+    <T> T get(F id);
+
+    <T> void set(F id, T value);
 
 }

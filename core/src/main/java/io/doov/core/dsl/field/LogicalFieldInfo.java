@@ -15,61 +15,63 @@
  */
 package io.doov.core.dsl.field;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.BooleanCondition;
 import io.doov.core.dsl.lang.StepCondition;
 
-public interface LogicalFieldInfo extends BaseFieldInfo<Boolean> {
+public interface LogicalFieldInfo<F extends FieldId & DslId> extends BaseFieldInfo<Boolean, F> {
 
     // not
 
-    default StepCondition not() {
+    default StepCondition<F> not() {
         return getBooleanCondition().not();
     }
 
     // and
 
-    default StepCondition and(boolean value) {
+    default StepCondition<F> and(boolean value) {
         return getBooleanCondition().and(value);
     }
 
-    default StepCondition and(LogicalFieldInfo value) {
+    default StepCondition<F> and(LogicalFieldInfo<F> value) {
         return getBooleanCondition().and(value);
     }
 
     // or
 
-    default StepCondition or(boolean value) {
+    default StepCondition<F> or(boolean value) {
         return getBooleanCondition().or(value);
     }
 
-    default StepCondition or(LogicalFieldInfo value) {
+    default StepCondition<F> or(LogicalFieldInfo<F> value) {
         return getBooleanCondition().or(value);
     }
 
     // xor
 
-    default StepCondition xor(boolean value) {
+    default StepCondition<F> xor(boolean value) {
         return getBooleanCondition().xor(value);
     }
 
-    default StepCondition xor(LogicalFieldInfo value) {
+    default StepCondition<F> xor(LogicalFieldInfo<F> value) {
         return getBooleanCondition().xor(value);
     }
 
     // true
 
-    default StepCondition isTrue() {
+    default StepCondition<F> isTrue() {
         return getBooleanCondition().isTrue();
     }
 
     // false
 
-    default StepCondition isFalse() {
+    default StepCondition<F> isFalse() {
         return getBooleanCondition().isFalse();
     }
 
     // implementation
 
-    BooleanCondition getBooleanCondition();
+    BooleanCondition<F> getBooleanCondition();
 
 }

@@ -14,9 +14,9 @@ ${imports}
 
 @Generated(value = "${source.generator.name}", comments = "generated from ${process.class}")
 public final class ${target.class.name} extends FieldInfoProvider {
-    private static final List<FieldInfo> ALL = new ArrayList<>();
+    private static final List<FieldInfo<${process.class.name}>> ALL = new ArrayList<>();
 
-    public static List<FieldInfo> values() {
+    public static List<FieldInfo<${process.class.name}>> values() {
         return unmodifiableList(ALL);
     }
 

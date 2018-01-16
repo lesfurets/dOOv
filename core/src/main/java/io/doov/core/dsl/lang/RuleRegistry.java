@@ -17,10 +17,13 @@ package io.doov.core.dsl.lang;
 
 import java.util.stream.Stream;
 
-public interface RuleRegistry {
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 
-    void register(ValidationRule rule);
+public interface RuleRegistry<F extends FieldId & DslId> {
 
-    Stream<ValidationRule> stream();
+    void register(ValidationRule<F> rule);
+
+    Stream<ValidationRule<F>> stream();
 
 }

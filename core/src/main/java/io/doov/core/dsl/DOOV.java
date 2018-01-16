@@ -22,6 +22,8 @@ import static java.util.Arrays.asList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.field.BaseFieldInfo;
 import io.doov.core.dsl.field.NumericFieldInfo;
 import io.doov.core.dsl.impl.*;
 import io.doov.core.dsl.lang.StepCondition;
@@ -35,44 +37,48 @@ public class DOOV {
 
     // when
 
-    public static StepWhen when(StepCondition condition) {
-        return new DefaultStepWhen(condition);
+    public static <F extends FieldId & DslId> StepWhen<F> when(StepCondition<F> condition) {
+        return new DefaultStepWhen<>(condition);
     }
 
     // always
 
-    public static StepCondition alwaysTrue() {
-        return new DefaultStepCondition(trueMetadata(), (model, context) -> true);
+    public static <F extends FieldId & DslId> StepCondition<F> alwaysTrue() {
+        return new DefaultStepCondition<>(trueMetadata(), (model, context) -> true);
     }
 
-    public static StepCondition alwaysFalse() {
-        return new DefaultStepCondition(falseMetadata(), (model, context) -> false);
+    public static <F extends FieldId & DslId> StepCondition<F> alwaysFalse() {
+        return new DefaultStepCondition<>(falseMetadata(), (model, context) -> false);
     }
 
     // count
 
-    public static IntegerCondition count(StepCondition... steps) {
+    @SafeVarargs
+    public static <F extends FieldId & DslId> IntegerCondition<F> count(StepCondition<F>... steps) {
         return LogicalNaryCondition.count(asList(steps));
     }
 
     // match
 
-    public static StepCondition matchAny(StepCondition... steps) {
+    @SafeVarargs
+    public static <F extends FieldId & DslId> StepCondition<F> matchAny(StepCondition<F>... steps) {
         return LogicalNaryCondition.matchAny(asList(steps));
     }
 
-    public static StepCondition matchAll(StepCondition... steps) {
+    @SafeVarargs
+    public static <F extends FieldId & DslId> StepCondition<F> matchAll(StepCondition<F>... steps) {
         return LogicalNaryCondition.matchAll(asList(steps));
     }
 
-    public static StepCondition matchNone(StepCondition... steps) {
+    @SafeVarargs
+    public static <F extends FieldId & DslId> StepCondition<F> matchNone(StepCondition<F>... steps) {
         return LogicalNaryCondition.matchNone(asList(steps));
     }
 
     // min
 
     @SafeVarargs
-    public static <N extends Number> NumericCondition<N> min(NumericFieldInfo<N>... fields) {
+    public static <N extends Number, F extends FieldId & DslId> NumericCondition<N, F> min(NumericFieldInfo<N, F>... fields) {
         return Arrays.stream(fields)
                 .filter(Objects::nonNull)
                 .findFirst()
@@ -84,7 +90,7 @@ public class DOOV {
     // sum
 
     @SafeVarargs
-    public static <N extends Number> NumericCondition<N> sum(NumericFieldInfo<N>... fields) {
+    public static <N extends Number, F extends FieldId & DslId> NumericCondition<N, F> sum(NumericFieldInfo<N, F>... fields) {
         return Arrays.stream(fields)
                 .filter(Objects::nonNull)
                 .findFirst()
@@ -94,7 +100,7 @@ public class DOOV {
     }
 
     @SafeVarargs
-    public static <N extends Number> NumericCondition<N> sum(NumericCondition<N>... conditions) {
+    public static <N extends Number, F extends FieldId & DslId> NumericCondition<N, F> sum(NumericCondition<N, F>... conditions) {
         return Arrays.stream(conditions)
                 .filter(Objects::nonNull)
                 .findFirst()

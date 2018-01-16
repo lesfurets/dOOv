@@ -30,7 +30,7 @@ import io.doov.sample.field.SampleFieldIdInfo;
 public class SampleModelCollectorTest {
 
     private SampleModel sample = SampleModels.sample();
-    private FieldModel source = new SampleModelWrapper(sample);
+    private FieldModel<SampleFieldId> source = new SampleModelWrapper(sample);
 
     @BeforeEach
     public void before() {
@@ -57,7 +57,7 @@ public class SampleModelCollectorTest {
         Assertions.assertThat(wrapper.<String> get(SampleFieldId.FAVORITE_SITE_URL_3)).isEqualTo("foo");
     }
 
-    private static void should_collect_all_values_when_collect(FieldModel target, FieldModel source) {
+    private static void should_collect_all_values_when_collect(FieldModel<SampleFieldId> target, FieldModel<SampleFieldId> source) {
         SoftAssertions softly = new SoftAssertions();
         SampleFieldIdInfo.values().forEach(info -> {
             Object after = target.get(info.id());

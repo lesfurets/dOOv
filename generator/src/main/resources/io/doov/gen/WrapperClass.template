@@ -19,19 +19,20 @@ import io.doov.core.FieldModel;
 import io.doov.core.FieldModels;
 import io.doov.core.dsl.DslId;
 import ${target.field.info.package.name}.${target.field.info.class.name};
+import ${target.field.info.package.name}.${process.class.name};
 
 @Generated(value = "${source.generator.name}", comments="generated from ${process.class}")
-public final class ${target.class.name} implements FieldModel {
+public final class ${target.class.name} implements FieldModel<${process.class.name}> {
 
-    private final List<FieldInfo> fieldInfos;
+    private final List<FieldInfo<${process.class.name}>> fieldInfos;
     private final ${target.model.class.name} model;
     
-    public static Collector<Entry<FieldId, Object>, ?, ${target.class.name}> toFieldModel() {
-        return FieldModels.<${target.class.name}> toFieldModel(new ${target.class.name}());
+    public static Collector<Entry<${process.class.name}, Object>, ?, ${target.class.name}> toFieldModel() {
+        return FieldModels.toFieldModel(new ${target.class.name}());
     }
     
-    public static Collector<Entry<FieldId, Object>, ?, ${target.class.name}> toConcurrentFieldModel() {
-        return FieldModels.<${target.class.name}> toConcurrentFieldModel(new ${target.class.name}());
+    public static Collector<Entry<${process.class.name}, Object>, ?, ${target.class.name}> toConcurrentFieldModel() {
+        return FieldModels.toConcurrentFieldModel(new ${target.class.name}());
     }
 
     public ${target.class.name}() {
@@ -48,13 +49,13 @@ public final class ${target.class.name} implements FieldModel {
     }
 
     @Override
-    public List<FieldInfo> getFieldInfos() {
+    public List<FieldInfo<${process.class.name}>> getFieldInfos() {
         return fieldInfos;
     }
     
     @Override
-    public Iterator<Map.Entry<FieldId, Object>> iterator() {
-        return new Iterator<Map.Entry<FieldId, Object>>() {
+    public Iterator<Map.Entry<${process.class.name}, Object>> iterator() {
+        return new Iterator<Map.Entry<${process.class.name}, Object>>() {
             int position = 0;
 
             @Override
@@ -63,7 +64,7 @@ public final class ${target.class.name} implements FieldModel {
             }
 
             @Override
-            public Entry<FieldId, Object> next() {
+            public Entry<${process.class.name}, Object> next() {
                 try {
                     return ${target.model.class.name}Property.values()[position].toEntry(model);
                 } finally {
@@ -74,30 +75,30 @@ public final class ${target.class.name} implements FieldModel {
     }
 
     @Override
-    public Spliterator<Entry<FieldId, Object>> spliterator() {
-        final Entry<FieldId, Object>[] entries = ${target.model.class.name}Property.entries(model);
+    public Spliterator<Entry<${process.class.name}, Object>> spliterator() {
+        final Entry<${process.class.name}, Object>[] entries = ${target.model.class.name}Property.entries(model);
         return Arrays.spliterator(entries, 0, entries.length);
     }
 
     @Override
-    public Stream<Entry<FieldId, Object>> stream() {
+    public Stream<Entry<${process.class.name}, Object>> stream() {
         return Arrays.stream(${target.model.class.name}Property.values()).map(p -> p.toEntry(model));
     }
 
     @Override
-    public Stream<Entry<FieldId, Object>> parallelStream() {
+    public Stream<Entry<${process.class.name}, Object>> parallelStream() {
         return Arrays.stream(${target.model.class.name}Property.values()).parallel().map(p -> p.toEntry(model));
     }
 
     @Override
-    public <T> T get(DslId fieldId) {
+    public <T> T get(${process.class.name} fieldId) {
 ${map.getter.if}        return null;
     }
 
 ${map.getter}
 
     @Override
-    public <T> void set(FieldId fieldId, T value) {
+    public <T> void set(${process.class.name} fieldId, T value) {
 ${map.setter.if}    }
 
 ${map.setter}
@@ -107,13 +108,13 @@ ${map.setter}
 ${map.properties}
         ;
 
-        private final FieldId fieldId;
+        private final ${process.class.name} fieldId;
 
-        ${target.model.class.name}Property(FieldId fieldId) {
+        ${target.model.class.name}Property(${process.class.name} fieldId) {
             this.fieldId = fieldId;
         }
         
-        Map.Entry<FieldId, Object> toEntry(${target.model.class.name} model) {
+        Map.Entry<${process.class.name}, Object> toEntry(${target.model.class.name} model) {
             return new SupplierEntry<>(fieldId, model, supplier());
         }
 
@@ -121,9 +122,9 @@ ${map.properties}
 
         public abstract <T> Function<${target.model.class.name}, T> supplier();
 
-        public static Map.Entry<FieldId, Object>[] entries(${target.model.class.name} model){
+        public static Map.Entry<${process.class.name}, Object>[] entries(${target.model.class.name} model){
             ${target.model.class.name}Property[] values = ${target.model.class.name}Property.values();
-            Map.Entry<FieldId, Object>[] entries = new Map.Entry[values.length];
+            Map.Entry<${process.class.name}, Object>[] entries = new Map.Entry[values.length];
             for(int i=0; i< values.length;i++) {
                 entries[i] = values[i].toEntry(model);
             }
@@ -131,12 +132,12 @@ ${map.properties}
         }
     }
 
-    private static class SupplierEntry<M, T> implements Map.Entry<FieldId, Object> {
-        final FieldId fieldId;
+    private static class SupplierEntry<M, T> implements Map.Entry<${process.class.name}, Object> {
+        final ${process.class.name} fieldId;
         final M model;
         final Function<M, T> supplier;
 
-        SupplierEntry(FieldId fieldId, M model, Function<M, T> supplier) {
+        SupplierEntry(${process.class.name} fieldId, M model, Function<M, T> supplier) {
             super();
             this.fieldId = fieldId;
             this.model = model;
@@ -144,7 +145,7 @@ ${map.properties}
         }
 
         @Override
-        public FieldId getKey() {
+        public ${process.class.name} getKey() {
             return fieldId;
         }
 

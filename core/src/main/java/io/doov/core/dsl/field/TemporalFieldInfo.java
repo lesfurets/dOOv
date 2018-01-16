@@ -18,201 +18,203 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Supplier;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.NumericCondition;
 import io.doov.core.dsl.impl.TemporalCondition;
 import io.doov.core.dsl.lang.StepCondition;
 import io.doov.core.dsl.time.TemporalAdjuster;
 
-public interface TemporalFieldInfo<N extends Temporal> extends BaseFieldInfo<N> {
+public interface TemporalFieldInfo<N extends Temporal, F extends FieldId & DslId> extends BaseFieldInfo<N, F> {
     
     // eq
     
-    default StepCondition eq(TemporalCondition<N> value) {
+    default StepCondition<F> eq(TemporalCondition<N, F> value) {
         return getTemporalCondition().eq(value);
     }
 
     // with
 
-    default TemporalCondition<N> with(TemporalAdjuster ajuster) {
+    default TemporalCondition<N, F> with(TemporalAdjuster ajuster) {
         return getTemporalCondition().with(ajuster);
     }
 
     // minus
 
-    default TemporalCondition<N> minus(int value, TemporalUnit unit) {
+    default TemporalCondition<N, F> minus(int value, TemporalUnit unit) {
         return getTemporalCondition().minus(value, unit);
     }
 
-    default TemporalCondition<N> minus(NumericFieldInfo<Integer> value, TemporalUnit unit) {
+    default TemporalCondition<N, F> minus(NumericFieldInfo<Integer, F> value, TemporalUnit unit) {
         return getTemporalCondition().minus(value, unit);
     }
 
-    default TemporalCondition<N> minusYears(int value) {
+    default TemporalCondition<N, F> minusYears(int value) {
         return getTemporalCondition().minus(value, YEARS);
     }
 
     // plus
 
-    default TemporalCondition<N> plus(int value, TemporalUnit unit) {
+    default TemporalCondition<N, F> plus(int value, TemporalUnit unit) {
         return getTemporalCondition().plus(value, unit);
     }
 
-    default TemporalCondition<N> plus(NumericFieldInfo<Integer> value, TemporalUnit unit) {
+    default TemporalCondition<N, F> plus(NumericFieldInfo<Integer, F> value, TemporalUnit unit) {
         return getTemporalCondition().plus(value, unit);
     }
 
-    default TemporalCondition<N> plusYears(int value) {
+    default TemporalCondition<N, F> plusYears(int value) {
         return getTemporalCondition().plus(value, YEARS);
     }
 
     // before
 
-    default StepCondition before(N value) {
+    default StepCondition<F> before(N value) {
         return getTemporalCondition().before(value);
     }
 
-    default StepCondition before(TemporalFieldInfo<N> value) {
+    default StepCondition<F> before(TemporalFieldInfo<N, F> value) {
         return getTemporalCondition().before(value);
     }
 
-    default StepCondition before(Supplier<N> value) {
+    default StepCondition<F> before(Supplier<N> value) {
         return getTemporalCondition().before(value);
     }
 
-    default StepCondition before(TemporalCondition<N> value) {
+    default StepCondition<F> before(TemporalCondition<N, F> value) {
         return getTemporalCondition().before(value);
     }
 
-    default StepCondition beforeOrEq(N value) {
+    default StepCondition<F> beforeOrEq(N value) {
         return getTemporalCondition().beforeOrEq(value);
     }
 
-    default StepCondition beforeOrEq(Supplier<N> value) {
+    default StepCondition<F> beforeOrEq(Supplier<N> value) {
         return getTemporalCondition().beforeOrEq(value);
     }
 
-    default StepCondition beforeOrEq(TemporalCondition<N> value) {
+    default StepCondition<F> beforeOrEq(TemporalCondition<N, F> value) {
         return getTemporalCondition().beforeOrEq(value);
     }
 
     // after
 
-    default StepCondition after(N value) {
+    default StepCondition<F> after(N value) {
         return getTemporalCondition().after(value);
     }
 
-    default StepCondition after(TemporalFieldInfo<N> value) {
+    default StepCondition<F> after(TemporalFieldInfo<N, F> value) {
         return getTemporalCondition().after(value);
     }
 
-    default StepCondition after(Supplier<N> value) {
+    default StepCondition<F> after(Supplier<N> value) {
         return getTemporalCondition().after(value);
     }
 
-    default StepCondition after(TemporalCondition<N> value) {
+    default StepCondition<F> after(TemporalCondition<N, F> value) {
         return getTemporalCondition().after(value);
     }
 
-    default StepCondition afterOrEq(Supplier<N> value) {
+    default StepCondition<F> afterOrEq(Supplier<N> value) {
         return getTemporalCondition().afterOrEq(value);
     }
 
-    default StepCondition afterOrEq(N value) {
+    default StepCondition<F> afterOrEq(N value) {
         return getTemporalCondition().afterOrEq(value);
     }
 
-    default StepCondition afterOrEq(TemporalCondition<N> value) {
+    default StepCondition<F> afterOrEq(TemporalCondition<N, F> value) {
         return getTemporalCondition().afterOrEq(value);
     }
 
     // beetween
 
-    default StepCondition between(N minValueInclusive, N maxValueExclusive) {
+    default StepCondition<F> between(N minValueInclusive, N maxValueExclusive) {
         return getTemporalCondition().between(minValueInclusive, maxValueExclusive);
     }
 
-    default StepCondition between(Supplier<N> minValueInclusive, Supplier<N> maxValueExclusive) {
+    default StepCondition<F> between(Supplier<N> minValueInclusive, Supplier<N> maxValueExclusive) {
         return getTemporalCondition().between(minValueInclusive, maxValueExclusive);
     }
 
-    default StepCondition notBetween(N minValueInclusive, N maxValueExclusive) {
+    default StepCondition<F> notBetween(N minValueInclusive, N maxValueExclusive) {
         return getTemporalCondition().notBetween(minValueInclusive, maxValueExclusive);
     }
 
     // age
 
-    default NumericCondition<Integer> ageAt(N value) {
+    default NumericCondition<Integer, F> ageAt(N value) {
         return getTemporalCondition().ageAt(value);
     }
 
-    default NumericCondition<Integer> ageAt(TemporalFieldInfo<N> value) {
+    default NumericCondition<Integer, F> ageAt(TemporalFieldInfo<N, F> value) {
         return getTemporalCondition().ageAt(value);
     }
 
-    default NumericCondition<Integer> ageAt(TemporalCondition<N> value) {
+    default NumericCondition<Integer, F> ageAt(TemporalCondition<N, F> value) {
         return getTemporalCondition().ageAt(value);
     }
 
-    default NumericCondition<Integer> ageAt(Supplier<N> value) {
+    default NumericCondition<Integer, F> ageAt(Supplier<N> value) {
         return getTemporalCondition().ageAt(value);
     }
 
     // days between
 
-    default NumericCondition<Integer> daysBetween(N value) {
+    default NumericCondition<Integer, F> daysBetween(N value) {
         return getTemporalCondition().daysBetween(value);
     }
 
-    default NumericCondition<Integer> daysBetween(TemporalFieldInfo<N> value) {
+    default NumericCondition<Integer, F> daysBetween(TemporalFieldInfo<N, F> value) {
         return getTemporalCondition().daysBetween(value);
     }
 
-    default NumericCondition<Integer> daysBetween(TemporalCondition<N> value) {
+    default NumericCondition<Integer, F> daysBetween(TemporalCondition<N, F> value) {
         return getTemporalCondition().daysBetween(value);
     }
 
-    default NumericCondition<Integer> daysBetween(Supplier<N> value) {
+    default NumericCondition<Integer, F> daysBetween(Supplier<N> value) {
         return getTemporalCondition().daysBetween(value);
     }
 
     // month between
 
-    default NumericCondition<Integer> monthsBetween(N value) {
+    default NumericCondition<Integer, F> monthsBetween(N value) {
         return getTemporalCondition().monthsBetween(value);
     }
 
-    default NumericCondition<Integer> monthsBetween(TemporalFieldInfo<N> value) {
+    default NumericCondition<Integer, F> monthsBetween(TemporalFieldInfo<N, F> value) {
         return getTemporalCondition().monthsBetween(value);
     }
 
-    default NumericCondition<Integer> monthsBetween(TemporalCondition<N> value) {
+    default NumericCondition<Integer, F> monthsBetween(TemporalCondition<N, F> value) {
         return getTemporalCondition().monthsBetween(value);
     }
 
-    default NumericCondition<Integer> monthsBetween(Supplier<N> value) {
+    default NumericCondition<Integer, F> monthsBetween(Supplier<N> value) {
         return getTemporalCondition().monthsBetween(value);
     }
 
     // year between
 
-    default NumericCondition<Integer> yearsBetween(N value) {
+    default NumericCondition<Integer, F> yearsBetween(N value) {
         return getTemporalCondition().yearsBetween(value);
     }
 
-    default NumericCondition<Integer> yearsBetween(TemporalFieldInfo<N> value) {
+    default NumericCondition<Integer, F> yearsBetween(TemporalFieldInfo<N, F> value) {
         return getTemporalCondition().yearsBetween(value);
     }
 
-    default NumericCondition<Integer> yearsBetween(TemporalCondition<N> value) {
+    default NumericCondition<Integer, F> yearsBetween(TemporalCondition<N, F> value) {
         return getTemporalCondition().yearsBetween(value);
     }
 
-    default NumericCondition<Integer> yearsBetween(Supplier<N> value) {
+    default NumericCondition<Integer, F> yearsBetween(Supplier<N> value) {
         return getTemporalCondition().yearsBetween(value);
     }
 
     // abstract
 
-    TemporalCondition<N> getTemporalCondition();
+    TemporalCondition<N, F> getTemporalCondition();
 
 }

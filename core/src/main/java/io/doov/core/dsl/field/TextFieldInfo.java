@@ -15,36 +15,38 @@
  */
 package io.doov.core.dsl.field;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.IntegerCondition;
 import io.doov.core.dsl.impl.StringCondition;
 import io.doov.core.dsl.lang.StepCondition;
 
-public interface TextFieldInfo extends BaseFieldInfo<String> {
+public interface TextFieldInfo<F extends FieldId & DslId> extends BaseFieldInfo<String, F> {
 
-    default StepCondition contains(String string) {
+    default StepCondition<F> contains(String string) {
         return getStringCondition().contains(string);
     }
 
-    default StepCondition matches(String regex) {
+    default StepCondition<F> matches(String regex) {
         return getStringCondition().matches(regex);
     }
 
-    default StepCondition startsWith(String prefix) {
+    default StepCondition<F> startsWith(String prefix) {
         return getStringCondition().startsWith(prefix);
     }
 
-    default StepCondition endsWith(String suffix) {
+    default StepCondition<F> endsWith(String suffix) {
         return getStringCondition().endsWith(suffix);
     }
 
-    default IntegerCondition length() {
+    default IntegerCondition<F> length() {
         return getStringCondition().length();
     }
 
-    default IntegerCondition parseInt() {
+    default IntegerCondition<F> parseInt() {
         return getStringCondition().parseInt();
     }
 
-    StringCondition getStringCondition();
+    StringCondition<F> getStringCondition();
 
 }

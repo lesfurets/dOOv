@@ -16,17 +16,18 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.DoubleCondition;
 
-public class DoubleFieldInfo extends DefaultFieldInfo<Double> implements NumericFieldInfo<Double> {
+public class DoubleFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<Double, F> implements NumericFieldInfo<Double, F> {
 
-    public DoubleFieldInfo(FieldId fieldId, String readable, Class<?> type, FieldId[] siblings) {
+    public DoubleFieldInfo(F fieldId, String readable, Class<?> type, F[] siblings) {
         super(fieldId, readable, type, new Class[] {}, siblings);
     }
 
     @Override
-    public DoubleCondition getNumericCondition() {
-        return new DoubleCondition(this);
+    public DoubleCondition<F> getNumericCondition() {
+        return new DoubleCondition<>(this);
     }
 
 }

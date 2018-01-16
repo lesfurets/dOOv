@@ -20,17 +20,17 @@ import io.doov.core.dsl.lang.Readable;
 /**
  * Properties of a {@code FieldId}, generated from the model java bean
  */
-public interface FieldInfo extends Readable {
+public interface FieldInfo<F extends FieldId> extends Readable {
 
     /**
      * @return the referenced {@code FieldId}
      */
-    FieldId id();
+    F id();
 
     /**
      * @return the other {@code FieldId} mapped on the same property
      */
-    FieldId[] siblings();
+    F[] siblings();
 
     /**
      * @return the {@code FieldId} type

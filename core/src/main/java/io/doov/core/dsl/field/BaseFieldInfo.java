@@ -21,98 +21,100 @@ import static java.util.Collections.singletonList;
 import java.util.Collection;
 import java.util.function.*;
 
+import io.doov.core.FieldId;
 import io.doov.core.dsl.DslField;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.DefaultCondition;
 import io.doov.core.dsl.impl.IntegerCondition;
 import io.doov.core.dsl.lang.StepCondition;
 
-public interface BaseFieldInfo<T> extends DslField {
+public interface BaseFieldInfo<T, F extends FieldId & DslId> extends DslField<F> {
 
     // null
 
-    default StepCondition isNull() {
+    default StepCondition<F> isNull() {
         return getDefaultCondition().isNull();
     }
 
-    default StepCondition isNotNull() {
+    default StepCondition<F> isNotNull() {
         return getDefaultCondition().isNotNull();
     }
 
     // eq
 
-    default StepCondition eq(T value) {
+    default StepCondition<F> eq(T value) {
         return getDefaultCondition().eq(value);
     }
 
-    default StepCondition eq(BaseFieldInfo<T> value) {
+    default StepCondition<F> eq(BaseFieldInfo<T, F> value) {
         return getDefaultCondition().eq(value);
     }
 
-    default StepCondition eq(Supplier<T> value) {
+    default StepCondition<F> eq(Supplier<T> value) {
         return getDefaultCondition().eq(value);
     }
 
-    default StepCondition notEq(T value) {
+    default StepCondition<F> notEq(T value) {
         return getDefaultCondition().notEq(value);
     }
 
-    default StepCondition notEq(BaseFieldInfo<T> value) {
+    default StepCondition<F> notEq(BaseFieldInfo<T, F> value) {
         return getDefaultCondition().notEq(value);
     }
 
     // any match
 
-    default StepCondition anyMatch(Predicate<T> value) {
+    default StepCondition<F> anyMatch(Predicate<T> value) {
         return getDefaultCondition().anyMatch(singletonList(value));
     }
 
     @SuppressWarnings("unchecked")
-    default StepCondition anyMatch(T... values) {
+    default StepCondition<F> anyMatch(T... values) {
         return getDefaultCondition().anyMatch(asList(values));
     }
 
-    default StepCondition anyMatch(Collection<T> values) {
+    default StepCondition<F> anyMatch(Collection<T> values) {
         return getDefaultCondition().anyMatch(values);
     }
 
     // all match
 
-    default StepCondition allMatch(Predicate<T> value) {
+    default StepCondition<F> allMatch(Predicate<T> value) {
         return getDefaultCondition().allMatch(singletonList(value));
     }
 
     @SuppressWarnings("unchecked")
-    default StepCondition allMatch(T... values) {
+    default StepCondition<F> allMatch(T... values) {
         return getDefaultCondition().allMatch(asList(values));
     }
 
-    default StepCondition allMatch(Collection<T> values) {
+    default StepCondition<F> allMatch(Collection<T> values) {
         return getDefaultCondition().allMatch(values);
     }
 
     // none match
 
-    default StepCondition noneMatch(Predicate<T> value) {
+    default StepCondition<F> noneMatch(Predicate<T> value) {
         return getDefaultCondition().noneMatch(singletonList(value));
     }
 
     @SuppressWarnings("unchecked")
-    default StepCondition noneMatch(T... values) {
+    default StepCondition<F> noneMatch(T... values) {
         return getDefaultCondition().noneMatch(asList(values));
     }
 
-    default StepCondition noneMatch(Collection<T> values) {
+    default StepCondition<F> noneMatch(Collection<T> values) {
         return getDefaultCondition().noneMatch(values);
     }
 
     // map
 
-    default IntegerCondition mapToInt(Function<T, Integer> mapper) {
+    default IntegerCondition<F> mapToInt(Function<T, Integer> mapper) {
         return getDefaultCondition().mapToInt(mapper);
     }
 
     // implementation
 
-    DefaultCondition<T> getDefaultCondition();
+    DefaultCondition<T, F> getDefaultCondition();
 
 }

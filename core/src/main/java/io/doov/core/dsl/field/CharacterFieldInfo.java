@@ -16,10 +16,11 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 
-public class CharacterFieldInfo extends DefaultFieldInfo<Character> {
+public class CharacterFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<Character, F> {
 
-    public CharacterFieldInfo(FieldId fieldId, String readable, Class<?> type, FieldId[] siblings) {
+    public CharacterFieldInfo(F fieldId, String readable, Class<?> type, F[] siblings) {
         super(fieldId, readable, type, new Class[] {}, siblings);
     }
 

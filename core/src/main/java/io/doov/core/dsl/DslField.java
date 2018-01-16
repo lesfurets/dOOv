@@ -15,10 +15,11 @@
  */
 package io.doov.core.dsl;
 
+import io.doov.core.FieldId;
 import io.doov.core.dsl.lang.Readable;
 
-public interface DslField extends Readable {
+public interface DslField<F extends FieldId & DslId> extends Readable {
 
-    DslId id();
+    F id();
 
 }

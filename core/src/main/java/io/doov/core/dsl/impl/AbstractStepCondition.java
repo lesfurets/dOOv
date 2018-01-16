@@ -17,18 +17,19 @@ import static io.doov.core.dsl.meta.ast.AstVisitorUtils.astToString;
 import java.util.Locale;
 import java.util.function.BiPredicate;
 
+import io.doov.core.FieldId;
 import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.DslModel;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.lang.StepCondition;
 import io.doov.core.dsl.meta.*;
 
-abstract class AbstractStepCondition implements StepCondition {
+abstract class AbstractStepCondition<F extends FieldId & DslId> implements StepCondition<F> {
 
     private final PredicateMetadata metadata;
-    private final BiPredicate<DslModel, Context> predicate;
+    private final BiPredicate<DslModel<F>, Context> predicate;
 
-    protected AbstractStepCondition(PredicateMetadata metadata, BiPredicate<DslModel, Context> predicate) {
+    protected AbstractStepCondition(PredicateMetadata metadata, BiPredicate<DslModel<F>, Context> predicate) {
         this.metadata = metadata;
         this.predicate = predicate;
     }
@@ -39,9 +40,9 @@ abstract class AbstractStepCondition implements StepCondition {
     }
 
     @Override
-    public BiPredicate<DslModel, Context> predicate() {
+    public BiPredicate<DslModel<F>, Context> predicate() {
         return (model, context) -> {
-            final boolean test = predicate.test(new Interceptor(model, context), context);
+            final boolean test = predicate.test(new Interceptor<>(model, context), context);
             if (test) {
                 metadata.incTrueEval();
                 context.addEvalTrue(metadata);
@@ -53,20 +54,26 @@ abstract class AbstractStepCondition implements StepCondition {
         };
     }
 
-    private static final class Interceptor implements DslModel {
-        private final DslModel model;
+    private static final class Interceptor<F extends FieldId & DslId> implements DslModel<F> {
+        private final DslModel<F> model;
         private final Context context;
 
-        Interceptor(DslModel model, Context context) {
+        Interceptor(DslModel<F> model, Context context) {
             this.model = model;
             this.context = context;
         }
 
         @Override
-        public <T> T get(DslId id) {
+        public <T> T get(F id) {
             final T value = model.get(id);
             context.addEvalValue(id, value);
             return value;
+        }
+
+        @Override
+        public <T> void set(F id, T value) {
+            // TODO
+            model.set(id, value);
         }
     }
 

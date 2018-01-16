@@ -16,26 +16,28 @@ import static io.doov.core.dsl.meta.ast.AstVisitorUtils.astToString;
 
 import java.util.Locale;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.DslModel;
 import io.doov.core.dsl.lang.*;
 import io.doov.core.dsl.meta.Metadata;
 import io.doov.core.dsl.meta.MetadataVisitor;
 
-public class DefaultValidationRule implements ValidationRule {
+public class DefaultValidationRule<F extends FieldId & DslId> implements ValidationRule<F> {
 
-    private final StepWhen stepWhen;
+    private final StepWhen<F> stepWhen;
     private final String message;
     private final boolean shortCircuit;
 
-    protected DefaultValidationRule(StepWhen stepWhen) {
+    protected DefaultValidationRule(StepWhen<F> stepWhen) {
         this(stepWhen, null, true);
     }
 
-    protected DefaultValidationRule(StepWhen stepWhen, String message) {
+    protected DefaultValidationRule(StepWhen<F> stepWhen, String message) {
         this(stepWhen, message, true);
     }
 
-    public DefaultValidationRule(StepWhen stepWhen, String message, boolean shortCircuit) {
+    public DefaultValidationRule(StepWhen<F> stepWhen, String message, boolean shortCircuit) {
         this.stepWhen = stepWhen;
         this.message = message;
         this.shortCircuit = shortCircuit;
@@ -55,17 +57,17 @@ public class DefaultValidationRule implements ValidationRule {
     }
 
     @Override
-    public ValidationRule withMessage(String message) {
-        return new DefaultValidationRule(stepWhen, message);
+    public ValidationRule<F> withMessage(String message) {
+        return new DefaultValidationRule<>(stepWhen, message);
     }
 
     @Override
-    public ValidationRule withShortCircuit(boolean shortCircuit) {
-        return new DefaultValidationRule(stepWhen, message, shortCircuit);
+    public ValidationRule<F> withShortCircuit(boolean shortCircuit) {
+        return new DefaultValidationRule<>(stepWhen, message, shortCircuit);
     }
 
     @Override
-    public Result executeOn(DslModel model) {
+    public Result executeOn(DslModel<F> model) {
         final DefaultContext context = new DefaultContext(shortCircuit, stepWhen.stepCondition().getMetadata());
         boolean valid = stepWhen.stepCondition().predicate().test(model, context);
         String readable = valid ? null : (message == null ? stepWhen.stepCondition().readable() : message);
@@ -73,7 +75,7 @@ public class DefaultValidationRule implements ValidationRule {
     }
 
     @Override
-    public ValidationRule registerOn(RuleRegistry registry) {
+    public ValidationRule<F> registerOn(RuleRegistry<F> registry) {
         registry.register(this);
         return this;
     }

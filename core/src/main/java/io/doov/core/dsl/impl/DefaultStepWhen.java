@@ -19,25 +19,27 @@ import static io.doov.core.dsl.meta.ast.AstVisitorUtils.astToString;
 
 import java.util.Locale;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.lang.*;
 import io.doov.core.dsl.meta.MetadataVisitor;
 
-public class DefaultStepWhen implements StepWhen {
+public class DefaultStepWhen<F extends FieldId & DslId> implements StepWhen<F> {
 
-    private final StepCondition stepCondition;
+    private final StepCondition<F> stepCondition;
 
-    public DefaultStepWhen(StepCondition stepCondition) {
+    public DefaultStepWhen(StepCondition<F> stepCondition) {
         this.stepCondition = stepCondition;
     }
 
     @Override
-    public StepCondition stepCondition() {
+    public StepCondition<F> stepCondition() {
         return stepCondition;
     }
 
     @Override
-    public ValidationRule validate() {
-        return new DefaultValidationRule(this);
+    public ValidationRule<F> validate() {
+        return new DefaultValidationRule<>(this);
     }
 
     @Override

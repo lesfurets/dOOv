@@ -17,27 +17,29 @@ package io.doov.core.dsl.lang;
 
 import java.util.function.BiPredicate;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.DslModel;
 import io.doov.core.dsl.impl.LogicalBinaryCondition;
 import io.doov.core.dsl.impl.LogicalUnaryCondition;
 import io.doov.core.dsl.meta.Metadata;
 import io.doov.core.dsl.meta.SyntaxTree;
 
-public interface StepCondition extends Readable, SyntaxTree {
+public interface StepCondition<F extends FieldId & DslId> extends Readable, SyntaxTree {
 
-    BiPredicate<DslModel, Context> predicate();
+    BiPredicate<DslModel<F>, Context> predicate();
 
     Metadata getMetadata();
 
-    default StepCondition and(StepCondition condition) {
+    default StepCondition<F> and(StepCondition<F> condition) {
         return LogicalBinaryCondition.and(this, condition);
     }
 
-    default StepCondition or(StepCondition condition) {
+    default StepCondition<F> or(StepCondition<F> condition) {
         return LogicalBinaryCondition.or(this, condition);
     }
 
-    default StepCondition not() {
+    default StepCondition<F> not() {
         return LogicalUnaryCondition.negate(this);
     }
 

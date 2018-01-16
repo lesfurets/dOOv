@@ -16,17 +16,18 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.LongCondition;
 
-public class LongFieldInfo extends DefaultFieldInfo<Long> implements NumericFieldInfo<Long> {
+public class LongFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<Long, F> implements NumericFieldInfo<Long, F> {
 
-    public LongFieldInfo(FieldId fieldId, String readable, Class<?> type, FieldId[] siblings) {
+    public LongFieldInfo(F fieldId, String readable, Class<?> type, F[] siblings) {
         super(fieldId, readable, type, new Class[] {}, siblings);
     }
 
     @Override
-    public LongCondition getNumericCondition() {
-        return new LongCondition(this);
+    public LongCondition<F> getNumericCondition() {
+        return new LongCondition<>(this);
     }
 
 }

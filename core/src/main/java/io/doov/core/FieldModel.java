@@ -23,46 +23,46 @@ import io.doov.core.dsl.DslModel;
 /**
  * An model that maps {@code FieldId} to values. Each {@code FieldId} can map to at most one value.
  */
-public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslModel {
+public interface FieldModel<F extends FieldId & DslId> extends Iterable<Map.Entry<F, Object>>, DslModel<F> {
 
     /**
      * @param fieldId the {@code FieldId} to read
      * @return the the {@code FieldId} value
      */
     @Override
-    <T> T get(DslId fieldId);
+    <T> T get(F fieldId);
 
     /**
      * @param fieldId the {@code FieldId} to update
      * @param value   the new {@code FieldId} value
      */
-    <T> void set(FieldId fieldId, T value);
+    <T> void set(F fieldId, T value);
 
     /**
      * return a sequential {@code Stream} with all key-value pairs
      */
-    Stream<Map.Entry<FieldId, Object>> stream();
+    Stream<Map.Entry<F, Object>> stream();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    Spliterator<Map.Entry<FieldId, Object>> spliterator();
+    Spliterator<Map.Entry<F, Object>> spliterator();
 
     /**
      * return a parallel {@code Stream} with all key-value pairs
      */
-    Stream<Map.Entry<FieldId, Object>> parallelStream();
+    Stream<Map.Entry<F, Object>> parallelStream();
 
     /**
      * @return the {@code FieldInfo} FieldInfo for all this model {@code FieldId}
      */
-    List<FieldInfo> getFieldInfos();
+    List<FieldInfo<F>> getFieldInfos();
 
     /**
      * @return all {@code FieldId}, with a not-null value
      */
-    default List<FieldId> getFieldIds() {
+    default List<F> getFieldIds() {
         return getFieldInfos().stream().map(FieldInfo::id).collect(toList());
     }
 
@@ -71,7 +71,7 @@ public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslMod
      *
      * @param source the source field model
      */
-    default void setAll(FieldModel source) {
+    default void setAll(FieldModel<F> source) {
         getFieldInfos().stream().filter(info -> source.get(info.id()) != null)
                 .forEach(info -> set(info.id(), source.get(info.id())));
     }

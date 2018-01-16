@@ -26,11 +26,12 @@ import org.junit.jupiter.api.Test;
 
 import io.doov.core.FieldId;
 import io.doov.core.FieldModel;
+import io.doov.sample.field.SampleFieldId;
 
 public class SampleModelIteratorTest {
 
     private SampleModel sample = SampleModels.sample();
-    private FieldModel source = new SampleModelWrapper(sample);
+    private FieldModel<SampleFieldId> source = new SampleModelWrapper(sample);
 
     @BeforeEach
     public void before() {
@@ -40,7 +41,7 @@ public class SampleModelIteratorTest {
 
     @Test
     public void iterator_test() {
-        for (Entry<FieldId, Object> entry : source) {
+        for (Entry<SampleFieldId, Object> entry : source) {
             assertThat(entry.getValue()).isEqualTo(source.get(entry.getKey()));
         }
     }
@@ -48,7 +49,7 @@ public class SampleModelIteratorTest {
     @Test
     public void iterator_contains_all_fields() {
         List<FieldId> ids = new ArrayList<>(source.getFieldIds());
-        for (Entry<FieldId, Object> entry : source) {
+        for (Entry<SampleFieldId, Object> entry : source) {
             ids.remove(entry.getKey());
         }
         assertThat(ids).hasSize(0);

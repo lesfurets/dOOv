@@ -22,6 +22,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.*;
 import java.util.stream.Collector;
 
+import io.doov.core.dsl.DslId;
+
 /**
  * Utility methods for creating and manipulating {@code FieldModel}.
  */
@@ -30,19 +32,19 @@ public class FieldModels {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a unique {@code FieldModel}.
      */
-    public static <Fm extends FieldModel> Collector<Entry<FieldId, Object>, ?, Fm> toFieldModel(Fm model) {
+    public static <F extends FieldId & DslId, Fm extends FieldModel<F>> Collector<Entry<F, Object>, ?, Fm> toFieldModel(Fm model) {
         return new FieldModelCollector<>(model);
     }
 
     /**
      * Returns a concurrent {@code Collector} that accumulates the input elements into a unique {@code FieldModel}.
      */
-    public static <Fm extends FieldModel> Collector<Entry<FieldId, Object>, ?, Fm> toConcurrentFieldModel(Fm model) {
+    public static <F extends FieldId & DslId, Fm extends FieldModel<F>> Collector<Entry<F, Object>, ?, Fm> toConcurrentFieldModel(Fm model) {
         return new ConcurrentFieldModelCollector<>(model);
     }
 
-    private static final class FieldModelCollector<Fm extends FieldModel>
-            implements Collector<Entry<FieldId, Object>, Fm, Fm> {
+    private static final class FieldModelCollector<F extends FieldId & DslId, Fm extends FieldModel<F>>
+            implements Collector<Entry<F, Object>, Fm, Fm> {
 
         private final Fm model;
 
@@ -56,7 +58,7 @@ public class FieldModels {
         }
 
         @Override
-        public BiConsumer<Fm, Entry<FieldId, Object>> accumulator() {
+        public BiConsumer<Fm, Entry<F, Object>> accumulator() {
             return (model, entry) -> {
                 Object value = entry.getValue();
                 if (value != null) {
@@ -81,8 +83,8 @@ public class FieldModels {
         }
     }
 
-    private static final class ConcurrentFieldModelCollector<Fm extends FieldModel>
-            implements Collector<Entry<FieldId, Object>, Fm, Fm> {
+    private static final class ConcurrentFieldModelCollector<F extends FieldId & DslId, Fm extends FieldModel<F>>
+            implements Collector<Entry<F, Object>, Fm, Fm> {
 
         private final Fm model;
         private final ReentrantLock lock;
@@ -98,7 +100,7 @@ public class FieldModels {
         }
 
         @Override
-        public BiConsumer<Fm, Entry<FieldId, Object>> accumulator() {
+        public BiConsumer<Fm, Entry<F, Object>> accumulator() {
             return (supplier, entry) -> {
                 Object value = entry.getValue();
                 if (value == null) {

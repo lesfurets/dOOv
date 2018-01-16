@@ -17,13 +17,15 @@ package io.doov.core.dsl.impl;
 
 import java.util.function.BiPredicate;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.DslModel;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.meta.PredicateMetadata;
 
-public class DefaultStepCondition extends AbstractStepCondition {
+public class DefaultStepCondition<F extends FieldId & DslId> extends AbstractStepCondition<F> {
 
-    public DefaultStepCondition(PredicateMetadata metadata, BiPredicate<DslModel, Context> predicate) {
+    public DefaultStepCondition(PredicateMetadata metadata, BiPredicate<DslModel<F>, Context> predicate) {
         super(metadata, predicate);
     }
 

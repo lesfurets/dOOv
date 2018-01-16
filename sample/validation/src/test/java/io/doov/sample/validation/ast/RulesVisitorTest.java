@@ -12,7 +12,6 @@
  */
 package io.doov.sample.validation.ast;
 
-import static io.doov.core.dsl.impl.DefaultRuleRegistry.REGISTRY_DEFAULT;
 import static io.doov.core.dsl.meta.i18n.ResourceBundleProvider.BUNDLE;
 
 import java.io.ByteArrayOutputStream;
@@ -28,9 +27,10 @@ import io.doov.sample.validation.SampleRules;
 
 public class RulesVisitorTest {
 
+    private static SampleRules REGISTRY_DEFAULT;
     @BeforeAll
     public static void init() {
-        new SampleRules();
+        REGISTRY_DEFAULT = new SampleRules();
     }
 
     @Test

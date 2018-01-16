@@ -185,6 +185,7 @@ public final class ModelMapGenMojo extends AbstractMojo {
             final Map<String, String> conf = new HashMap<>();
             conf.put("package.name", targetPackage);
             conf.put("process.class", clazz.getName());
+            conf.put("process.class.name", clazz.getSimpleName());
             conf.put("process.date", ofLocalizedDateTime(SHORT).format(now()));
             conf.put("target.class.name", targetClassName);
             conf.put("imports", imports(fieldPaths));
@@ -217,6 +218,7 @@ public final class ModelMapGenMojo extends AbstractMojo {
             Map<String, String> conf = new HashMap<>();
             conf.put("package.name", targetPackage);
             conf.put("process.class", modelClass.getName());
+            conf.put("process.class.name", fieldClass.getSimpleName());
             conf.put("process.date", ofLocalizedDateTime(SHORT).format(now()));
             conf.put("target.model.class.name", modelClass.getSimpleName());
             conf.put("target.model.class.full.name", modelClass.getName());

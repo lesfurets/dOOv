@@ -39,6 +39,7 @@ import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
 
 import io.doov.core.*;
+import io.doov.sample.field.SampleFieldId;
 import io.doov.sample.field.SampleTag;
 import io.doov.sample.model.*;
 
@@ -58,7 +59,7 @@ public class LiveCode {
         model.getAccount().setEmail("chtijug@gmail.com");
         System.out.println(model.getAccount().getEmail());
 
-        FieldModel fieldModel = new SampleModelWrapper(model);
+        FieldModel<SampleFieldId> fieldModel = new SampleModelWrapper(model);
         System.out.println(fieldModel.<String> get(EMAIL));
 
         fieldModel.set(EMAIL, "lesfurets@gmail.com");
@@ -66,11 +67,11 @@ public class LiveCode {
     }
 
     private static void mixingWithMap() {
-        FieldModel model = SampleModels.wrapper();
+        FieldModel<SampleFieldId> model = SampleModels.wrapper();
         System.out.println(model.<String> get(EMAIL));
         model.stream().forEach(System.out::println);
 
-        Map<FieldId, Object> map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
+        Map<SampleFieldId, Object> map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
         System.out.println(map);
 
         SampleModelWrapper newModel = map.entrySet().stream().collect(SampleModelWrapper.toFieldModel());
@@ -79,9 +80,9 @@ public class LiveCode {
     }
 
     private static void tagFiltering() {
-        FieldModel model = SampleModels.wrapper();
+        FieldModel<SampleFieldId> model = SampleModels.wrapper();
 
-        Map<FieldId, Object> map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
+        Map<SampleFieldId, Object> map = model.stream().collect(toMap(Entry::getKey, Entry::getValue));
         SampleModelWrapper newModel = map.entrySet().stream()
                 .filter(e -> e.getKey().hasTag(SampleTag.ACCOUNT))
                 // .filter(e -> e.getKey().hasTag(SampleTag.USER))
@@ -91,7 +92,7 @@ public class LiveCode {
     }
 
     private static void cqlBuilders() {
-        FieldModel model = SampleModels.wrapper();
+        FieldModel<SampleFieldId> model = SampleModels.wrapper();
         Create create = SchemaBuilder.createTable("Field").addClusteringColumn(LOGIN.name(), text())
                 .addPartitionKey("snapshot_id", timeuuid());
 
@@ -108,8 +109,8 @@ public class LiveCode {
     }
 
     private static void modelDiff() {
-        FieldModel sample_1 = SampleModels.wrapper();
-        FieldModel sample_2 = SampleModels.wrapper();
+        FieldModel<SampleFieldId> sample_1 = SampleModels.wrapper();
+        FieldModel<SampleFieldId> sample_2 = SampleModels.wrapper();
 
         sample_1.set(FAVORITE_SITE_NAME_3, null);
         sample_1.set(FAVORITE_SITE_URL_3, null);
@@ -153,16 +154,16 @@ public class LiveCode {
         throw new IllegalArgumentException("unknown type " + info.type() + " for " + info.id());
     }
 
-    private static Function<Entry<FieldId, Object>, Triple<Object, FieldId, Object>> buildLeft = (entry) ->
+    private static Function<Entry<SampleFieldId, Object>, Triple<Object, SampleFieldId, Object>> buildLeft = (entry) ->
             Triple.of(entry.getValue(), entry.getKey(), null);
 
-    private static Function<Entry<FieldId, Object>, Triple<Object, FieldId, Object>> buildRight = (entry) ->
+    private static Function<Entry<SampleFieldId, Object>, Triple<Object, SampleFieldId, Object>> buildRight = (entry) ->
             Triple.of(null, entry.getKey(), entry.getValue());
 
-    private static Predicate<Triple<Object, FieldId, Object>> isNotSame = (triple) ->
+    private static Predicate<Triple<Object, SampleFieldId, Object>> isNotSame = (triple) ->
             !Objects.equals(triple.getLeft(), triple.getRight());
 
-    private static BinaryOperator<Triple<Object, FieldId, Object>> merge = (t1, t2) -> {
+    private static BinaryOperator<Triple<Object, SampleFieldId, Object>> merge = (t1, t2) -> {
         Object left = t1.getLeft() != null ? t1.getLeft() : t2.getLeft();
         Object right = t2.getRight() != null ? t2.getRight() : t1.getRight();
         return Triple.of(left, t1.getMiddle(), right);

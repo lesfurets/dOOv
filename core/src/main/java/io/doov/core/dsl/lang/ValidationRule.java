@@ -15,19 +15,21 @@
  */
 package io.doov.core.dsl.lang;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.DslModel;
 import io.doov.core.dsl.meta.Metadata;
 import io.doov.core.dsl.meta.SyntaxTree;
 
-public interface ValidationRule extends Readable, SyntaxTree {
+public interface ValidationRule<F extends FieldId & DslId> extends Readable, SyntaxTree {
 
-    ValidationRule withMessage(String message);
+    ValidationRule<F> withMessage(String message);
 
-    ValidationRule withShortCircuit(boolean shortCircuit);
+    ValidationRule<F> withShortCircuit(boolean shortCircuit);
 
-    Result executeOn(DslModel model);
+    Result executeOn(DslModel<F> model);
 
-    ValidationRule registerOn(RuleRegistry registry);
+    ValidationRule<F> registerOn(RuleRegistry<F> registry);
 
     String getMessage();
     

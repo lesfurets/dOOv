@@ -88,13 +88,13 @@ final class FieldInfoGen {
             }
 
             constants.append("    public static final ");
-            constants.append(fieldType(type, rawType, genericTypes));
+            constants.append(fieldType(type, rawType, genericTypes, fieldId));
             constants.append(" ");
             constants.append(fieldId.toString());
             constants.append(" = ");
-            constants.append(fieldFactoryMethod(type, rawType, genericTypes));
             constants.append("\n                    ");
-            constants.append(".fieldId(");
+            constants.append(fieldFactoryMethod(type, rawType, genericTypes, fieldId));
+            constants.append("(");
             constants.append(fieldId.getClass().getSimpleName());
             constants.append(".");
             constants.append(fieldId.toString());
@@ -124,7 +124,7 @@ final class FieldInfoGen {
             constants.append(".build(ALL);\n\n");
 
             methods.append("    public static ");
-            methods.append(fieldType(type, rawType, genericTypes));
+            methods.append(fieldType(type, rawType, genericTypes, fieldId));
             methods.append(" ");
             methods.append(formatMethod(fieldId, currentPath));
             methods.append("() {");
@@ -157,97 +157,100 @@ final class FieldInfoGen {
         return lastIndex > 0 ? className.substring(lastIndex + 1, className.length()) : className;
     }
 
-    private static String fieldType(Class<?> type, String rawType, String genericTypes) {
+    private static String fieldType(Class<?> type, String rawType, String genericTypes, FieldId fieldId) {
         if (String.class.equals(type)) {
-            return StringFieldInfo.class.getSimpleName();
+            return StringFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (Character.class.equals(type) || Character.TYPE.equals(type)) {
-            return CharacterFieldInfo.class.getSimpleName();
+            return CharacterFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (Integer.class.equals(type) || Integer.TYPE.equals(type)) {
-            return IntegerFieldInfo.class.getSimpleName();
+            return IntegerFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (Boolean.class.equals(type) || Boolean.TYPE.equals(type)) {
-            return BooleanFieldInfo.class.getSimpleName();
+            return BooleanFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (Double.class.equals(type) || Double.TYPE.equals(type)) {
-            return DoubleFieldInfo.class.getSimpleName();
+            return DoubleFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (Float.class.equals(type) || Float.TYPE.equals(type)) {
-            return FloatFieldInfo.class.getSimpleName();
+            return FloatFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (Long.class.equals(type) || Long.TYPE.equals(type)) {
-            return LongFieldInfo.class.getSimpleName();
+            return LongFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (LocalDate.class.equals(type)) {
-            return LocalDateFieldInfo.class.getSimpleName();
+            return LocalDateFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (LocalDateTime.class.equals(type)) {
-            return LocalDateTimeFieldInfo.class.getSimpleName();
+            return LocalDateTimeFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (LocalTime.class.equals(type)) {
-            return LocalTimeFieldInfo.class.getSimpleName();
+            return LocalTimeFieldInfo.class.getSimpleName() + "<" + fieldId.getClass().getSimpleName() + ">";
         }
         if (Enum.class.isAssignableFrom(type)) {
-            return EnumFieldInfo.class.getSimpleName() + "<" + rawType + ">";
+            return EnumFieldInfo.class.getSimpleName() + "<" + rawType + ", "+ fieldId.getClass().getSimpleName() + ">";
         }
         if (Iterable.class.isAssignableFrom(type)) {
             if (genericTypes.isEmpty()) {
-                return IterableFieldInfo.class.getSimpleName() + "<?, " + rawType + ">";
+                return IterableFieldInfo.class.getSimpleName() + "<?, " + rawType
+                                + ", " + fieldId.getClass().getSimpleName() + ">";
             } else {
                 return IterableFieldInfo.class.getSimpleName() + "<" + genericTypes + ", " + rawType + "<"
-                        + genericTypes + ">>";
+                        + genericTypes + ">"+ ", " + fieldId.getClass().getSimpleName() + ">";
             }
         }
         return DefaultFieldInfo.class.getSimpleName() + "<" + rawType
-                + (genericTypes.isEmpty() ? "" : "<" + genericTypes + ">") + ">";
+                + (genericTypes.isEmpty() ? "" : "<" + genericTypes + ">") + ", " + fieldId.getClass().getSimpleName() + ">";
     }
 
-    private static String fieldFactoryMethod(Class<?> type, String rawType, String genericTypes) {
+    private static String fieldFactoryMethod(Class<?> type, String rawType, String genericTypes, FieldId fieldId) {
         if (String.class.equals(type)) {
-            return "stringField()";
+            return "stringField";
         }
         if (Character.class.equals(type) || Character.TYPE.equals(type)) {
-            return "characterField()";
+            return "characterField";
         }
         if (Integer.class.equals(type) || Integer.TYPE.equals(type)) {
-            return "integerField()";
+            return "integerField";
         }
         if (Boolean.class.equals(type) || Boolean.TYPE.equals(type)) {
-            return "booleanField()";
+            return "booleanField";
         }
         if (Double.class.equals(type) || Double.TYPE.equals(type)) {
-            return "doubleField()";
+            return "doubleField";
         }
         if (Float.class.equals(type) || Float.TYPE.equals(type)) {
-            return "floatField()";
+            return "floatField";
         }
         if (Long.class.equals(type) || Long.TYPE.equals(type)) {
-            return "longField()";
+            return "longField";
         }
         if (LocalDate.class.equals(type)) {
-            return "localDateField()";
+            return "localDateField";
         }
         if (LocalDateTime.class.equals(type)) {
-            return "localDateTimeField()";
+            return "localDateTimeField";
         }
         if (LocalTime.class.equals(type)) {
-            return "localTimeField()";
+            return "localTimeField";
         }
         if (Enum.class.isAssignableFrom(type)) {
-            return "FieldInfoProvider\n                    .<" + rawType + "> enumField()";
+            return "FieldInfoProvider\n                    .<" + rawType + ", "
+                            + fieldId.getClass().getSimpleName() + "> enumField";
         }
         if (Iterable.class.isAssignableFrom(type)) {
             if (genericTypes.isEmpty()) {
-                return "FieldInfoProvider\n                    .<?, " + rawType + "> iterableField()";
+                return "FieldInfoProvider\n                    .<?, " + rawType + ", "
+                                + fieldId.getClass().getSimpleName() + "> iterableField";
             } else {
                 return "FieldInfoProvider\n                    .<" + genericTypes + ", " + rawType + "<"
-                        + genericTypes + ">> iterableField()";
+                        + genericTypes + ">"+ ", " + fieldId.getClass().getSimpleName() +"> iterableField";
             }
         }
         return "FieldInfoProvider\n                    .<" + rawType
-                + (genericTypes.isEmpty() ? "" : "<" + genericTypes + ">")
-                + "> defaultField()";
+                + (genericTypes.isEmpty() ? "" : "<" + genericTypes + ", " + fieldId.getClass().getSimpleName() + ">")
+                + "> defaultField";
     }
 
     private static String formatSiblings(Set<FieldId> siblings) {

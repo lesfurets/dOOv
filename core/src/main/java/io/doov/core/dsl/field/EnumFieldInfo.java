@@ -16,10 +16,11 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 
-public class EnumFieldInfo<E extends Enum<E>> extends DefaultFieldInfo<E> {
+public class EnumFieldInfo<E extends Enum<E>, F extends FieldId & DslId> extends DefaultFieldInfo<E, F> {
 
-    public EnumFieldInfo(FieldId fieldId, String readable, Class<?> type, FieldId[] siblings) {
+    public EnumFieldInfo(F fieldId, String readable, Class<?> type, F[] siblings) {
         super(fieldId, readable, type, new Class[] {}, siblings);
     }
 

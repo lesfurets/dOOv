@@ -19,22 +19,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.lang.RuleRegistry;
 import io.doov.core.dsl.lang.ValidationRule;
 
-public class DefaultRuleRegistry implements RuleRegistry {
+public abstract class DefaultRuleRegistry<F extends FieldId & DslId> implements RuleRegistry<F> {
 
-    public static final RuleRegistry REGISTRY_DEFAULT = new DefaultRuleRegistry();
-
-    private final List<ValidationRule> rules = new ArrayList<>();
+    private final List<ValidationRule<F>> rules = new ArrayList<>();
 
     @Override
-    public void register(ValidationRule rule) {
+    public void register(ValidationRule<F> rule) {
         rules.add(rule);
     }
 
     @Override
-    public Stream<ValidationRule> stream() {
+    public Stream<ValidationRule<F>> stream() {
         return rules.stream();
     }
 

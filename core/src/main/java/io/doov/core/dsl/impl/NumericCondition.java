@@ -28,48 +28,48 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
-import io.doov.core.dsl.DslField;
-import io.doov.core.dsl.DslModel;
+import io.doov.core.FieldId;
+import io.doov.core.dsl.*;
 import io.doov.core.dsl.field.NumericFieldInfo;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.lang.StepCondition;
 import io.doov.core.dsl.meta.Metadata;
 import io.doov.core.dsl.meta.PredicateMetadata;
 
-public abstract class NumericCondition<N extends Number> extends DefaultCondition<N> {
+public abstract class NumericCondition<N extends Number, F extends FieldId & DslId> extends DefaultCondition<N, F> {
 
-    NumericCondition(DslField field) {
+    NumericCondition(DslField<F> field) {
         super(field);
     }
 
-    NumericCondition(DslField field, PredicateMetadata metadata, BiFunction<DslModel, Context, Optional<N>> value) {
+    NumericCondition(DslField<F> field, PredicateMetadata metadata, BiFunction<DslModel<F>, Context, Optional<N>> value) {
         super(field, metadata, value);
     }
 
-    abstract NumericCondition<N> numericCondition(DslField field, PredicateMetadata metadata,
-                    BiFunction<DslModel, Context, Optional<N>> value);
+    abstract NumericCondition<N, F> numericCondition(DslField<F> field, PredicateMetadata metadata,
+                    BiFunction<DslModel<F>, Context, Optional<N>> value);
 
     // lesser than
 
-    public final StepCondition lesserThan(N value) {
+    public final StepCondition<F> lesserThan(N value) {
         return predicate(lesserThanMetadata(field, value),
                         (model, context) -> Optional.ofNullable(value),
                         (l, r) -> lesserThanFunction().apply(l, r));
     }
 
-    public final StepCondition lesserThan(NumericFieldInfo<N> value) {
+    public final StepCondition<F> lesserThan(NumericFieldInfo<N, F> value) {
         return predicate(lesserThanMetadata(field, value),
                         (model, context) -> valueModel(model, value),
                         (l, r) -> lesserThanFunction().apply(l, r));
     }
 
-    public final StepCondition lesserOrEquals(N value) {
+    public final StepCondition<F> lesserOrEquals(N value) {
         return predicate(lesserOrEqualsMetadata(field, value),
                         (model, context) -> Optional.ofNullable(value),
                         (l, r) -> lesserOrEqualsFunction().apply(l, r));
     }
 
-    public final StepCondition lesserOrEquals(NumericFieldInfo<N> value) {
+    public final StepCondition<F> lesserOrEquals(NumericFieldInfo<N, F> value) {
         return predicate(lesserOrEqualsMetadata(field, value),
                         (model, context) -> valueModel(model, value),
                         (l, r) -> lesserOrEqualsFunction().apply(l, r));
@@ -81,25 +81,25 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
 
     // greater than
 
-    public final StepCondition greaterThan(N value) {
+    public final StepCondition<F> greaterThan(N value) {
         return predicate(greaterThanMetadata(field, value),
                         (model, context) -> Optional.ofNullable(value),
                         (l, r) -> greaterThanFunction().apply(l, r));
     }
 
-    public final StepCondition greaterThan(NumericFieldInfo<N> value) {
+    public final StepCondition<F> greaterThan(NumericFieldInfo<N, F> value) {
         return predicate(greaterThanMetadata(field, value),
                         (model, context) -> valueModel(model, value),
                         (l, r) -> greaterThanFunction().apply(l, r));
     }
 
-    public final StepCondition greaterOrEquals(N value) {
+    public final StepCondition<F> greaterOrEquals(N value) {
         return predicate(greaterOrEqualsMetadata(field, value),
                         (model, context) -> Optional.ofNullable(value),
                         (l, r) -> greaterOrEqualsFunction().apply(l, r));
     }
 
-    public final StepCondition greaterOrEquals(NumericFieldInfo<N> value) {
+    public final StepCondition<F> greaterOrEquals(NumericFieldInfo<N, F> value) {
         return predicate(greaterOrEqualsMetadata(field, value),
                         (model, context) -> valueModel(model, value),
                         (l, r) -> greaterOrEqualsFunction().apply(l, r));
@@ -111,17 +111,17 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
 
     // between
 
-    public final StepCondition between(N minIncluded, N maxExcluded) {
+    public final StepCondition<F> between(N minIncluded, N maxExcluded) {
         return greaterOrEquals(minIncluded).and(lesserThan(maxExcluded));
     }
 
-    public final StepCondition between(NumericFieldInfo<N> minIncluded, NumericFieldInfo<N> maxExcluded) {
+    public final StepCondition<F> between(NumericFieldInfo<N, F> minIncluded, NumericFieldInfo<N, F> maxExcluded) {
         return greaterOrEquals(minIncluded).and(lesserThan(maxExcluded));
     }
 
     // min
 
-    public final NumericCondition<N> min(List<NumericFieldInfo<N>> fields) {
+    public final NumericCondition<N, F> min(List<NumericFieldInfo<N, F>> fields) {
         return numericCondition(null, minMetadata(getMetadataForFields(fields)),
                         (model, context) -> fields.stream()
                                         .map(f -> Optional.ofNullable(model.<N> get(f.id())))
@@ -133,7 +133,7 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
 
     // sum
 
-    public final NumericCondition<N> sum(List<NumericFieldInfo<N>> fields) {
+    public final NumericCondition<N, F> sum(List<NumericFieldInfo<N, F>> fields) {
         return numericCondition(null, sumMetadata(getMetadataForFields(fields)),
                         (model, context) -> Optional.of(fields.stream()
                                         .map(f -> Optional.ofNullable(model.<N> get(f.id())))
@@ -141,7 +141,7 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
                                         .reduce(identity(), sumFunction())));
     }
 
-    public final NumericCondition<N> sumConditions(List<NumericCondition<N>> conditions) {
+    public final NumericCondition<N, F> sumConditions(List<NumericCondition<N, F>> conditions) {
         return numericCondition(null, sumMetadata(getMetadataForConditions(conditions)),
                         (model, context) -> Optional.of(conditions.stream()
                                         .map(c -> c.function.apply(model, context))
@@ -153,7 +153,7 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
 
     // times
 
-    public final NumericCondition<N> times(int multiplier) {
+    public final NumericCondition<N, F> times(int multiplier) {
         return numericCondition(field, timesMetadata(field, multiplier),
                         (model, context) -> valueModel(model, field)
                                         .map(v -> timesFunction().apply(v, multiplier)));
@@ -163,7 +163,7 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
 
     // when
 
-    public final NumericCondition<N> when(StepCondition condition) {
+    public final NumericCondition<N, F> when(StepCondition<F> condition) {
         return numericCondition(field, whenMetadata(field, condition),
                         (model, context) -> condition.predicate().test(model, context)
                                         ? valueModel(model, field)
@@ -176,11 +176,11 @@ public abstract class NumericCondition<N extends Number> extends DefaultConditio
 
     // static
 
-    private static <N extends Number> List<Metadata> getMetadataForFields(List<NumericFieldInfo<N>> fields) {
+    private static <N extends Number, F extends FieldId & DslId> List<Metadata> getMetadataForFields(List<NumericFieldInfo<N, F>> fields) {
         return fields.stream().map(field -> field.getNumericCondition().metadata).collect(toList());
     }
 
-    private static <N extends Number> List<Metadata> getMetadataForConditions(List<NumericCondition<N>> conditions) {
+    private static <N extends Number, F extends FieldId & DslId> List<Metadata> getMetadataForConditions(List<NumericCondition<N, F>> conditions) {
         return conditions.stream().map(condition -> condition.metadata).collect(toList());
     }
 

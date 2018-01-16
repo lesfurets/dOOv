@@ -16,17 +16,18 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.BooleanCondition;
 
-public class BooleanFieldInfo extends DefaultFieldInfo<Boolean> implements LogicalFieldInfo {
+public class BooleanFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<Boolean, F> implements LogicalFieldInfo<F> {
 
-    public BooleanFieldInfo(FieldId fieldId, String readable, Class<?> type, FieldId[] siblings) {
+    public BooleanFieldInfo(F fieldId, String readable, Class<?> type, F[] siblings) {
         super(fieldId, readable, type, new Class[] {}, siblings);
     }
 
     @Override
-    public BooleanCondition getBooleanCondition() {
-        return new BooleanCondition(this);
+    public BooleanCondition<F> getBooleanCondition() {
+        return new BooleanCondition<>(this);
     }
 
 }

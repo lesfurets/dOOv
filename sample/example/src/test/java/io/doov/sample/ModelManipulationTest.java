@@ -37,7 +37,7 @@ public class ModelManipulationTest {
         SampleModel sample = SampleModels.sample();
         print(sample.getUser().getFullName());
 
-        Map<FieldId, Object> aMap = new SampleModelWrapper(sample).stream()
+        Map<SampleFieldId, Object> aMap = new SampleModelWrapper(sample).stream()
                 .collect(toMap(Entry::getKey, Entry::getValue));
         SampleModelWrapper clone = aMap.entrySet().stream().collect(SampleModelWrapper.toFieldModel());
         print(clone.getModel().getUser().getFullName());
@@ -65,8 +65,8 @@ public class ModelManipulationTest {
 
     @Test
     public void diff() {
-        FieldModel sample_1 = SampleModels.wrapper();
-        FieldModel sample_2 = SampleModels.wrapper();
+        FieldModel<SampleFieldId> sample_1 = SampleModels.wrapper();
+        FieldModel<SampleFieldId> sample_2 = SampleModels.wrapper();
 
         sample_1.set(SampleFieldId.FAVORITE_SITE_NAME_3, null);
         sample_1.set(SampleFieldId.FAVORITE_SITE_URL_3, null);
@@ -87,16 +87,16 @@ public class ModelManipulationTest {
                 .forEach(element -> print(element.toString()));
     }
 
-    private static Function<Entry<FieldId, Object>, Triple<Object, FieldId, Object>> buildLeft = (entry) ->
+    private static Function<Entry<SampleFieldId, Object>, Triple<Object, SampleFieldId, Object>> buildLeft = (entry) ->
             Triple.of(entry.getValue(), entry.getKey(), null);
 
-    private static Function<Entry<FieldId, Object>, Triple<Object, FieldId, Object>> buildRight = (entry) ->
+    private static Function<Entry<SampleFieldId, Object>, Triple<Object, SampleFieldId, Object>> buildRight = (entry) ->
             Triple.of(null, entry.getKey(), entry.getValue());
 
-    private static Predicate<Triple<Object, FieldId, Object>> isNotSame = (triple) ->
+    private static Predicate<Triple<Object, SampleFieldId, Object>> isNotSame = (triple) ->
             !Objects.equals(triple.getLeft(), triple.getRight());
 
-    private static BinaryOperator<Triple<Object, FieldId, Object>> merge = (t1, t2) -> {
+    private static BinaryOperator<Triple<Object, SampleFieldId, Object>> merge = (t1, t2) -> {
         Object left = t1.getLeft() != null ? t1.getLeft() : t2.getLeft();
         Object right = t2.getRight() != null ? t2.getRight() : t1.getRight();
         return Triple.of(left, t1.getMiddle(), right);

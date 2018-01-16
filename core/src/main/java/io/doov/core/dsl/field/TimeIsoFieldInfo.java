@@ -28,45 +28,45 @@ import io.doov.core.dsl.impl.TemporalCondition;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.meta.PredicateMetadata;
 
-public class TimeIsoFieldInfo extends DefaultFieldInfo<LocalTime> implements TemporalFieldInfo<LocalTime> {
+public class TimeIsoFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<LocalTime, F> implements TemporalFieldInfo<LocalTime, F> {
 
-    TimeIsoFieldInfo(FieldId fieldId, String readable, FieldId... siblings) {
+    TimeIsoFieldInfo(F fieldId, String readable, F[] siblings) {
         super(fieldId, readable, String.class, new Class<?>[] {}, siblings);
     }
 
     @Override
-    public DefaultCondition<LocalTime> getDefaultCondition() {
-        return new TimeIsoCondition(this);
+    public DefaultCondition<LocalTime, F> getDefaultCondition() {
+        return new TimeIsoCondition<>(this);
     }
 
     @Override
-    public TemporalCondition<LocalTime> getTemporalCondition() {
-        return new TimeIsoCondition(this);
+    public TemporalCondition<LocalTime, F> getTemporalCondition() {
+        return new TimeIsoCondition<>(this);
     }
 
-    public static Optional<LocalTime> parse(DslModel model, DslId id) {
+    public static <T extends FieldId & DslId> Optional<LocalTime> parse(DslModel<T> model, T id) {
         return Optional.ofNullable(model.<String> get(id)).map(v -> LocalTime.parse(v, BASIC_ISO_DATE));
     }
 
-    private class TimeIsoCondition extends LocalTimeCondition {
+    private class TimeIsoCondition<T extends FieldId & DslId> extends LocalTimeCondition<T> {
 
-        private TimeIsoCondition(DslField field) {
+        private TimeIsoCondition(DslField<T> field) {
             super(field);
         }
 
-        private TimeIsoCondition(DslField field, PredicateMetadata metadata,
-                        BiFunction<DslModel, Context, Optional<LocalTime>> value) {
+        private TimeIsoCondition(DslField<T> field, PredicateMetadata metadata,
+                        BiFunction<DslModel<T>, Context, Optional<LocalTime>> value) {
             super(field, metadata, value);
         }
 
         @Override
-        protected TemporalCondition<LocalTime> temporalCondition(DslField field, PredicateMetadata metadata,
-                        BiFunction<DslModel, Context, Optional<LocalTime>> value) {
-            return new TimeIsoCondition(field, metadata, value);
+        protected TemporalCondition<LocalTime, T> temporalCondition(DslField<T> field, PredicateMetadata metadata,
+                        BiFunction<DslModel<T>, Context, Optional<LocalTime>> value) {
+            return new TimeIsoCondition<>(field, metadata, value);
         }
 
         @Override
-        protected Optional<LocalTime> valueModel(DslModel model, DslField field) {
+        protected Optional<LocalTime> valueModel(DslModel<T> model, DslField<T> field) {
             return parse(model, field.id());
         }
 

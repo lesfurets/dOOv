@@ -16,17 +16,18 @@
 package io.doov.core.dsl.field;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.IntegerCondition;
 
-public class IntegerFieldInfo extends DefaultFieldInfo<Integer> implements NumericFieldInfo<Integer> {
+public class IntegerFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<Integer, F> implements NumericFieldInfo<Integer, F> {
 
-    public IntegerFieldInfo(FieldId fieldId, String readable, Class<?> type, FieldId[] siblings) {
+    public IntegerFieldInfo(F fieldId, String readable, Class<?> type, F[] siblings) {
         super(fieldId, readable, type, new Class[] {}, siblings);
     }
 
     @Override
-    public IntegerCondition getNumericCondition() {
-        return new IntegerCondition(this);
+    public IntegerCondition<F> getNumericCondition() {
+        return new IntegerCondition<>(this);
     }
 
 }

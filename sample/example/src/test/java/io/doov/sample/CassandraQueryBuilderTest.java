@@ -39,6 +39,7 @@ import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
 
 import io.doov.core.FieldInfo;
 import io.doov.core.FieldModel;
+import io.doov.sample.field.SampleFieldId;
 import io.doov.sample.model.SampleModels;
 
 public class CassandraQueryBuilderTest {
@@ -74,7 +75,7 @@ public class CassandraQueryBuilderTest {
 
     @Test
     public void simpleCassandraSchema() {
-        FieldModel model = SampleModels.wrapper();
+        FieldModel<SampleFieldId> model = SampleModels.wrapper();
 
         Create createRequest = SchemaBuilder.createTable("fields_model")
                 .addClusteringColumn(LOGIN.name(), text())
@@ -90,7 +91,7 @@ public class CassandraQueryBuilderTest {
 
     @Test
     public void simpleCasandraInsert() {
-        FieldModel model = SampleModels.wrapper();
+        FieldModel<SampleFieldId> model = SampleModels.wrapper();
         Insert insertRequest = QueryBuilder.insertInto("fields_model");
         insertRequest.value("snapshot_id", UUID.randomUUID());
         insertRequest.values(

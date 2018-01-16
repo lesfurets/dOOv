@@ -21,26 +21,26 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import io.doov.core.dsl.DslField;
-import io.doov.core.dsl.DslModel;
+import io.doov.core.FieldId;
+import io.doov.core.dsl.*;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.meta.PredicateMetadata;
 
-public class LocalDateCondition extends TemporalCondition<LocalDate> {
+public class LocalDateCondition<F extends FieldId & DslId> extends TemporalCondition<LocalDate, F> {
 
-    public LocalDateCondition(DslField field) {
+    public LocalDateCondition(DslField<F> field) {
         super(field);
     }
 
-    public LocalDateCondition(DslField field, PredicateMetadata metadata,
-                    BiFunction<DslModel, Context, Optional<LocalDate>> value) {
+    public LocalDateCondition(DslField<F> field, PredicateMetadata metadata,
+                    BiFunction<DslModel<F>, Context, Optional<LocalDate>> value) {
         super(field, metadata, value);
     }
 
     @Override
-    protected TemporalCondition<LocalDate> temporalCondition(DslField field, PredicateMetadata metadata,
-                    BiFunction<DslModel, Context, Optional<LocalDate>> value) {
-        return new LocalDateCondition(field, metadata, value);
+    protected TemporalCondition<LocalDate, F> temporalCondition(DslField<F> field, PredicateMetadata metadata,
+                    BiFunction<DslModel<F>, Context, Optional<LocalDate>> value) {
+        return new LocalDateCondition<>(field, metadata, value);
     }
 
     @Override

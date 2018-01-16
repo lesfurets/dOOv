@@ -18,19 +18,20 @@ package io.doov.core.dsl.field;
 import java.time.LocalDateTime;
 
 import io.doov.core.FieldId;
+import io.doov.core.dsl.DslId;
 import io.doov.core.dsl.impl.LocalDateTimeCondition;
 import io.doov.core.dsl.impl.TemporalCondition;
 
-public class LocalDateTimeFieldInfo extends DefaultFieldInfo<LocalDateTime>
-        implements TemporalFieldInfo<LocalDateTime> {
+public class LocalDateTimeFieldInfo<F extends FieldId & DslId> extends DefaultFieldInfo<LocalDateTime, F>
+        implements TemporalFieldInfo<LocalDateTime, F> {
 
-    public LocalDateTimeFieldInfo(FieldId fieldId, String readable, FieldId[] siblings) {
+    public LocalDateTimeFieldInfo(F fieldId, String readable, F[] siblings) {
         super(fieldId, readable, LocalDateTime.class, new Class[] {}, siblings);
     }
 
     @Override
-    public TemporalCondition<LocalDateTime> getTemporalCondition() {
-        return new LocalDateTimeCondition(this);
+    public TemporalCondition<LocalDateTime, F> getTemporalCondition() {
+        return new LocalDateTimeCondition<>(this);
     }
 
 }

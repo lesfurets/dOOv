@@ -18,26 +18,26 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import io.doov.core.dsl.DslField;
-import io.doov.core.dsl.DslModel;
+import io.doov.core.FieldId;
+import io.doov.core.dsl.*;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.meta.PredicateMetadata;
 
-public class LocalTimeCondition extends TemporalCondition<LocalTime> {
+public class LocalTimeCondition<F extends FieldId & DslId> extends TemporalCondition<LocalTime, F> {
 
-    public LocalTimeCondition(DslField field) {
+    public LocalTimeCondition(DslField<F> field) {
         super(field);
     }
 
-    public LocalTimeCondition(DslField field, PredicateMetadata metadata,
-                    BiFunction<DslModel, Context, Optional<LocalTime>> value) {
+    public LocalTimeCondition(DslField<F> field, PredicateMetadata metadata,
+                    BiFunction<DslModel<F>, Context, Optional<LocalTime>> value) {
         super(field, metadata, value);
     }
 
     @Override
-    protected TemporalCondition<LocalTime> temporalCondition(DslField field, PredicateMetadata metadata,
-                    BiFunction<DslModel, Context, Optional<LocalTime>> value) {
-        return new LocalTimeCondition(field, metadata, value);
+    protected TemporalCondition<LocalTime, F> temporalCondition(DslField<F> field, PredicateMetadata metadata,
+                    BiFunction<DslModel<F>, Context, Optional<LocalTime>> value) {
+        return new LocalTimeCondition<>(field, metadata, value);
     }
 
     @Override

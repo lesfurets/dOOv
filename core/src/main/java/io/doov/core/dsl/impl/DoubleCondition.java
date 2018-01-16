@@ -16,25 +16,25 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-import io.doov.core.dsl.DslField;
-import io.doov.core.dsl.DslModel;
+import io.doov.core.FieldId;
+import io.doov.core.dsl.*;
 import io.doov.core.dsl.lang.Context;
 import io.doov.core.dsl.meta.PredicateMetadata;
 
-public class DoubleCondition extends NumericCondition<Double> {
+public class DoubleCondition<F extends FieldId & DslId> extends NumericCondition<Double, F> {
 
-    public DoubleCondition(DslField field) {
+    public DoubleCondition(DslField<F> field) {
         super(field);
     }
 
-    public DoubleCondition(DslField field, PredicateMetadata metadata, BiFunction<DslModel, Context, Optional<Double>> value) {
+    public DoubleCondition(DslField<F> field, PredicateMetadata metadata, BiFunction<DslModel<F>, Context, Optional<Double>> value) {
         super(field, metadata, value);
     }
 
     @Override
-    NumericCondition<Double> numericCondition(DslField field, PredicateMetadata metadata,
-            BiFunction<DslModel, Context, Optional<Double>> value) {
-        return new DoubleCondition(field, metadata, value);
+    NumericCondition<Double, F> numericCondition(DslField<F> field, PredicateMetadata metadata,
+            BiFunction<DslModel<F>, Context, Optional<Double>> value) {
+        return new DoubleCondition<>(field, metadata, value);
     }
 
     @Override
