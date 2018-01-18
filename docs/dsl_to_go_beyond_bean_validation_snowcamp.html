@@ -19,7 +19,6 @@ if( window.location.search.match( /print-pdf/gi ) ) {
   document.getElementsByTagName( 'head' )[0].appendChild( link );
 }
     </script>
-    <script async src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
   </head>
   <body>
     <div class="footer">
@@ -84,22 +83,22 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             <h2>Introduction</h2>
           </section>
 
-          <section>
-            <img data-transition="fade" width="66%" src="png/lf_car_journey.png">
+          <section data-transition="slide-in fade-out">
+            <img width="66%" src="png/lf_car_journey.png">
           </section>
 
-          <section>
-            <img data-transition="fade" width="66%" src="png/lf_com_car_price_sheet.png">
+          <section data-transition="fade">
+            <img width="66%" src="png/lf_com_car_price_sheet.png">
           </section>
 
-          <section>
+          <section data-transition="fade">
             <h2>LesFurets service orchestration</h2>
-            <img data-transition="fade" width="80%" src="png/lf_scatter_gather.jpg">
+            <img width="80%" src="png/lf_scatter_gather.jpg">
           </section>
 
-          <section>
-            <h2>Insurer business rules</h2>
-            <img data-transition="fade" width="80%" src="png/lf_scatter_gather_doov.jpg">
+          <section data-transition="fade-in slide-out">
+            <h2>LesFurets service orchestration</h2>
+            <img width="80%" src="png/lf_scatter_gather_doov.jpg">
           </section>
 
           <section>
@@ -110,15 +109,14 @@ if( window.location.search.match( /print-pdf/gi ) ) {
           <section>
             <h2>Insurer exclusions</h2>
             <p>Hierarchy of 492 legacy classes, no governance or auditability</p>
-            <img data-transition="fade" width="80%" src="png/softshake/exclusion-list.png">
+            <img width="80%" src="png/softshake/exclusion-list.png">
           </section>
 
           <section>
             <h2>Use case: insurer exclusions</h2>
             <p>Insurer exclusions based on object model (legacy code)</p>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
                   Vehicule vehicule, Void unused, Besoins besoins,
                   Set&lt;EAbTestingScenario&gt; scenarios)
                   throws ExclusionException {
@@ -133,8 +131,7 @@ public void check(FieldContext context, FormuleMoto formule, Conducteur conducte
                     DateHelper.EPrecision.jour)) {
         throw new ExclusionException(DATE_EFFET_PLUS_60_JOURS);
     }
-}
-              </code></pre>
+}</code></pre>
             </div>
           </section>
 
@@ -148,14 +145,12 @@ public void check(FieldContext context, FormuleMoto formule, Conducteur conducte
             </ul>
             <p>Same rule, more <strong>fluent</strong>:</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-public ExclusionRule exclusionRule() {
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public ExclusionRule exclusionRule() {
     return DOOV.when(dateContrat().after(todayPlusDays(60)))
                .excludeFormules(F1, F2, F3)
                .withMessage(DATE_EFFET_PLUS_60_JOURS)
                .exclusionRule();
-}
-              </code></pre>
+}</code></pre>
             </div>
           </section>
 
@@ -163,8 +158,7 @@ public ExclusionRule exclusionRule() {
             <h2>Why a fluent API?</h2>
             <p>Java is verbose, but you can reduce the noise and write code like natural language with a fluent API</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-// JUnit API
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>// JUnit API
 assertEquals(9, fellowshipOfTheRing.size());
 assertTrue(fellowshipOfTheRing.contains(frodo, sam));
 assertFalse(fellowshipOfTheRing.contains(sauron));
@@ -172,8 +166,7 @@ assertFalse(fellowshipOfTheRing.contains(sauron));
 // AssertJ API (fluent)
 assertThat(fellowshipOfTheRing).hasSize(9)
                                .contains(frodo, sam)
-                               .doesNotContain(sauron);
-              </code></pre>
+                               .doesNotContain(sauron);</code></pre>
             </div>
           </section>
 
@@ -181,8 +174,7 @@ assertThat(fellowshipOfTheRing).hasSize(9)
             <h2>Fluent API</h2>
             <p>New elements in Java 8 makes it easier to write a fluent API</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-// java.util.function (io.doov.core.dsl.impl.LogicalBinaryCondition)
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>// java.util.function (io.doov.core.dsl.impl.LogicalBinaryCondition)
 left.predicate().and(right.predicate()).test(model, context)
 
 // java.util.stream (io.doov.core.dsl.impl.LogicalNaryCondition)
@@ -191,8 +183,7 @@ steps.stream().anyMatch(s -&gt; s.predicate().test(model, context))
 // lambda and method reference (io.doov.core.dsl.impl.NumericCondition)
 predicate(greaterThanMetadata(field, value),
           (model, context) -&gt; Optional.ofNullable(value),
-          (l, r) -&gt; greaterThanFunction().apply(l, r));
-              </code></pre>
+          (l, r) -&gt; greaterThanFunction().apply(l, r));</code></pre>
             </div>
           </section>
 
@@ -200,14 +191,12 @@ predicate(greaterThanMetadata(field, value),
             <h2>Fluent API</h2>
             <p>Many popular libraries propose fluent APIs like<br><strong>jOOQ</strong>, <strong>AssertJ</strong>, <strong>Apache Spark</strong>, etc.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-Dataset&lt;Row&gt; averagePrice = prices
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>Dataset&lt;Row&gt; averagePrice = prices
         .filter(value.&lt;String&gt;getAs("insurer")
                      .equals("COOL insurer"))
         .groupBy("product")
         .agg(avg("price").as("average"))
-        .orderBy(desc("average"));
-              </code></pre>
+        .orderBy(desc("average"));</code></pre>
             </div>
           </section>
 
@@ -235,8 +224,7 @@ Dataset&lt;Row&gt; averagePrice = prices
               <div class="column">
                 <p><strong>object</strong></p>
                 <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-public class Account {
+                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account {
 
   @Path(field = SampleFieldId.<mark class="fragment">LOGIN</mark>,
         readable = "account login")
@@ -246,15 +234,13 @@ public class Account {
         readable = "account password")
   private String password;
 
-}
-                  </code></pre>
+}</code></pre>
                 </div>
               </div>
               <div class="column">
                 <p><strong>dictionary</strong></p>
                 <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-Account account = new Account();
+                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>Account account = new Account();
 account.setLogin("alex");
 
 SampleModel model = new SampleModel();
@@ -264,20 +250,18 @@ SampleModelWrapper wrapper
     = new SampleModelWrapper(model);
 wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // alex
 wrapper.set(SampleFieldId.<mark class="fragment">LOGIN</mark>, "bob");
-wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob
-
-                  </code></pre>
+wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob</code></pre>
                 </div>
               </div>
             </div>
           </section>
 
-          <section>
-            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_1.png">
+          <section data-transition="slide-in fade-out">
+            <img width="80%" src="png/org_modelmap_casper_1.png">
           </section>
 
-          <section>
-            <img data-transition="fade" width="80%" src="png/org_modelmap_casper_2.png">
+          <section data-transition="fade-in slide-out">
+            <img width="80%" src="png/org_modelmap_casper_2.png">
           </section>
 
           <section>
@@ -286,8 +270,7 @@ wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob
               <div class="column">
                 <p><strong>key model</strong></p>
                 <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-class Model {
+                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class Model {
   User user;
 }
 
@@ -298,35 +281,30 @@ class User {
 
 enum ModelFieldId {
   EMAIL;
-}
-                  </code></pre>
+}</code></pre>
                 </div>
               </div>
               <div class="column fragment">
                 <p><strong>code generate</strong></p>
                 <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-class ModelFieldIdInfo {
+                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class ModelFieldIdInfo {
   FieldInfo <mark class="fragment">userEmail()</mark>;
 }
 
 class ModelWrapper {
   ...
-}
-                  </code></pre>
+}</code></pre>
                 </div>
               </div>
               <div class="column fragment">
                 <p><strong>write rules</strong></p>
                 <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-class Validations {
+                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class Validations {
   ValidationRule email = DOOV
     .when(<mark class="fragment">userEmail()</mark>.matches(...))
     .validate();
     .register(REGISTRY_DEFAULT);
-}
-                  </code></pre>
+}</code></pre>
                 </div>
               </div>
             </div>
@@ -338,25 +316,21 @@ class Validations {
               <div class="column">
                 <p><strong>wrap model</strong></p>
                 <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-User user = new User();
+                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>User user = new User();
 user.setEmail("e@mail.com");
 
 Model model = new Model();
 model.setUser(user);
 
 ModelWrapper <mark class="fragment">wrap</mark>
-  = new ModelWrapper(model);
-                  </code></pre>
+  = new ModelWrapper(model);</code></pre>
                 </div>
               </div>
               <div class="column">
                 <p><strong>execute</strong></p>
                 <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-REGISTRY_DEFAULT.stream()
-  .map(rule -&gt; rule.executeOn(<mark class="fragment">wrap</mark>));
-                  </code></pre>
+                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>REGISTRY_DEFAULT.stream()
+  .map(rule -&gt; rule.executeOn(<mark class="fragment">wrap</mark>));</code></pre>
                 </div>
               </div>
             </div>
@@ -370,8 +344,7 @@ REGISTRY_DEFAULT.stream()
 
           <section>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-public class Account extends Identity {
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account extends Identity {
 
     @SamplePath(field = SampleFieldId.TIMEZONE,
                 readable = "account timezone")
@@ -393,16 +366,14 @@ public class Account extends Identity {
                 readable = "account préférences mail")
     private Collection&lt;EmailType&gt; emailTypes = new HashSet&lt;&gt;();
 
-}
-              </code></pre>
+}</code></pre>
             </div>
           </section>
 
           <section>
             <h2>Live code: rewrite with dOOv</h2>
             <div class="code-wrapper smaller">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-public static boolean validateAccount(User user, Account account, Configuration config) {
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public static boolean validateAccount(User user, Account account, Configuration config) {
     if (config == null) {
         return false;
     }
@@ -412,44 +383,39 @@ public static boolean validateAccount(User user, Account account, Configuration 
     if (account == null || account.getCountry() == null || account.getPhoneNumber() == null) {
         return false;
     }
-    if (YEARS.between(user.getBirthDate(), LocalDate.now()) >= 18
-                    && account.getEmail().length() <= config.getMaxEmailSize()
-                    && account.getCountry().equals(Country.FR) 
-                    && account.getPhoneNumber().startsWith("+33")) {
+    if (YEARS.between(user.getBirthDate(), LocalDate.now()) &gt;= 18
+                    &amp;&amp; account.getEmail().length() &lt;= config.getMaxEmailSize()
+                    &amp;&amp; account.getCountry().equals(Country.FR) 
+                    &amp;&amp; account.getPhoneNumber().startsWith("+33")) {
         return true;
     }
     return false;
-}
-              </code></pre>
+}</code></pre>
             </div>
           </section>
 
           <section>
             <h2>Live code: result</h2>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DOOV.when(userBirthdate().ageAt(today())
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userBirthdate().ageAt(today())
                          .greaterOrEquals(18L)
      .and(accountEmail().length()
                         .lesserOrEquals(configurationMaxEmailSize()))
      .and(accountCountry().eq(Country.FR))
      .and(accountPhoneNumber().startsWith("+33")))
-     .validate();
-              </code></pre>
+     .validate();</code></pre>
             </div>
           </section>
 
           <section>
             <h2>Live code: test</h2>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-@Test
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>@Test
 public void test() {
   FieldModel wrapper = SampleModels.wrapper();
   Result result = RulesSoftshake.EXAMPLE.executeOn(wrapper);
   assertThat(result).isTrue();
-}
-              </code></pre>
+}</code></pre>
             </div>
           </section>
 
@@ -464,12 +430,10 @@ public void test() {
             <h2>Entry point</h2>
             <p>The entry point is <code>DOOV#when(StepCondition)</code> and the operation <code>StepWhen#validate</code> returns the validation rule</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
       .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
     .validate()
-    .withMessage("email finishes with .com or .fr");
-              </code></pre>
+    .withMessage("email finishes with .com or .fr");</code></pre>
             </div>
             <p class="fragment">This is <strong>lazy</strong></p>
           </section>
@@ -479,11 +443,9 @@ DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
             <p>A natural language version of the rule is available with <code>ValidationRule#readable</code>.</p>
             <p>This makes <strong>auditability</strong> and <strong>compliance</strong> possible.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-System.out.println(EMAIL_VALID.readable());
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>System.out.println(EMAIL_VALID.readable());
 &gt; When (email matches '\w+[@]\w+\.com' or email matches '\w+[@]\w+\.fr')
-&gt;   validate with message "email finishes with .com or .fr"
-              </code></pre>
+&gt;   validate with message "email finishes with .com or .fr"</code></pre>
             </div>
           </section>
 
@@ -492,12 +454,10 @@ System.out.println(EMAIL_VALID.readable());
             <p>You can add the rule in one or many registry with <code>ValidationRule#registerOn(Registry)</code></p>
             <p>This makes <strong>governance</strong> possible.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
       .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
    .validate()
-   .registerOn(REGISTRY_ACCOUNT);
-              </code></pre>
+   .registerOn(REGISTRY_ACCOUNT);</code></pre>
             </div>
           </section>
 
@@ -505,13 +465,11 @@ DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
             <h2>Execution</h2>
             <p>The terminal operation <code>ValidationRule#executeOn(FieldModel)</code><br>executes the rule</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-REGISTRY_ACCOUNT.stream()
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>REGISTRY_ACCOUNT.stream()
     .map(rule -> rule.executeOn(model))
     .filter(Result::isInvalid)
     .map(Result::message)
-    .collect(toList());
-              </code></pre>
+    .collect(toList());</code></pre>
             </div>
           </section>
 
@@ -519,73 +477,69 @@ REGISTRY_ACCOUNT.stream()
             <h2>Type safety</h2>
             <p>The available operations depend on the field type, and the arguments are type safe and validated <strong>by the compiler</strong></p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-   DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
 //        ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//             date field                  is type safe here
-              </code></pre>
+//             date field                  is type safe here</code></pre>
             </div>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-   DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
 //                              ^^^^^
-//                        only for date field
-              </code></pre>
+//                        only for date field</code></pre>
             </div>
           </section>
 
           <section>
             <h2>Syntax tree design</h2>
             <p><em>"In computer science, an abstract syntax tree (AST), or just syntax tree, is a tree representation of the abstract syntactic structure of source code written in a programming language"</em></p>
-            <img data-transition="fade" src="png/doov_full_ast.png" width="90%">
+            <img src="png/doov_full_ast.png" width="90%">
           </section>
 
           <section>
             <h2>Syntax tree design: DSL, when, match any...</h2>
             <p>The syntax tree always starts with <code>when</code> then you compose a predidate by:<br/><strong>using a field</strong> or by <strong>composing predicates</strong> on other fields with<br/><code>matchAll</code>, <code>matchAny</code>, or <code>matchOne</code>.
-            <img data-transition="fade" src="png/doov_simple_ast.png" width="90%">
+            <img src="png/doov_simple_ast.png" width="90%">
           </section>
 
           <section>
             <h2>Syntax tree design: Numeric fields and enumerated fields</h2>
             <p>The syntax tree implements classic operations on numeric predicates like <code>lesserThan</code>, <code>greaterThan</code>, etc. that takes a numeric value or another numeric field as a parameter</p>
-            <img data-transition="fade" src="png/doov_numeric_and_types_field_ast.png" width="90%">
+            <img src="png/doov_numeric_and_types_field_ast.png" width="90%">
           </section>
 
           <section>
             <h2>Syntax tree design: string field and boolean field</h2>
             <p>We have operations that are available on the <code>String</code> type like <code>matches</code> and <code>contains</code> that takes a regular expressions as a parameter</p>
-            <img data-transition="fade" src="png/doov_string_and_boolean_field_ast.png" width="90%">
+            <img src="png/doov_string_and_boolean_field_ast.png" width="90%">
           </section>
 
           <section>
             <h2>Syntax tree design: data field, time field, etc.</h2>
             <p>Fields of <code>Temporal</code> type have operators that can apply functions like <code>today()</code>, <code>todayPlusDays()</code>, etc. so that the dates are only evaluated at execution time</p>
-            <img data-transition="fade" src="png/doov_temporal_field_ast.png" width="90%">
+            <img src="png/doov_temporal_field_ast.png" width="90%">
           </section>
 
           <section>
             <h2>Why a syntax tree?</h2>
             <p>We can output a multi-language human readable rules catalog in multiple formats (text, markdown, HTML, etc.), check out <code>io.doov.sample.validation.ast.RulesVisitorTest</code></p>
-            <img data-transition="fade" src="png/doov_rules_visitor_test.png" width="90%">
+            <img src="png/doov_rules_visitor_test.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
             <p>Using the registry, we can generate a HTML validation rules catalog,<br/>grouped by insurers and by insurance product</p>
-            <img data-transition="fade" src="png/doov_exclusions_insurer.png" width="90%">
+            <img src="png/doov_exclusions_insurer.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
             <p>Then the syntax tree makes it possible to generate a HTML human-readable rule. Notice how the elements from the tree are <strong>tokenized</strong> (operator, fields, etc.)
-            <img data-transition="fade" src="png/doov_exclusions_insurer_conducteur.png" width="90%">
+            <img src="png/doov_exclusions_insurer_conducteur.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
             <p>Also, the syntax tree makes it possible to see <strong>all the rules that applies for a specific field</strong>, for example the driver's date of birth.</p>
-            <img data-transition="fade" src="png/doov_exclusions_insurer_date_naissance.png" width="90%">
+            <img src="png/doov_exclusions_insurer_date_naissance.png" width="90%">
           </section>
 
           <section>
@@ -596,13 +550,13 @@ REGISTRY_ACCOUNT.stream()
           <section>
             <h2>Execution statistics</h2>
             <p>We make daily statistics that helps us shape the business,<br/>by removing or tweaking rules as needed</p>
-            <img data-transition="fade" src="png/doov_failure_cause.png" width="90%">
+            <img src="png/doov_failure_cause.png" width="90%">
           </section>
 
           <section>
             <h2>Execution statistics</h2>
             <p>We also rewrite the execution rules by simplifying the predicate tree, to show the minimal predicate that fails. This is a complex problem we are currently working on.</p>
-            <img data-transition="fade" src="png/doov_failure_cause_simplify.png" width="90%">
+            <img src="png/doov_failure_cause_simplify.png" width="90%">
           </section>
         </section>
 
@@ -615,11 +569,9 @@ REGISTRY_ACCOUNT.stream()
             <h2>Performance - Java Microbenchmark Harness</h2>
             <p>We use JMH to check the performance of the DSL</p>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>
-Benchmark                          Mode  Samples      Mean  Mean error   Units
+              <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>Benchmark                          Mode  Samples      Mean  Mean error   Units
 o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
-o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
-              </code></pre>
+o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms</code></pre>
             </div>
             <p>Performance of the DSL and POJO code are very close</p>
           </section>
@@ -627,7 +579,7 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
           <section>
             <h2>Performance - comparing with other frameworks</h2>
             <p>We tested the performance of dOOv against the Bean Validation benchmark<br/>and dOOv is faster in every category (hint: reflection API)</p>
-            <img data-transition="fade" src="https://beastie.lesfurets.com/wp-content/uploads/sites/64/2017/12/chart-simple-validation-benchmark.png" width="50%">
+            <img src="https://beastie.lesfurets.com/wp-content/uploads/sites/64/2017/12/chart-simple-validation-benchmark.png" width="50%">
             <p><a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark</a></p>
           </section>
 
@@ -635,14 +587,12 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
             <h2>Beyond Bean Validation: types</h2>
             <p>Bean Validation rules are not strongly typed since it's annotation based. This code will fail at compile time, but your IDE won't be able to tell you why.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-public class Account {
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account {
 
     @NotNull @Email
     private Email email;
 
-}
-              </code></pre>
+}</code></pre>
             </div>
           </section>
 
@@ -650,8 +600,7 @@ public class Account {
             <h2>Beyond Bean Validation: complex validation</h2>
             <p>Because Bean Validation constraints are based on field annotation, cross validation between fields are only available through the extension mechanism.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-public class Account {
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account {
 
     @Pattern(regexp = "(FR)|(UK)")
     private String country;
@@ -659,8 +608,7 @@ public class Account {
     @Pattern(regexp = "???")
     private String phoneNumber;
 
-}
-              </code></pre>
+}</code></pre>
             </div>
           </section>
 
@@ -668,19 +616,15 @@ public class Account {
             <h2>Beyond Bean Validation: natural language</h2>
             <p>Bean Validation rules are not written with a natural language syntax and does not provide a syntax tree</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-@Size(min = 10, max = 200,
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>@Size(min = 10, max = 200,
       message = "About Me must be between 10 and 200 characters")
-private String aboutMe;
-              </code></pre>
+private String aboutMe;</code></pre>
             </div>
             <p></p>
             <h2>DSL</h2>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-userAboutMe().length().between(10, 200).validate().readable()
-> When user about me length is between 10 and 200, validate with message...
-              </code></pre>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>userAboutMe().length().between(10, 200).validate().readable()
+> When user about me length is between 10 and 200, validate with message... </code></pre>
             </div>
           </section>
 
@@ -708,7 +652,7 @@ B & C
                   <strong style="color:#59B2AC">Bean Validation</strong> rules are written on the model</br>&nbsp;</br>&nbsp;
                 </div>
                 <div>
-                  <strong style="color:#59B2AC">Bean Validation</strong> works as-is
+                  <strong style="color:#59B2AC">Bean Validation</strong> uses reflection
                 </div>
               </div>
               <div class="column column-2">
@@ -719,7 +663,7 @@ B & C
                   <strong style="color:#ec7f00">dOOv</strong> rules are writtent outside of the model, allowing complex checks</br>&nbsp;</br>&nbsp;
                 </div>
                 <div>
-                  <strong style="color:#ec7f00">dOOv</strong> needs code generation
+                  <strong style="color:#ec7f00">dOOv</strong> uses code generation
                 </div>
               </div>
             </div>
@@ -733,21 +677,19 @@ B & C
 
           <section>
             <h2>Goal</h2>
-            <p>We migrated our 492 business rules to dOOv,<br/> we now have <strong>compliance</strong>, <strong>auditability</strong>, <strong>governance</strong>, <strong>clarity</strong>.
+            <p>We migrated our 492 business rules to dOOv,<br/> we now have <strong>compliance</strong>, <strong>auditability</strong>, <strong>governance</strong>, <strong>clarity</strong><br/>(and more!)</p>
           </section>
 
           <section>
             <h2>Roadmap</h2>
             <p>Next step is extending the DSL to create an <strong>object to object mapping framework</strong> (Domain Object Oriented Mapping, <code>dOOm</code>?). It will feature the same AST to text and statistics functionnalities.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>
-DOOV.map(userEmail().to(insurerEmail())
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.map(userEmail().to(insurerEmail())
     .map(userFirstName(), userLastName())
       .using(StringJoiner)
       .to(insurerFullName())
     .when(userCountry().eq(FR))
-      .map(userPhone().to(insurerPhone()))
-              </code></pre>
+      .map(userPhone().to(insurerPhone()))</code></pre>
             </div>
             <p>Stay tuned for the next versions!</p>
           </section>
@@ -792,7 +734,7 @@ Reveal.initialize({
   { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
   { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
   { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-  { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+  //{ src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
   { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
   { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
   ]
@@ -810,5 +752,8 @@ function handleClick(e) {
 }
 
             </script>
+            <script type="text/javascript" src="js/doov.js"></script>
+            <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert&amp;callback=doov"></script>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
   </body>
 </html>
