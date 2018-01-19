@@ -1,24 +1,37 @@
-graph {
-    rule -- when;
+digraph {
+    node [style=rounded]
 
-    when -- and;
+    rule [shape=box]
+    when [shape=box]
+    and1 [shape=box]
+    and2 [shape=box]
+    and3 [shape=box]
+    "account phone number" [shape=diamond]
+    "account country" [shape=diamond]
+    "account email length" [shape=diamond]
+    "configuration max email size" [shape=diamond]
+    "user birthdate" [shape=diamond]
 
-    and -- "starts with";
-    "starts with" -- "account phone number";
-    "starts with" -- "+33";
-    and -- and1;
+    rule -> when;
 
-    and1 -- "=";
-    "=" -- "account country";
-    "=" -- "FR";
-    and1 -- and2;
+    when -> and1;
 
-    and2 -- "<=";
-    "<=" -- "account email length";
-    "<=" -- "configuration max email size";
-    and2 -- ">=";
-    ">=" -- "age at";
-    ">=" -- "18";
-    "age at" -- "user birthdate";
-    "age at" -- "today"
+    and1 -> "starts with";
+    "starts with" -> "account phone number";
+    "starts with" -> "+33";
+    and1 -> and2;
+
+    and2 -> "=";
+    "=" -> "account country";
+    "=" -> "FR";
+    and2 -> and3;
+
+    and3 -> "<=";
+    "<=" -> "account email length";
+    "<=" -> "configuration max email size";
+    and3 -> ">=";
+    ">=" -> "age at";
+    ">=" -> "18";
+    "age at" -> "user birthdate";
+    "age at" -> "today"
 }

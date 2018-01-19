@@ -1,14 +1,26 @@
-graph {
-    rule -- when;
+digraph {
+    node [style=rounded]
 
-    when -- and;
+    rule
+    when
+    and1    [label="and"]
+    and2    [label="and"]
+    and3    [label="and"]
+    phone   [shape=record, label="{account phone number | starts with | +33}"]
+    country [shape=record, label="{account country | = | FR}"]
+    age     [shape=record, label="{user birthdate | age at | today | &gt;= | 18}"]
+    email   [shape=record, label="{account email length | &lt;= | configuration max email size}"]
 
-    and -- "account phone number starts with +33";
-    and -- and1;
+    rule -> when;
 
-    and1 -- "account country = FR";
-    and1 -- and2;
+    when -> and1;
 
-    and2 -- "account email length <= configuration max email size";
-    and2 -- "user birthdate age at today >= 18";
+    and1 -> phone;
+    and1 -> and2;
+
+    and2 -> country;
+    and2 -> and3;
+
+    and3 -> age;
+    and3 -> email;
 }
