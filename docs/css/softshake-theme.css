@@ -416,9 +416,11 @@ body {
     overflow: hidden;
     margin-right: -100%;
 }
+
 /*********************************************
  * Google code prettifu
  *********************************************/
+
 pre.prettyprint,
 code.prettyprint {
   background-color: transparent !important;
@@ -426,6 +428,7 @@ code.prettyprint {
   margin: inherit !important;
   padding: inherit !important;
 }
+
 pre mark .pln,
 code mark .pln,
 pre mark .typ,
@@ -434,12 +437,13 @@ pre mark .pun,
 code mark .pun {
   color: #000 !important;
 }
-pre .field .pln {
-  color: darkseagreen;
+
+pre .pln.doov {
+  font-weight: bold;
+  color: white;
 }
-pre .operator .pln {
-  color: indianred; 
-}
-pre .logical .pln {
-  color: cornflowerblue;
+
+pre .pln.operator {
+  font-weight: bold;
+  color: #fffcad;
 }

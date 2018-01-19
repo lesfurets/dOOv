@@ -300,10 +300,10 @@ class ModelWrapper {
                 <p><strong>write rules</strong></p>
                 <div class="code-wrapper">
                   <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class Validations {
-  ValidationRule email = DOOV
-    .when(<mark class="fragment">userEmail()</mark>.matches(...))
-    .validate();
-    .register(REGISTRY_DEFAULT);
+  ValidationRule email = 
+    DOOV.when(<mark class="fragment">userEmail()</mark>.eq(...))
+        .validate();
+        .register(REGISTRY_DEFAULT);
 }</code></pre>
                 </div>
               </div>
@@ -397,13 +397,18 @@ ModelWrapper <mark class="fragment">wrap</mark>
           <section>
             <h2>Live code: result</h2>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userBirthdate().ageAt(today())
-                         .greaterOrEquals(18L)
-     .and(accountEmail().length()
-                        .lesserOrEquals(configurationMaxEmailSize()))
-     .and(accountCountry().eq(Country.FR))
-     .and(accountPhoneNumber().startsWith("+33")))
-     .validate();</code></pre>
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>ValidationRule userAccount = DOOV
+  // Entry point is when
+  .when(userBirthdate().ageAt(today()).greaterOrEquals(18)
+   .and(accountEmail().length().lesserOrEquals(configurationMaxEmailSize()))
+   .and(accountCountry().eq(Country.FR))
+   .and(accountPhoneNumber().startsWith("+33")))
+  // Terminal operation is validate
+  .validate()
+  // Optional: add message
+  .withMessage("user account")
+  // Optional: add to registry
+  .registerOn(REGISTRY_DEFAULT);</code></pre>
             </div>
           </section>
 
@@ -411,23 +416,22 @@ ModelWrapper <mark class="fragment">wrap</mark>
             <h2>Live code: test</h2>
             <div class="code-wrapper small">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>@Test
-public void test() {
-  FieldModel wrapper = SampleModels.wrapper();
-  Result result = RulesSoftshake.EXAMPLE.executeOn(wrapper);
+public void should_user_account_validates() {
+  // Condition assert
+  assertThat(accountEmail().isNotNull()).validates(wrapper);
+
+  // Rule assert
+  assertThat(RulesConference.userAccount).validates(wrapper);
+
+  // Result assert
+  Result result = RulesConference.userAccount.executeOn(wrapper);
   assertThat(result).isTrue();
 }</code></pre>
             </div>
           </section>
 
-        </section>
-
-        <section>
           <section>
-            <h2>Usage</h2>
-          </section>
-
-          <section>
-            <h2>Entry point</h2>
+            <h2>Live code: entry point</h2>
             <p>The entry point is <code>DOOV#when(StepCondition)</code> and the operation <code>StepWhen#validate</code> returns the validation rule</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
@@ -439,7 +443,7 @@ public void test() {
           </section>
 
           <section>
-            <h2>Natural language</h2>
+            <h2>Live code: natural language</h2>
             <p>A natural language version of the rule is available with <code>ValidationRule#readable</code>.</p>
             <p>This makes <strong>auditability</strong> and <strong>compliance</strong> possible.</p>
             <div class="code-wrapper">
@@ -450,7 +454,7 @@ public void test() {
           </section>
 
           <section>
-            <h2>Validation rule registry</h2>
+            <h2>Live code: validation rule registry</h2>
             <p>You can add the rule in one or many registry with <code>ValidationRule#registerOn(Registry)</code></p>
             <p>This makes <strong>governance</strong> possible.</p>
             <div class="code-wrapper">
@@ -462,7 +466,7 @@ public void test() {
           </section>
 
           <section>
-            <h2>Execution</h2>
+            <h2>Live code: execution</h2>
             <p>The terminal operation <code>ValidationRule#executeOn(FieldModel)</code><br>executes the rule</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>REGISTRY_ACCOUNT.stream()
@@ -474,77 +478,58 @@ public void test() {
           </section>
 
           <section>
-            <h2>Type safety</h2>
+            <h2>Live code: type safety</h2>
             <p>The available operations depend on the field type, and the arguments are type safe and validated <strong>by the compiler</strong></p>
-            <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
-//        ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//             date field                  is type safe here</code></pre>
-            </div>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
 //                              ^^^^^
 //                        only for date field</code></pre>
             </div>
+            <div class="code-wrapper">
+              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+//        ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//             date field                  is type safe here</code></pre>
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Syntax tree</h2>
           </section>
 
           <section>
-            <h2>Syntax tree design</h2>
-            <p><em>"In computer science, an abstract syntax tree (AST), or just syntax tree, is a tree representation of the abstract syntactic structure of source code written in a programming language"</em></p>
-            <img src="png/doov_full_ast.png" width="90%">
-          </section>
-
-          <section>
-            <h2>Syntax tree design: DSL, when, match any...</h2>
-            <p>The syntax tree always starts with <code>when</code> then you compose a predidate by:<br/><strong>using a field</strong> or by <strong>composing predicates</strong> on other fields with<br/><code>matchAll</code>, <code>matchAny</code>, or <code>matchOne</code>.
-            <img src="png/doov_simple_ast.png" width="90%">
-          </section>
-
-          <section>
-            <h2>Syntax tree design: Numeric fields and enumerated fields</h2>
-            <p>The syntax tree implements classic operations on numeric predicates like <code>lesserThan</code>, <code>greaterThan</code>, etc. that takes a numeric value or another numeric field as a parameter</p>
-            <img src="png/doov_numeric_and_types_field_ast.png" width="90%">
-          </section>
-
-          <section>
-            <h2>Syntax tree design: string field and boolean field</h2>
-            <p>We have operations that are available on the <code>String</code> type like <code>matches</code> and <code>contains</code> that takes a regular expressions as a parameter</p>
-            <img src="png/doov_string_and_boolean_field_ast.png" width="90%">
-          </section>
-
-          <section>
-            <h2>Syntax tree design: data field, time field, etc.</h2>
-            <p>Fields of <code>Temporal</code> type have operators that can apply functions like <code>today()</code>, <code>todayPlusDays()</code>, etc. so that the dates are only evaluated at execution time</p>
-            <img src="png/doov_temporal_field_ast.png" width="90%">
+            <h2>Syntax tree instance</h2>
+            <p>TODO example of syntax tree instance</p>
           </section>
 
           <section>
             <h2>Why a syntax tree?</h2>
-            <p>We can output a multi-language human readable rules catalog in multiple formats (text, markdown, HTML, etc.), check out <code>io.doov.sample.validation.ast.RulesVisitorTest</code></p>
+            <p>Makes readable text generation possible:<br/>we can output a multi-language rules catalog<br/>in multiple formats (text, markdown, HTML, etc.)</p>
             <img src="png/doov_rules_visitor_test.png" width="90%">
           </section>
 
           <section>
-            <h2>Rules catalog</h2>
-            <p>Using the registry, we can generate a HTML validation rules catalog,<br/>grouped by insurers and by insurance product</p>
+            <h2>LesFurets rules catalog</h2>
+            <p>We generate a HTML validation rules catalog,<br/>grouped by insurers and by insurance product</p>
             <img src="png/doov_exclusions_insurer.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
-            <p>Then the syntax tree makes it possible to generate a HTML human-readable rule. Notice how the elements from the tree are <strong>tokenized</strong> (operator, fields, etc.)
+            <p>The syntax tree makes it possible to generate the rule as text. Notice how the elements from the tree are <strong>tokenized</strong> (operator, fields, etc.)
             <img src="png/doov_exclusions_insurer_conducteur.png" width="90%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
             <p>Also, the syntax tree makes it possible to see <strong>all the rules that applies for a specific field</strong>, for example the driver's date of birth.</p>
-            <img src="png/doov_exclusions_insurer_date_naissance.png" width="90%">
           </section>
 
           <section>
             <h2>Execution statistics</h2>
             <p>During execution, each node of the AST captures <strong>context value</strong> and <strong>predicate result</strong>. We know at runtime which node failed, and why.</p>
+            <img src="png/doov_exclusions_insurer_conducteur_statistics.png" width="90%">
           </section>
 
           <section>
@@ -558,6 +543,18 @@ public void test() {
             <p>We also rewrite the execution rules by simplifying the predicate tree, to show the minimal predicate that fails. This is a complex problem we are currently working on.</p>
             <img src="png/doov_failure_cause_simplify.png" width="90%">
           </section>
+
+<!--
+canonique / normale
+count(p1, p2, p3) >= 2
+(p1 n p2) u (...)
+
+reduction / simplification : faire liste
+eventuellement detection simplifications
+(A | B) & C
+A & C
+B & C
+-->
         </section>
 
         <section>
@@ -628,18 +625,6 @@ private String aboutMe;</code></pre>
             </div>
           </section>
 
-<!--
-canonique / normale
-count(p1, p2, p3) >= 2
-(p1 n p2) u (...)
-
-reduction / simplification : faire liste
-eventuellement detection simplifications
-(A | B) & C
-A & C
-B & C
--->
-
           <section>
             <h2>Beyond Bean Validation: syntax versus consistency</h2>
             <p>&nbsp;</p>
@@ -668,6 +653,12 @@ B & C
               </div>
             </div>
           </section>
+
+          <section>
+            <h2>dOOv pitfalls</h2>
+            <p><strong style="color:#ec7f00">dOOv</strong> is harder to debug than bare metal code</p>
+            <p><strong style="color:#ec7f00">dOOv</strong> cannot handle lists of arbitrary size,<br/>meaning your model needs to be <strong>bounded</strong><br/>(there are workarounds)</p>
+          </section>
         </section>
 
         <section>
@@ -682,7 +673,7 @@ B & C
 
           <section>
             <h2>Roadmap</h2>
-            <p>Next step is extending the DSL to create an <strong>object to object mapping framework</strong> (Domain Object Oriented Mapping, <code>dOOm</code>?). It will feature the same AST to text and statistics functionnalities.</p>
+            <p>Next step is extending the DSL to create an <strong>object to object mapping framework</strong>, Domain Object Oriented Mapping (<strong>dOOm</strong>). It will feature the same AST to text and statistics functionnalities.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.map(userEmail().to(insurerEmail())
     .map(userFirstName(), userLastName())
@@ -752,8 +743,8 @@ function handleClick(e) {
 }
 
             </script>
-            <script type="text/javascript" src="js/doov.js"></script>
-            <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert&amp;callback=doov"></script>
             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+            <script src="js/doov.js"></script>
+            <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert&amp;callback=doov"></script>
   </body>
 </html>
