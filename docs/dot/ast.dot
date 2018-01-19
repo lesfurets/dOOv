@@ -1,8 +1,14 @@
 graph {
-    a -- b;
-    b -- c;
-    a -- c;
-    d -- c;
-    e -- c;
-    e -- a;
+    rule -- when;
+
+    when -- and;
+
+    and -- "account phone number starts with +33";
+    and -- and1;
+
+    and1 -- "account country = FR";
+    and1 -- and2;
+
+    and2 -- "account email length <= configuration max email size";
+    and2 -- "user birthdate age at today >= 18";
 }

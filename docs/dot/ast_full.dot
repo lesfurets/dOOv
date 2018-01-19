@@ -1,0 +1,24 @@
+graph {
+    rule -- when;
+
+    when -- and;
+
+    and -- "starts with";
+    "starts with" -- "account phone number";
+    "starts with" -- "+33";
+    and -- and1;
+
+    and1 -- "=";
+    "=" -- "account country";
+    "=" -- "FR";
+    and1 -- and2;
+
+    and2 -- "<=";
+    "<=" -- "account email length";
+    "<=" -- "configuration max email size";
+    and2 -- ">=";
+    ">=" -- "age at";
+    ">=" -- "18";
+    "age at" -- "user birthdate";
+    "age at" -- "today"
+}
