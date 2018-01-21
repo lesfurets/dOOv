@@ -701,57 +701,120 @@ private String aboutMe;</code></pre>
 
         <section>
           <section>
-            <h1>Appendices</h1>
+            <h2>Appendices</h2>
           </section>
 
           <section>
-              Rule <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/umbrella.png"/>
-              with parameter <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/rain_TRUE.png"/>
-              <br></br>
-            
-              ((<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/rain.png"/>
-                 or
-                 <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/snow.png"/>)
-                and
-                not(<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/thunderbolt.png"/>
-                    or
-                    <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/wind.png"/>))
-              <br></br>
+              <h2>"Good Weather" with parameter <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/></h2>
 
-              ((<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/rain.png"/>
-                or
-               <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/snow.png"/>)
-               and
-               not(<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/thunderbolt.png"/>
+              <div><code>
+                  <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_FALSE.png"/>
                    or
-                   <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/wind.png"/>))<img class="nostyle" style="vertical-align: -3vh" width="2%" src="png/weather/mark_TRUE.png"/>
-               <br></br>
+                  not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_TRUE.png"/>
+                      and
+                      <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_FALSE.png"/>)
+              </code></div>
 
-               ((<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/rain.png"/>
-                 or
-                <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/snow.png"/>)<img class="nostyle" style="vertical-align: -3vh" width="2%" src="png/weather/mark_TRUE.png"/>
-                and
-                not(<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/thunderbolt.png"/>
-                    or
-                    <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/wind.png"/>)<img class="nostyle" style="vertical-align: -3vh" width="2%" src="png/weather/mark_TRUE.png"/>)
-                <br></br>
-
-                ((<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/rain_TRUE.png"/>
-                  or
-                 <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/snow_FALSE.png"/>)
-                 and
-                 not(<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/thunderbolt_FALSE.png"/>
-                     or
-                     <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/wind_FALSE.png"/>))
-                <br></br> 
-
-                failure cause :
-                <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/rain.png"/>
-                and
-                not(<img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/thunderbolt.png"/>
+              <div><code>
+                  <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_DEL.png"/>
                    or
-                   <img class="nostyle" style="vertical-align: -3vh" width="5%" src="png/weather/wind.png"/>))
+                  not( <font color="red">[<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>
+                      and
+                      <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>]</font><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_FALSE.png"/>)
+              </code></div>
+
+              <div><code>
+                  <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_DEL.png"/>
+                   or
+                   <font color="green">[not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>
+                      and
+                      <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>)]</font><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/>
+              </code></div>
+
+              <div><code>
+                  <font color="green">[<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_DEL.png"/>
+                   or
+                   not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>
+                      and
+                      <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>)]</font><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/>
+              </code></div>
+
+              <div>
+                failure cause
+                <code>not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>
+                  and
+                  <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>)</code>
+              </div>
           </section>
+
+          <section>
+            <h2>"Good Weather 2" - Morgan's laws - with parameter <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/></h2>
+
+            <div><code>
+                matchAny(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_FALSE.png"/>, 
+                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_TRUE.png"/>), 
+                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_FALSE.png"/>))
+            </code></div>
+
+
+            <div><code>
+                matchAny(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_DEL.png"/>, 
+                <font color="red">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>)</font><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_FALSE.png"/>, 
+                <font color="green">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>)</font><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/>)
+            </code></div>
+
+            <div>
+              failure cause
+              <code>not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>)</code>
+            </div>
+        </section>
+
+        <section>
+            <h2>"Very Good Weather" with parameters <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun.png"/>
+              and <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/wind.png"/></h2>
+
+            <div><code>
+                count(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_TRUE.png"/>, 
+                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_FALSE.png"/>), 
+                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_FALSE.png"/>),
+                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/wind_TRUE.png"/>))).greaterThan(2)
+            </code></div>
+
+            <div><code>
+                count(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_TRUE.png"/>, 
+                <font color="green">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>)</font><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/>, 
+                <font color="green">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>)</font><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/>,
+                <font color="red">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/wind_DEL.png"/>)</font>) .greaterThan(2)
+            </code></div>
+
+            <div>
+              failure cause
+              <code>count(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun.png"/>, 
+                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>), 
+                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow.png"/>)).greaterThan(2)</code>
+            </div>
+        </section>
+
+        <section>
+            <h2>"Wet Weather" with parameters <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/>= 2
+              and <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_VAL.png"/>= 0</h2>
+
+            <div><code>
+                sum(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/>, 
+                    <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_VAL.png"/>).greaterOrEquals(2)
+            </code></div>
+
+            <div><code>
+                sum(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/>, 
+                    <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_VAL_DEL.png"/>).greaterOrEquals(2)
+            </code></div>
+
+            <div>
+              failure cause
+              <code>(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/>).greaterOrEquals(2)</code>
+            </div>
+        </section>
+
         </section>
             </div>
             </div>
