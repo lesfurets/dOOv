@@ -1,253 +1,232 @@
-<html>
-<head>
-    <meta charset="UTF-8">
-    <style>* {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11pt;
-    }
+<html><head><meta charset="UTF-8"><style>* {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+}
+.dsl-token-when {
+    color: #983E77;
+}
+        
+.dsl-token-validate {
+    color: #983E77;
+}
+        
+.dsl-token-nary {
+    color: black;
+    font-weight: bold;
+}
+        
+.dsl-token-unary {
+    font-weight: bold;
+}
+        
+.dsl-token-binary {
+    color: black;
+    font-weight: bold;
+}
+        
+.dsl-token-field {
+    color: #683E40;
+}
+        
+.dsl-token-operator {
+    color: black;
+    font-weight: bold;
+}
+        
+.dsl-token-value {
+    color: #020C7E;
+    font-style: italic;
+}
+        
+.dsl-validation-message {
+    color: #020C7E;
+}
+        
+.dsl-token-unknown {
+    color: red;
+}
+</style></head><body><div class="dsl-validation-rule">
 
-    .dsl-token-when {
-        color: #983E77;
-    }
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">account email</span> <span class="dsl-token-operator">correspond à</span> <span class="dsl-token-value">'\w+[@]\w+\.com'</span> 
+<br><span class="dsl-token-binary">ou</span> 
+<span class="dsl-token-field">account email</span> <span class="dsl-token-operator">correspond à</span> <span class="dsl-token-value">'\w+[@]\w+\.fr'</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"email finishes with .com or .fr"</span> 
 
-    .dsl-token-validate {
-        color: #983E77;
-    }
+</div>
+<hr/><div class="dsl-validation-rule">
 
-    .dsl-token-nary {
-        color: black;
-        font-weight: bold;
-    }
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li>begin nary 
+<span class="dsl-token-nary">correspond &agrave; tous</span> <ol>
+<li> start leaf<span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span class="dsl-token-operator">la date du jour</span> <span class="dsl-token-operator">>=</span> <span class="dsl-token-value">18</span> 
+<li> start leaf<span class="dsl-token-field">account email</span> <span class="dsl-token-operator">taille</span> <span class="dsl-token-operator"><=</span> <span class="dsl-token-field">configuration max email size</span> 
+<li> start leaf<span class="dsl-token-field">account country</span> <span class="dsl-token-operator">=</span> <span class="dsl-token-value">FR</span> 
+<br><span class="dsl-token-binary">et</span> 
+<span class="dsl-token-field">account phone number</span> <span class="dsl-token-operator">commence par</span> <span class="dsl-token-value">'+33'</span> 
+</ol>
+end nary </li>
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
 
-    .dsl-token-unary {
-        font-weight: bold;
-    }
+</div>
+<hr/><div class="dsl-validation-rule">
 
-    .dsl-token-binary {
-        color: black;
-        font-weight: bold;
-    }
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span class="dsl-token-operator">la date du jour</span> <span class="dsl-token-operator">>=</span> <span class="dsl-token-value">18</span> 
+<br><span class="dsl-token-binary">et</span> 
+<span class="dsl-token-field">account email</span> <span class="dsl-token-operator">taille</span> <span class="dsl-token-operator"><=</span> <span class="dsl-token-field">configuration max email size</span> 
+<br><span class="dsl-token-binary">et</span> 
+<span class="dsl-token-field">account country</span> <span class="dsl-token-operator">=</span> <span class="dsl-token-value">FR</span> 
+<br><span class="dsl-token-binary">et</span> 
+<span class="dsl-token-field">account phone number</span> <span class="dsl-token-operator">commence par</span> <span class="dsl-token-value">'+33'</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
 
-    .dsl-token-field {
-        color: #683E40;
-    }
+</div>
+<hr/><div class="dsl-validation-rule">
 
-    .dsl-token-operator {
-        color: black;
-        font-weight: bold;
-    }
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li>begin nary 
+<span class="dsl-token-nary">nombre d'occurrence</span> <ol>
+<li> start leaf<span class="dsl-token-field">user first name</span> <span class="dsl-token-operator">existe</span> 
+<li> start leaf<span class="dsl-token-field">user last name</span> <span class="dsl-token-operator">existe</span> 
+<br><span class="dsl-token-binary">et</span> 
+<span class="dsl-token-field">user last name</span> <span class="dsl-token-operator">correspond à</span> <span class="dsl-token-value">'[A-Z]+'</span> 
+</ol>
+end nary </li>
+<span class="dsl-token-binary">&gt;=</span> 
+<span class="dsl-token-value">0</span> </br>
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
 
-    .dsl-token-value {
-        color: #020C7E;
-        font-style: italic;
-    }
+</div>
+<hr/><div class="dsl-validation-rule">
 
-    .dsl-validation-message {
-        color: #020C7E;
-    }
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user last name</span> <span class="dsl-token-operator">existe</span> 
+<br><span class="dsl-token-binary">et</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user last name</span> <span class="dsl-token-operator">correspond à</span> <span class="dsl-token-value">'[A-Z]+'</span> 
+<br><span class="dsl-token-binary">et</span> 
+<ul>
+<li>begin nary 
+<span class="dsl-token-nary">nombre d'occurrence</span> <ol>
+<li> start leaf<span class="dsl-token-field">account phone number</span> <span class="dsl-token-operator">existe</span> 
+<li> start leaf<span class="dsl-token-field">account email</span> <span class="dsl-token-operator">existe</span> 
+</ol>
+end nary </li>
+<span class="dsl-token-binary">&gt;</span> 
+<span class="dsl-token-value">0</span> </br>
 
-    .dsl-token-unknown {
-        color: red;
-    }
-    </style>
-</head>
-<body>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">account email</span> <span class="dsl-token-operator">correspond à</span>
-                <span class="dsl-token-value">'\w+[@]\w+\.com'</span> <br><span class="dsl-token-binary">ou</span> <span
-                        class="dsl-token-field">account email</span> <span
-                        class="dsl-token-operator">correspond à</span> <span
-                        class="dsl-token-value">'\w+[@]\w+\.fr'</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span class="dsl-validation-message">"email finishes with .com or .fr"</span>
-    </ul>
+</ul>
+</ul></ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-nary">correspond &agrave; tous</span></li>
-            <ol>
-                <li><span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span>
-                    <span class="dsl-token-operator">la date du jour</span> <span class="dsl-token-operator">>=</span>
-                    <span class="dsl-token-value">18</span></li>
-                <li><span class="dsl-token-field">account email</span> <span class="dsl-token-operator">taille</span>
-                    <span class="dsl-token-operator"><=</span> <span class="dsl-token-field">configuration max email size</span>
-                </li>
-                <li><span class="dsl-token-field">account country</span> <span class="dsl-token-operator">=</span> <span
-                        class="dsl-token-value">FR</span> <br><span class="dsl-token-binary">et</span> <span
-                        class="dsl-token-field">account phone number</span> <span class="dsl-token-operator">commence par</span>
-                    <span class="dsl-token-value">'+33'</span></li>
-            </ol>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span class="dsl-token-field">account creation date</span> <span class="dsl-token-operator">>=</span> <span class="dsl-token-value">18</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span
-                    class="dsl-token-operator">la date du jour</span> <span class="dsl-token-operator">>=</span> <span
-                    class="dsl-token-value">18</span> <br><span class="dsl-token-binary">et</span> <span
-                    class="dsl-token-field">account email</span> <span class="dsl-token-operator">taille</span> <span
-                    class="dsl-token-operator"><=</span> <span
-                    class="dsl-token-field">configuration max email size</span> <br><span
-                    class="dsl-token-binary">et</span> <span class="dsl-token-field">account country</span> <span
-                    class="dsl-token-operator">=</span> <span class="dsl-token-value">FR</span> <br><span
-                    class="dsl-token-binary">et</span> <span class="dsl-token-field">account phone number</span> <span
-                    class="dsl-token-operator">commence par</span> <span class="dsl-token-value">'+33'</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span class="dsl-token-field">account creation date</span> <span class="dsl-token-operator">au</span> <span class="dsl-token-operator">premier jour de l'année</span> <span class="dsl-token-operator">>=</span> <span class="dsl-token-value">18</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-nary">nombre d'occurrence</span></li>
-            <ol>
-                <li><span class="dsl-token-field">user first name</span> <span class="dsl-token-operator">existe</span>
-                </li>
-                <li><span class="dsl-token-field">user last name</span> <span class="dsl-token-operator">existe</span>
-                    <br><span class="dsl-token-binary">et</span> <span class="dsl-token-field">user last name</span>
-                    <span class="dsl-token-operator">correspond à</span> <span class="dsl-token-value">'[A-Z]+'</span>
-            </ol>
-            <span class="dsl-token-binary">&gt;=</span> <span class="dsl-token-value">0</span> </li></ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li>begin nary 
+<span class="dsl-token-nary">correspond &agrave; tous</span> <ol>
+<li> start leaf<span class="dsl-token-field">user first name</span> <span class="dsl-token-operator">valeur numérique</span> <span class="dsl-token-unknown">-function- </span> <span class="dsl-token-operator">=</span> <span class="dsl-token-value">1</span> 
+</ol>
+end nary </li>
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">user last name</span> <span class="dsl-token-operator">existe</span>
-                <br><span class="dsl-token-binary">et</span>
-                <ul>
-                    <li><span class="dsl-token-field">user last name</span> <span class="dsl-token-operator">correspond à</span>
-                        <span class="dsl-token-value">'[A-Z]+'</span> <br><span class="dsl-token-binary">et</span> <span
-                                class="dsl-token-nary">nombre d'occurrence</span>
-                        <ol>
-                            <li><span class="dsl-token-field">account phone number</span> <span
-                                    class="dsl-token-operator">existe</span></li>
-                            <li><span class="dsl-token-field">account email</span> <span class="dsl-token-operator">existe</span>
-                            </li>
-                        </ol>
-                        <span class="dsl-token-binary">&gt;</span> <span class="dsl-token-value">0</span>
-                </ul>
-            </li>
-            </li></ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user id</span> <span class="dsl-token-operator">existe</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span
-                    class="dsl-token-field">account creation date</span> <span class="dsl-token-operator">>=</span>
-                <span class="dsl-token-value">18</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span class="dsl-token-operator">la date du jour</span> <span class="dsl-token-operator">>=</span> <span class="dsl-token-value">18</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span
-                    class="dsl-token-field">account creation date</span> <span class="dsl-token-operator">au</span>
-                <span class="dsl-token-operator">premier jour de l'année</span> <span
-                        class="dsl-token-operator">>=</span> <span class="dsl-token-value">18</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">après</span> <span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">moins</span> <span class="dsl-token-value">1</span> <span class="dsl-token-operator">jour(s)</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-nary">correspond &agrave; tous</span></li>
-            <ol>
-                <li><span class="dsl-token-field">user first name</span> <span class="dsl-token-operator">valeur numérique</span>
-                    <span class="dsl-token-unknown">-function- </span> <span class="dsl-token-operator">=</span> <span
-                            class="dsl-token-value">1</span></li>
-            </ol>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li>begin nary 
+<span class="dsl-token-nary">somme des</span> <ol>
+<li> start leaf<span class="dsl-token-field">configuration min age</span> <span class="dsl-token-operator">x</span> <span class="dsl-token-value">0</span> 
+<li> start leaf<span class="dsl-token-field">configuration max email size</span> <span class="dsl-token-operator">x</span> <span class="dsl-token-value">1</span> 
+</ol>
+end nary </li>
+<span class="dsl-token-binary">&gt;=</span> 
+<span class="dsl-token-value">0</span> </br>
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">user id</span> <span class="dsl-token-operator">existe</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li>begin nary 
+<span class="dsl-token-nary">min</span> <ol>
+<li> start leaf<span class="dsl-token-field">configuration min age</span> 
+<li> start leaf<span class="dsl-token-field">configuration max email size</span> 
+</ol>
+end nary </li>
+<span class="dsl-token-binary">&gt;=</span> 
+<span class="dsl-token-value">0</span> </br>
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">âge à</span> <span
-                    class="dsl-token-operator">la date du jour</span> <span class="dsl-token-operator">>=</span> <span
-                    class="dsl-token-value">18</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
+<hr/><div class="dsl-validation-rule">
+
+<span class="dsl-token-when">lorsque</span> 
+<ul>
+<li> start leaf<span class="dsl-token-field">favorite site name 1</span> <span class="dsl-token-operator">correspond à au moins un</span> <span class="dsl-token-unknown">-function- -function-</span> 
+</ul>
+<span class="dsl-token-validate">valider avec le message</span>  <span class="dsl-validation-message">"vide"</span> 
+
 </div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">après</span> <span
-                    class="dsl-token-field">user birthdate</span> <span class="dsl-token-operator">moins</span> <span
-                    class="dsl-token-value">1</span> <span class="dsl-token-operator">jour(s)</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
-</div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-nary">somme des</span></li>
-            <ol>
-                <li><span class="dsl-token-field">configuration min age</span> <span class="dsl-token-operator">x</span>
-                    <span class="dsl-token-value">0</span></li>
-                <li><span class="dsl-token-field">configuration max email size</span> <span
-                        class="dsl-token-operator">x</span> <span class="dsl-token-value">1</span></li>
-            </ol>
-            <span class="dsl-token-binary">&gt;=</span> <span class="dsl-token-value">0</span></ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
-</div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-nary">min</span></li>
-            <ol>
-                <li><span class="dsl-token-field">configuration min age</span></li>
-                <li><span class="dsl-token-field">configuration max email size</span></li>
-            </ol>
-            <span class="dsl-token-binary">&gt;=</span> <span class="dsl-token-value">0</span></ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
-</div>
-<hr/>
-<div class="dsl-validation-rule">
-    <ul><span class="dsl-token-when">lorsque</span>
-        <ul>
-            <li><span class="dsl-token-field">favorite site name 1</span> <span class="dsl-token-operator">correspond à au moins un</span>
-                <span class="dsl-token-unknown">-function- -function-</span></li>
-        </ul>
-        <span class="dsl-token-validate">valider avec le message</span> <span
-                class="dsl-validation-message">"vide"</span></ul>
-</div>
-<hr/>
-</body>
-</html>
+<hr/></body></html>
