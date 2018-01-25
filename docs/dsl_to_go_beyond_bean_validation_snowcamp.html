@@ -44,7 +44,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             <h2>Welcome to the Furets!</h2>
           </section>
           <section>
-            <div class="fragment">
+            <div class="">
               <h2>@dubreuia – Alexandre Dubreuil</h2>
               <ul>
                 <li>French canadian working in Paris since 2009</li>
@@ -52,7 +52,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
               </ul>
             </div>
             <br><br>
-            <div class="fragment">
+            <div class="">
               <h2>@gdigugli – Gilles Di Guglielmo</h2>
               <ul>
                 <li>Designer of sweet cooked software since 1999</li>
@@ -63,7 +63,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
           <section>
             <img width="50%" src="png/logo_lesfurets.png">
             <p></p>
-            <ul class="fragment">
+            <ul class="">
               <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
               <li class="emptyline">1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
 
@@ -237,7 +237,7 @@ predicate(greaterThanMetadata(field, value),
 }</code></pre>
                 </div>
               </div>
-              <div class="column">
+              <div class="column fragment">
                 <p><strong>dictionary</strong></p>
                 <div class="code-wrapper">
                   <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>Account account = new Account();
@@ -302,7 +302,7 @@ class ModelWrapper {
                   <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class Validations {
   ValidationRule email = 
     DOOV.when(<mark class="fragment">userEmail()</mark>.eq(...))
-        .validate();
+        .validate()
         .register(REGISTRY_DEFAULT);
 }</code></pre>
                 </div>
@@ -326,7 +326,7 @@ ModelWrapper <mark class="fragment">wrap</mark>
   = new ModelWrapper(model);</code></pre>
                 </div>
               </div>
-              <div class="column">
+              <div class="column fragment">
                 <p><strong>execute</strong></p>
                 <div class="code-wrapper">
                   <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>REGISTRY_DEFAULT.stream()
@@ -499,8 +499,7 @@ public void should_user_account_validates() {
           </section>
 
           <section>
-            <h2>Syntax tree instance</h2>
-            <img src="dot/ast.svg" width="33%">
+            <img src="dot/ast.svg" width="40%">
           </section>
 
           <section>
@@ -512,13 +511,13 @@ public void should_user_account_validates() {
           <section>
             <h2>LesFurets rules catalog</h2>
             <p>We generate a HTML validation rules catalog,<br/>grouped by insurers and by insurance product</p>
-            <img src="png/doov_exclusions_insurer.png" width="90%">
+            <img src="png/doov_exclusions_insurer.png" width="100%">
           </section>
 
           <section>
             <h2>Rules catalog</h2>
             <p>The syntax tree makes it possible to generate the rule as text. Notice how the elements from the tree are <strong>tokenized</strong> (operator, fields, etc.)
-            <img src="png/doov_exclusions_insurer_conducteur.png" width="90%">
+            <img src="png/doov_exclusions_insurer_conducteur.png" width="100%">
           </section>
 
           <section>
@@ -529,7 +528,7 @@ public void should_user_account_validates() {
           <section>
             <h2>Execution statistics</h2>
             <p>During execution, each node of the AST captures <strong>context value</strong> and <strong>predicate result</strong>. We know at runtime which node failed, and why.</p>
-            <img src="png/doov_exclusions_insurer_conducteur_statistics.png" width="90%">
+            <img src="png/doov_exclusions_insurer_conducteur_statistics.png" width="100%">
           </section>
 
           <section>
@@ -541,7 +540,12 @@ public void should_user_account_validates() {
           <section>
             <h2>Execution statistics</h2>
             <p>We also rewrite the execution rules by simplifying the predicate tree, to show the minimal predicate that fails. This is a complex problem we are currently working on.</p>
-            <img src="png/doov_failure_cause_simplify.png" width="90%">
+            <img src="png/doov_failure_cause_simplify.png" width="100%">
+          </section>
+
+          <section>
+            <h2>Execution short-circuit</h2>
+            <p>By default, predicate evaluation in dOOv behaves like Java: it <strong>short-circuits</strong>. This can be disabled to execute all nodes, even if they don't impact the end result.</p>
           </section>
 
 <!--
