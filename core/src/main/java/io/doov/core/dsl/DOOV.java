@@ -250,15 +250,30 @@ public class DOOV {
     }
 
     /**
+     * Create an array of mapping rules from a stream of fields
+     *
+     * @param fieldStream stream of fields
+     * @param mappingRuleFunction index to mapping rule function
+     * @return array of mapping rule
+     */
+    public static MappingRule[] mapFor(Stream<? extends DslField<?>> fieldStream,
+                                         Function<DslField<?>, MappingRule> mappingRuleFunction) {
+        return fieldStream
+                .filter(Objects::nonNull)
+                .map(mappingRuleFunction::apply)
+                .toArray(MappingRule[]::new);
+    }
+
+    /**
      * Returns the field in the position
      *
-     * @param fieldInfoStream field info stream
+     * @param fieldStream field info stream
      * @param index field list position
      * @param <T> field info type
      * @return field info
      */
-    public static <T extends FieldInfo> T fieldInPosition(Stream<T> fieldInfoStream, int index) {
-        return fieldInfoStream
+    public static <T extends DslField<?>> T fieldInPosition(Stream<T> fieldStream, int index) {
+        return fieldStream
                 .filter(Objects::nonNull)
                 .filter(f -> f.id().position() == index)
                 .findFirst()
