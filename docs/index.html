@@ -100,10 +100,10 @@ a.button {
       <div class="code">
           <div class="java">
               ValidationRule <font color="#aeaeae">rule</font> = DOOV<br/>
-              &nbsp;&nbsp;&nbsp;.when(<font color="#efef8f">userBirthdate</font>().ageAt(<font color="#efef8f">today</font>()).greaterOrEquals(<font color="#8cd0d3">18</font>)<br/>
-              &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountEmail</font>().length().lesserOrEquals(<font color="#efef8f">maxEmailSize</font>()))<br/>
-              &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountCountry</font>().eq(<font color="#98fb98">Country</font>.FR))<br/>
-              &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountPhoneNumber</font>().startsWith(<font color="#cc9393">"+33"</font>)))<br/>
+              &nbsp;&nbsp;&nbsp;.when(<font color="#efef8f">userBirthdate</font>.ageAt(<font color="#efef8f">today</font>()).greaterOrEquals(<font color="#8cd0d3">18</font>)<br/>
+              &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountEmail</font>.length().lesserOrEquals(<font color="#efef8f">maxEmailSize</font>))<br/>
+              &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountCountry</font>.eq(<font color="#98fb98">Country</font>.FR))<br/>
+              &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountPhoneNumber</font>.startsWith(<font color="#cc9393">"+33"</font>)))<br/>
               &nbsp;&nbsp;&nbsp;.validate();
           </div>
       </div>
