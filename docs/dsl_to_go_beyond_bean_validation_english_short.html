@@ -292,8 +292,6 @@ REGISTRY_DEFAULT.stream()
    .and(accountPhoneNumber.startsWith("+33")))
   // Terminal operation is validate
   .validate()
-  // Optional: add message
-  .withMessage("user account")
   // Optional: add to registry
   .registerOn(REGISTRY_DEFAULT);</code></pre>
             </div>
@@ -323,8 +321,7 @@ public void should_user_account_validates() {
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
       .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
-    .validate()
-    .withMessage("email finishes with .com or .fr");</code></pre>
+    .validate()</code></pre>
             </div>
             <p class="fragment">This is <strong>lazy</strong></p>
           </section>
@@ -335,8 +332,7 @@ public void should_user_account_validates() {
             <p>This makes <strong>auditability</strong> and <strong>compliance</strong> possible.</p>
             <div class="code-wrapper">
               <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>System.out.println(EMAIL_VALID.readable());
-&gt; When (email matches '\w+[@]\w+\.com' or email matches '\w+[@]\w+\.fr')
-&gt;   validate with message "email finishes with .com or .fr"</code></pre>
+&gt; When (email matches '\w+[@]\w+\.com' or email matches '\w+[@]\w+\.fr') validate</code></pre>
             </div>
           </section>
 
@@ -581,148 +577,6 @@ private String aboutMe;</code></pre>
               <li>Try and contribute!</li>
             </ul>
           </section>
-
-        </section>
-
-        <section>
-          <section>
-            <h2>Appendices</h2>
-          </section>
-
-          <section>
-            <h2>"Good Weather" with parameter <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/> and
-              <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_high.png"/></h2>
-
-            <ul style="list-style-type: none">
-              <li><code>
-                  <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_FALSE.png"/>
-                   or
-                  not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_TRUE.png"/>
-                    and
-                    <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low_FALSE.png"/>)
-              </code></li>
-
-              <li><code>
-                  <font style="background-color: #ba6b6b"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_FALSE.png"/></font>
-                   or
-                  not(<font style="background-color: #ba6b6b"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>
-                    and
-                    <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/><img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_FALSE.png"/></font>)
-              </code></li>
-
-              <li><code>
-                  <font style="background-color: #ba6b6b"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_DEL.png"/></font>
-                  or
-                  <font style="background-color: #6bba7a">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>
-                    and
-                    <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/></font>
-              </code></li>
-
-              <li>
-                <font style="color: #ec7f00">Failure cause</font> is :
-                <code>not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>
-                and
-                <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>)</code>
-              </li>
-            </ul>
-
-          </section>
-
-          <section>
-            <h2>"Good Weather 2" - Morgan law - with params <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>and
-              <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_high.png"/></h2>
-
-            <div><font style="font-style: italic">not(A and B) = not(A) or not(B)</font></div>
-
-            <ul style="list-style-type: none">
-              <li><code>
-                  matchAny(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_FALSE.png"/>, 
-                  not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_TRUE.png"/>), 
-                  not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low_FALSE.png"/>))
-              </code></li>
-
-              <li><code>
-                  matchAny(
-                  <font style="background-color: #ba6b6b"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_FALSE.png"/></font>, 
-                  <font style="background-color: #ba6b6b">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_FALSE.png"/></font>, 
-                  <font style="background-color: #6bba7a">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/></font>)
-              </code></li>
-
-              <li><code>
-                matchAny(
-                <font style="background-color: #ba6b6b"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_DEL.png"/></font>, 
-                <font style="background-color: #ba6b6b">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_DEL.png"/></font>, 
-                <font style="background-color: #6bba7a">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/></font>)
-            </code></li>
-
-              <li>
-                <font style="color: #ec7f00">Failure cause</font> is :
-                <code>not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>)</code>
-              </li>
-            </ul>
-        </section>
-
-        <section>
-          <h2>"Very Good Weather" with parameters <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun.png"/>
-              and <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/wind.png"/></h2>
-
-          <ul style="list-style-type: none">
-            <li><code>
-                count(
-                <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_TRUE.png"/>, 
-                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_FALSE.png"/>), 
-                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low_FALSE.png"/>),
-                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/wind_TRUE.png"/>)))</code>
-                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>.greaterThan(2)</code></li>
-
-            <li><code>
-                count(
-                <font style="background-color: #6bba7a"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_TRUE.png"/></font>,
-                <font style="background-color: #6bba7a">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/></font>, 
-                <font style="background-color: #6bba7a">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/></font>,
-                <font style="background-color: #ba6b6b">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/wind.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_FALSE.png"/></font>)</code>
-                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>.greaterThan(2)</code></li>
-
-            <li><code>
-              count(
-              <font style="background-color: #6bba7a"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun_TRUE.png"/></font>,
-              <font style="background-color: #6bba7a">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/></font>, 
-              <font style="background-color: #6bba7a">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_TRUE.png"/></font>,
-              <font style="background-color: #ba6b6b">not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/wind.png"/>)<img class="nostyle" style="vertical-align: -5vh" width="2%" src="png/weather/mark_DEL.png"/></font>)</code>
-              <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>.greaterThan(2)</code></li>
-
-            <li>
-              <font style="color: #ec7f00">Failure cause</font> is :
-              <code>count(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/sun.png"/>, 
-                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain.png"/>), 
-                not(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/temperature_low.png"/>))</code>
-                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>.greaterThan(2)</code></li>
-          </ul>
-
-
-        </section>
-
-        <section>
-          <h2>"Wet Weather" with parameters <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/>= 2
-              and <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_VAL.png"/>= 0</h2>
-
-          <ul style="list-style-type: none">
-            <li><code>
-                sum(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/>, 
-                    <img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_VAL.png"/>).greaterOrEquals(2)
-            </code></li>
-
-            <li><code>
-                sum(<font style="background-color: #6bba7a"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/></font>, 
-                <font style="background-color: #ba6b6b"><img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/snow_VAL_DEL.png"/></font>).greaterOrEquals(2)
-            </code></li>
-
-            <li>
-              <font style="color: #ec7f00">Failure cause</font> is :
-              <code>(<img class="nostyle" style="vertical-align: -5vh" width="5%" src="png/weather/rain_VAL.png"/>).greaterOrEquals(2)</code>
-            </li>
-          </ul>
-
 
         </section>
 
