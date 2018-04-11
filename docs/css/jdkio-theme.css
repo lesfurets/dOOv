@@ -265,6 +265,16 @@ body {
   background-color: transparent;
 }
 
+.reveal .failure-cause {
+  border: none;
+  border-left: #eeeeee;
+  border-left-width: 10px;
+  border-left-style: solid;
+  padding: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+
 .reveal section img.nostyle {
   background-color: transparent;
   border: none;
@@ -450,4 +460,16 @@ pre .pln.doov {
 pre .pln.operator {
   font-weight: bold;
   color: #fffcad;
+}
+
+mark.true-predicate {
+  background-color: lightgreen;
+}
+
+mark.false-predicate {
+  background-color:  lightcoral;
+}
+
+mark.output {
+  background-color:  white;
 }
