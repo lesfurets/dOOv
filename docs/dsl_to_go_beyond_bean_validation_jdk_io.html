@@ -721,39 +721,42 @@ private String aboutMe;</code></pre>
               their country is France when their phone number starts with '+33'</em>
             </p>
             <p/>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-DOOV.when(accountEmail.length().lesserThan(20)
+                <code class="code lang-java data-trim data-noescape">DOOV.when(accountEmail.length().lesserThan(20)
       .and(userBirthdate.ageAt(today()).greaterThan(18)
           .and(accountCountry.eq(Country.FR)))
       .and(accountCountry.eq(Country.FR)
-          .and(accountPhoneNumber.startsWith("+33")))).validate();
-                </code>
+          .and(accountPhoneNumber.startsWith("+33"))))
+    .validate();</code>
               </pre>
             </div>
           </section>
 
           <section>
             <h2>Failure cause - sample 1</h2>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-model.getAccount().setEmail("test@test.org");
+                <code class="code lang-java data-trim data-noescape">model.getAccount().setEmail("test@test.org");
 model.getAccount().setCountry(Country.FR);
 model.getUser().setBirthDate(LocalDate.now().minusYears(19));
 
-DOOV.when(<mark class="true-predicate">accountEmail.length().lesserThan(20)</mark>  
+ValidationRule rule = DOOV
+    .when(<mark class="true-predicate">accountEmail.length().lesserThan(20)</mark>  
       .and(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>
           .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>))
       .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>
-          .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>))).validate();
+          .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>)))
+    .validate();
 
-Result result = rule.withShortCircuit(false).executeOn(wrapper);
-System.out.println("> " + result.getFailureCause());
-
-<mark class="output">> account phone number starts with '+33'</mark>
-                </code>
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());</code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-xml data-trim data-noescape">&gt; account phone number starts with '+33'</code>
               </pre>
             </div>
           </section>
@@ -768,41 +771,45 @@ System.out.println("> " + result.getFailureCause());
                   and their phone number starts with '+1'</em>
               </p>
               <p/>
-              <div class="code-wrapper">
+              <div class="code-wrapper small">
                 <pre class="prettyprint">
-                  <code class="code lang-java data-trim data-noescape">
-DOOV.when(userBirthdate.ageAt(today()).greaterThan(18)
+                  <code class="code lang-java data-trim data-noescape">DOOV.when(userBirthdate.ageAt(today()).greaterThan(18)
         .and(accountCountry.eq(Country.FR)
         .and(accountPhoneNumber.startsWith("+33")))
         .or(userBirthdate.ageAt(today()).greaterThan(21)
               .and(accountCountry.eq(Country.CAN)
-              .and(accountPhoneNumber.startsWith("+1"))))).validate();
-                  </code>
+              .and(accountPhoneNumber.startsWith("+1")))))
+    .validate();</code>
                 </pre>
               </div>
           </section>
 
           <section>
             <h2>Failure cause - sample 2</h2>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+                <code class="code lang-java data-trim data-noescape">model.getUser().setBirthDate(LocalDate.now().minusYears(22));
 model.getAccount().setCountry(Country.FR);
 
-DOOV.when(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>
+ValidationRule rule = DOOV
+    .when(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>
         .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>
         .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>))
         .or(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(21)</mark>
               .and(<mark class="false-predicate">accountCountry.eq(Country.CAN)</mark>
-              .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>)))).validate();
+              .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>))))
+    .validate();
 
-Result result = rule.withShortCircuit(false).executeOn(wrapper);
-System.out.println("> " + result.getFailureCause());
-                
-<mark class="output">> account phone number starts with '+33'
-    or (account country = CAN and account phone number starts with '+1')</mark>
-                </code>
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());</code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-xml data-trim data-noescape">&gt; account phone number starts with '+33'
+    or (account country = CAN and
+        account phone number starts with '+1')</code>
               </pre>
             </div>
           </section>
@@ -816,45 +823,49 @@ System.out.println("> " + result.getFailureCause());
                   and their phone number starts with '+1'</em>
               </p>
               <p/>
-              <div class="code-wrapper">
+              <div class="code-wrapper small">
                 <pre class="prettyprint">
-                  <code class="code lang-java data-trim data-noescape">
-DOOV.when(matchAny(
+                  <code class="code lang-java data-trim data-noescape">DOOV.when(matchAny(
         matchAll(userBirthdate.ageAt(today()).greaterThan(18),
                  accountCountry.eq(Country.FR),
                  accountPhoneNumber.startsWith("+33")),
         matchAll(userBirthdate.ageAt(today()).greaterThan(21),
                  accountCountry.eq(Country.CAN),
-                 accountPhoneNumber.startsWith("+1")))).validate();
-                  </code>
+                 accountPhoneNumber.startsWith("+1"))))
+    .validate();</code>
                 </pre>
               </div>
           </section>
 
           <section>
             <h2>Failure cause - sample 3</h2>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+                <code class="code lang-java data-trim data-noescape">model.getUser().setBirthDate(LocalDate.now().minusYears(22));
 model.getAccount().setCountry(Country.FR);
 
-DOOV.when(matchAny(
+ValidationRule rule = DOOV
+    .when(matchAny(
         matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>,
                  <mark class="true-predicate">accountCountry.eq(Country.FR)</mark>,
                  <mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>),
         matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(21)</mark>,
                  <mark class="false-predicate">accountCountry.eq(Country.CAN)</mark>,
-                 <mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>))).validate();
+                 <mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>)))
+    .validate();
 
-Result result = rule.withShortCircuit(false).executeOn(wrapper);
-System.out.println("> " + result.getFailureCause());
-  
-<mark class="output">> match any [account phone number starts with '+33',
-    match all [account country = CAN, account phone number starts with '+1']]</mark>
-                </code>
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());</code>
               </pre>
             </div>  
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-xml data-trim data-noescape">&gt; match any [account phone number starts with '+33',
+             match all [account country = CAN,
+                        account phone number starts with '+1']]</code>
+              </pre>
+            </div>
           </section>
 
           <section>
@@ -863,29 +874,32 @@ System.out.println("> " + result.getFailureCause());
               <em>Validate that a profile country is Canadian or French</em>
             </p>
             <p></p>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-DOOV.when(accountCountry.anyMatch(Country.CAN, Country.FR)).validate();
-                </code>
+                <code class="code lang-java data-trim data-noescape">DOOV.when(accountCountry.anyMatch(Country.CAN, Country.FR))
+    .validate();</code>
               </pre>
             </div>
           </section>
 
           <section>
             <h2>Failure cause - sample 4</h2>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-model.getAccount().setCountry(Country.UK);
+                <code class="code lang-java data-trim data-noescape">model.getAccount().setCountry(Country.UK);
 
-DOOV.when(accountCountry.<mark class="false-predicate">anyMatch(Country.CAN, Country.FR)</mark>).validate();
+ValidationRule rule = DOOV
+    .when(accountCountry.<mark class="false-predicate">anyMatch(Country.CAN, Country.FR)</mark>)
+    .validate();
 
-Result result = rule.withShortCircuit(false).executeOn(wrapper);
-System.out.println("> " + result.getFailureCause());
-  
-<mark class="output">> account country != UK</mark>
-                </code>
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());</code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-xml data-trim data-noescape">&gt; account country != UK</code>
               </pre>
             </div>
           </section>
@@ -902,37 +916,41 @@ System.out.println("> " + result.getFailureCause());
               </em>
             </p>
             <p/>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-DOOV.when(count(
+                <code class="code lang-java data-trim data-noescape">DOOV.when(count(
       userBirthdate.ageAt(today()).greaterThan(18),
       accountCountry.eq(Country.FR),
-      accountPhoneNumber.startsWith("+33")).greaterThan(1)).validate();
-                </code>
+      accountPhoneNumber.startsWith("+33")).greaterThan(1))
+    .validate();</code>
               </pre>
             </div>
           </section>
 
           <section>
             <h2>Failure cause - sample 5</h2>
-            <div class="code-wrapper">
+            <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">
-model.getUser().setBirthDate(LocalDate.now().minusYears(19));
+                <code class="code lang-java data-trim data-noescape">model.getUser().setBirthDate(LocalDate.now().minusYears(19));
 model.getAccount().setCountry(Country.CAN);
 model.getAccount().setPhoneNumber("1 23 45 67 89");
 
-DOOV.when(count(
-  <mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>,
-  <mark class="false-predicate">accountCountry.eq(Country.FR)</mark>,
-  <mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>).greaterThan(1)).validate();
+ValidationRule rule = DOOV
+    .when(count(
+            <mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>,
+            <mark class="false-predicate">accountCountry.eq(Country.FR)</mark>,
+            <mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>)
+        .greaterThan(1))
+    .validate();
 
-Result result = rule.withShortCircuit(false).executeOn(wrapper);
-System.out.println("> " + result.getFailureCause());
- 
-<mark class="output">> account country = FR and account phone number starts with '+33'</mark>
-                </code>
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());</code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-xml data-trim data-noescape">&gt; account country = FR and account phone number starts with '+33'</code>
               </pre>
             </div>
           </section>
