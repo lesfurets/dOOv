@@ -467,9 +467,13 @@ mark.true-predicate {
 }
 
 mark.false-predicate {
-  background-color:  lightcoral;
+  background-color: lightcoral;
 }
 
-mark.output {
-  background-color:  white;
+code.output {
+  background-color: white;
+}
+
+code.output span.pln {
+  color: black !important;
 }
