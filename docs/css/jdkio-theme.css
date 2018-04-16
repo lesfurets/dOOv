@@ -413,6 +413,15 @@ body {
     text-align: center;
 }
 
+.reveal p {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.reveal p.quote {
+    font-size: 0.9em;
+}
+
 .reveal .code-wrapper.small {
     font-size: 0.7em;
 }
@@ -474,6 +483,7 @@ code.output {
   background-color: white;
 }
 
-code.output span.pln {
+code.output span.pln,
+code.output span.pun {
   color: black !important;
 }

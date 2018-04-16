@@ -1,6 +1,15 @@
+// Trims white space for code elements
+$('.prettyprint').each(function () {
+  $(this).html($(this).html().trim());
+});
+$('.prettyprint .code').each(function () {
+  $(this).html($(this).html().trim());
+});
+
 const operators = ['or', 'and', 'after', 'before', 'eq', 'ageAt', 'greaterOrEquals', 'greaterThan', 'lesserOrEquals', 'lesserThan', 'startsWith', 'matches']
 
 const doov = function (args) {
+  // Add operator CSS classes
   $('.prettyprinted .pln').each(function () {
     if ($(this).text().trim() == 'DOOV') {
       $(this).addClass('doov');
@@ -10,4 +19,5 @@ const doov = function (args) {
   });
 }
 
+// Callback after the code is pretty printed
 window.exports = { 'doov': doov };

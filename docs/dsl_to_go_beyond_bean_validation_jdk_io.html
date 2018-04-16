@@ -116,7 +116,9 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             <h2>Use case: insurer exclusions</h2>
             <p>Insurer exclusions based on object model (legacy code)</p>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
                   Vehicule vehicule, Void unused, Besoins besoins,
                   Set&lt;EAbTestingScenario&gt; scenarios)
                   throws ExclusionException {
@@ -131,7 +133,9 @@ if( window.location.search.match( /print-pdf/gi ) ) {
                     DateHelper.EPrecision.jour)) {
         throw new ExclusionException(DATE_EFFET_PLUS_60_JOURS);
     }
-}</code></pre>
+}
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -145,12 +149,14 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             </ul>
             <p>Same rule, more <strong>fluent</strong>:</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public ExclusionRule exclusionRule() {
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public ExclusionRule exclusionRule() {
     return DOOV.when(dateContrat().after(todayPlusDays(60)))
-               .excludeFormules(F1, F2, F3)
-               .withMessage(DATE_EFFET_PLUS_60_JOURS)
                .exclusionRule();
-}</code></pre>
+}
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -158,7 +164,9 @@ if( window.location.search.match( /print-pdf/gi ) ) {
             <h2>Why a fluent API?</h2>
             <p>Java is verbose, but you can reduce the noise and write code like natural language with a fluent API</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>// JUnit API
+              <pre class="prettyprint">
+                <code class="code lang-java">
+// JUnit API
 assertEquals(9, fellowshipOfTheRing.size());
 assertTrue(fellowshipOfTheRing.contains(frodo, sam));
 assertFalse(fellowshipOfTheRing.contains(sauron));
@@ -166,7 +174,9 @@ assertFalse(fellowshipOfTheRing.contains(sauron));
 // AssertJ API (fluent)
 assertThat(fellowshipOfTheRing).hasSize(9)
                                .contains(frodo, sam)
-                               .doesNotContain(sauron);</code></pre>
+                               .doesNotContain(sauron);
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -174,7 +184,9 @@ assertThat(fellowshipOfTheRing).hasSize(9)
             <h2>Fluent API</h2>
             <p>New elements in Java 8 makes it easier to write a fluent API</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>// java.util.function (io.doov.core.dsl.impl.LogicalBinaryCondition)
+              <pre class="prettyprint">
+                <code class="code lang-java">
+// java.util.function (io.doov.core.dsl.impl.LogicalBinaryCondition)
 left.predicate().and(right.predicate()).test(model, context)
 
 // java.util.stream (io.doov.core.dsl.impl.LogicalNaryCondition)
@@ -183,7 +195,9 @@ steps.stream().anyMatch(s -&gt; s.predicate().test(model, context))
 // lambda and method reference (io.doov.core.dsl.impl.NumericCondition)
 predicate(greaterThanMetadata(field, value),
           (model, context) -&gt; Optional.ofNullable(value),
-          (l, r) -&gt; greaterThanFunction().apply(l, r));</code></pre>
+          (l, r) -&gt; greaterThanFunction().apply(l, r));
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -191,12 +205,16 @@ predicate(greaterThanMetadata(field, value),
             <h2>Fluent API</h2>
             <p>Many popular libraries propose fluent APIs like<br><strong>jOOQ</strong>, <strong>AssertJ</strong>, <strong>Apache Spark</strong>, etc.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>Dataset&lt;Row&gt; averagePrice = prices
+              <pre class="prettyprint">
+                <code class="code lang-java">
+Dataset&lt;Row&gt; averagePrice = prices
         .filter(value.&lt;String&gt;getAs("insurer")
                      .equals("COOL insurer"))
         .groupBy("product")
         .agg(avg("price").as("average"))
-        .orderBy(desc("average"));</code></pre>
+        .orderBy(desc("average"));
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -223,8 +241,10 @@ predicate(greaterThanMetadata(field, value),
             <div class="horizontal">
               <div class="column">
                 <p><strong>object</strong></p>
-                <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account {
+                <div class="code-wrapper small">
+                  <pre class="prettyprint">
+                    <code class="code lang-java">
+public class Account {
 
   @Path(field = SampleFieldId.<mark class="fragment">LOGIN</mark>,
         readable = "account login")
@@ -234,13 +254,17 @@ predicate(greaterThanMetadata(field, value),
         readable = "account password")
   private String password;
 
-}</code></pre>
+}
+                    </code>
+                  </pre>
                 </div>
               </div>
               <div class="column fragment">
                 <p><strong>dictionary</strong></p>
-                <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>Account account = new Account();
+                <div class="code-wrapper small">
+                  <pre class="prettyprint">
+                    <code class="code lang-java">
+Account account = new Account();
 account.setLogin("alex");
 
 SampleModel model = new SampleModel();
@@ -250,7 +274,9 @@ SampleModelWrapper wrapper
     = new SampleModelWrapper(model);
 wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // alex
 wrapper.set(SampleFieldId.<mark class="fragment">LOGIN</mark>, "bob");
-wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob</code></pre>
+wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob
+                    </code>
+                  </pre>
                 </div>
               </div>
             </div>
@@ -269,8 +295,10 @@ wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob</code></p
             <div class="horizontal">
               <div class="column">
                 <p><strong>key model</strong></p>
-                <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class Model {
+                <div class="code-wrapper small">
+                  <pre class="prettyprint">
+                    <code class="code lang-java">
+class Model {
   User user;
 }
 
@@ -282,13 +310,17 @@ class User {
 
 enum ModelFieldId {
   EMAIL;
-}</code></pre>
+}
+                    </code>
+                  </pre>
                 </div>
               </div>
               <div class="column fragment">
                 <p><strong>code generate</strong></p>
-                <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class ModelFieldInfo {
+                <div class="code-wrapper small">
+                  <pre class="prettyprint">
+                    <code class="code lang-java">
+class ModelFieldInfo {
   FieldInfo <mark class="fragment">EMAIL</mark>;
 }
 
@@ -298,18 +330,24 @@ class DslModel {
 
 class ModelWrapper {
   ...
-}</code></pre>
+}
+                    </code>
+                  </pre>
                 </div>
               </div>
               <div class="column fragment">
                 <p><strong>write rules</strong></p>
-                <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>class Validations {
+                <div class="code-wrapper small">
+                  <pre class="prettyprint">
+                    <code class="code lang-java">
+class Validations {
   ValidationRule email = 
     DOOV.when(<mark class="fragment">userEmail</mark>.eq(...))
         .validate()
         .register(REGISTRY_DEFAULT);
-}</code></pre>
+}
+                    </code>
+                  </pre>
                 </div>
               </div>
             </div>
@@ -320,26 +358,34 @@ class ModelWrapper {
             <div class="horizontal">
               <div class="column">
                 <p><strong>wrap model</strong></p>
-                <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>User user = new User();
+                <div class="code-wrapper small">
+                  <pre class="prettyprint">
+                    <code class="code lang-java">
+User user = new User();
 user.setEmail("e@mail.com");
 
 Model model = new Model();
 model.setUser(user);
 
 ModelWrapper <mark class="fragment">wrap</mark>
-  = new ModelWrapper(model);</code></pre>
+  = new ModelWrapper(model);
+                    </code>
+                  </pre>
                 </div>
               </div>
               <div class="column fragment">
                 <p><strong>execute</strong></p>
-                <div class="code-wrapper">
-                  <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>// Directly reference rule email
+                <div class="code-wrapper small">
+                  <pre class="prettyprint">
+                    <code class="code lang-java">
+// Directly reference rule email
 Validations.email.executeOn(<mark class="fragment">wrap</mark>);
 
 // Or use the registry
 REGISTRY_DEFAULT.stream()
-  .map(rule -&gt; rule.executeOn(<mark class="fragment">wrap</mark>));</code></pre>
+  .map(rule -&gt; rule.executeOn(<mark class="fragment">wrap</mark>));
+                    </code>
+                  </pre>
                 </div>
               </div>
             </div>
@@ -353,7 +399,9 @@ REGISTRY_DEFAULT.stream()
 
           <section>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account extends Identity {
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account extends Identity {
 
     @SamplePath(field = SampleFieldId.TIMEZONE,
                 readable = "account timezone")
@@ -375,14 +423,18 @@ REGISTRY_DEFAULT.stream()
                 readable = "account préférences mail")
     private Collection&lt;EmailType&gt; emailTypes = new HashSet&lt;&gt;();
 
-}</code></pre>
+}
+                </code>
+              </pre>
             </div>
           </section>
 
           <section>
             <h2>Live code: rewrite with dOOv</h2>
             <div class="code-wrapper smaller">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public static boolean validateAccount(User user, Account account, Configuration config) {
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public static boolean validateAccount(User user, Account account, Configuration config) {
     if (config == null) {
         return false;
     }
@@ -399,14 +451,18 @@ REGISTRY_DEFAULT.stream()
         return true;
     }
     return false;
-}</code></pre>
+}
+                </code>
+              </pre>
             </div>
           </section>
 
           <section>
             <h2>Live code: result</h2>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>ValidationRule userAccount = DOOV
+              <pre class="prettyprint">
+                <code class="code lang-java">
+ValidationRule userAccount = DOOV
   // Entry point is when
   .when(userBirthdate.ageAt(today()).greaterOrEquals(18)
    .and(accountEmail.length().lesserOrEquals(configurationMaxEmailSize))
@@ -415,14 +471,18 @@ REGISTRY_DEFAULT.stream()
   // Terminal operation is validate
   .validate()
   // Optional: add to registry
-  .registerOn(REGISTRY_DEFAULT);</code></pre>
+  .registerOn(REGISTRY_DEFAULT);
+                </code>
+              </pre>
             </div>
           </section>
 
           <section>
             <h2>Live code: test</h2>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>@Test
+              <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
 public void should_user_account_validates() {
   // Condition assert
   assertThat(accountEmail().isNotNull()).validates(wrapper);
@@ -433,7 +493,9 @@ public void should_user_account_validates() {
   // Result assert
   Result result = RulesConference.userAccount.executeOn(wrapper);
   assertThat(result).isTrue();
-}</code></pre>
+}
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -441,9 +503,13 @@ public void should_user_account_validates() {
             <h2>Live code: entry point</h2>
             <p>The entry point is <code>DOOV#when(StepCondition)</code> and the operation <code>StepWhen#validate</code> returns the validation rule</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
       .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
-    .validate();</code></pre>
+    .validate();
+                </code>
+              </pre>
             </div>
             <p class="fragment">This is <strong>lazy</strong></p>
           </section>
@@ -453,8 +519,19 @@ public void should_user_account_validates() {
             <p>A natural language version of the rule is available with <code>ValidationRule#readable</code>.</p>
             <p>This makes <strong>auditability</strong> and <strong>compliance</strong> possible.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>System.out.println(EMAIL_VALID.readable());
-&gt; When (email matches '\w+[@]\w+\.com' or email matches '\w+[@]\w+\.fr') validate</code></pre>
+              <pre class="prettyprint">
+                <code class="code lang-java">
+System.out.println("&gt; " + EMAIL_VALID.readable());
+                </code>
+              </pre>
+            </div>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; When (email matches '\w+[@]\w+\.com' or
+email matches '\w+[@]\w+\.fr') validate
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -463,10 +540,14 @@ public void should_user_account_validates() {
             <p>You can add the rule in one or many registry with <code>ValidationRule#registerOn(Registry)</code></p>
             <p>This makes <strong>governance</strong> possible.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(accountEmail().matches("\\w+[@]\\w+\\.com")
       .or(accountEmail().matches("\\w+[@]\\w+\\.fr")))
    .validate()
-   .registerOn(REGISTRY_ACCOUNT);</code></pre>
+   .registerOn(REGISTRY_ACCOUNT);
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -474,11 +555,15 @@ public void should_user_account_validates() {
             <h2>Live code: execution</h2>
             <p>The terminal operation <code>ValidationRule#executeOn(FieldModel)</code><br>executes the rule</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>REGISTRY_ACCOUNT.stream()
-    .map(rule -> rule.executeOn(model))
+              <pre class="prettyprint">
+                <code class="code lang-java">
+REGISTRY_ACCOUNT.stream()
+    .map(rule -&gt; rule.executeOn(model))
     .filter(Result::isInvalid)
     .map(Result::message)
-    .collect(toList());</code></pre>
+    .collect(toList());
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -486,14 +571,22 @@ public void should_user_account_validates() {
             <h2>Live code: type safety</h2>
             <p>The available operations depend on the field type, and the arguments are type safe and validated <strong>by the compiler</strong></p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
 //                              ^^^^^
-//                        only for date field</code></pre>
+//                        only for date field
+                </code>
+              </pre>
             </div>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(userAccountCreation().after(LocalDate.of(2000, 01, 01))).validate();
 //        ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//             date field                  is type safe here</code></pre>
+//             date field                  is type safe here
+                </code>
+              </pre>
             </div>
           </section>
         </section>
@@ -531,6 +624,72 @@ public void should_user_account_validates() {
           </section>
 
           <section>
+            <h2>i18n of the syntax tree</h2>
+            <p>The syntax tree is localized for left side elements (fields) and operators via <code>MessageBundle</code>.</p>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+// User.java
+@SamplePath(field = SampleFieldId.FIRST_NAME, 
+            readable = "user.first.name")
+private String firstName;
+                </code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+// SampleResourceBundle_en_US.properties
+user.first.name = user first name
+
+// SampleResourceBundle_fr_FR.properties
+user.first.name = prénom
+                </code>
+              </pre>
+            </div>
+            <p>You can also specify the text directly in the <code>readable</code> field.</p>
+          </section>
+
+          <section>
+            <h2>i18n of the syntax tree</h2>
+            <p>You can use <code>ValidationRule#readable(Locale)</code> and <code>Result#getFailureCause(Locale)</code> to specify a locale</p>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+// Output in default Locale.getDefault()
+String readable = DOOV.when(userFirstName.isNotNull())
+                      .readable())
+System.out.println("&gt; " + readable);
+                </code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java output">
+&gt; when first name exists
+                </code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+// Output in french
+String readable = DOOV.when(userFirstName.isNotNull())
+                      .readable(Locale.FRANCE))
+System.out.println("&gt; " + readable)
+                </code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java output">
+&gt; lorsque pr&eacute;nom existe
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
             <h2>Execution statistics</h2>
             <p>During execution, each node of the AST captures <strong>context value</strong> and <strong>predicate result</strong>. We know at runtime which node failed, and why.</p>
             <img src="png/doov_exclusions_insurer_conducteur_statistics.png" width="100%">
@@ -544,26 +703,119 @@ public void should_user_account_validates() {
 
           <section>
             <h2>Execution statistics</h2>
-            <p>We also rewrite the execution rules by simplifying the predicate tree, to show the minimal predicate that fails. This is a complex problem we are currently working on.</p>
+            <p>We also rewrite the execution rules by simplifying the predicate tree, to show the minimal predicate that fails.</p>
             <img src="png/doov_failure_cause_simplify.png" width="100%">
+          </section>
+
+          <section>
+            <h2>Failure cause - and / or</h2>
+            <p class="quote"><em>Validate that the profile has an email with less than 20 characters, is at least 18 years old when the country is France, and the country is France when the phone number starts with '+33'</em></p>
+            <p/>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(accountEmail.length().lesserThan(20)
+      .and(userBirthdate.ageAt(today()).greaterThan(18)
+        .and(accountCountry.eq(Country.FR)))
+      .and(accountCountry.eq(Country.FR)
+        .and(accountPhoneNumber.startsWith("+33"))))
+    .validate();
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Failure cause - and / or</h2>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+model.getAccount().setEmail("test@test.org");
+model.getAccount().setCountry(Country.FR);
+model.getUser().setBirthDate(LocalDate.now().minusYears(19));
+
+ValidationRule rule = DOOV
+    .when(<mark class="true-predicate">accountEmail.length().lesserThan(20)</mark>  
+      .and(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>
+        .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>))
+      .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>
+        .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>)))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+            </div>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; account phone number starts with '+33'
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Failure cause - matchAny / matchAll</h2>
+            <p class="quote"><em>Validate that the profile is least 18 years old, the country is France, the phone number starts with '+33', is at least 21 years old when their country is Canada, and their phone number starts with '+1'</em></p>
+            <p/>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(matchAny(
+      matchAll(userBirthdate.ageAt(today()).greaterThan(18),
+               accountCountry.eq(Country.FR),
+               accountPhoneNumber.startsWith("+33")),
+      matchAll(userBirthdate.ageAt(today()).greaterThan(21),
+               accountCountry.eq(Country.CAN),
+               accountPhoneNumber.startsWith("+1"))))
+    .validate();
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Failure cause - matchAny / matchAll</h2>
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+model.getAccount().setCountry(Country.FR);
+
+ValidationRule rule = DOOV
+    .when(matchAny(
+        matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>,
+                 <mark class="true-predicate">accountCountry.eq(Country.FR)</mark>,
+                 <mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>),
+        matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(21)</mark>,
+                 <mark class="false-predicate">accountCountry.eq(Country.CAN)</mark>,
+                 <mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>)))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+            </div>  
+            <div class="code-wrapper small">
+              <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; match any [account phone number starts with '+33',
+             match all [account country = CAN,
+                        account phone number starts with '+1']]
+                </code>
+              </pre>
+            </div>
           </section>
 
           <section>
             <h2>Execution short-circuit</h2>
             <p>By default, predicate evaluation in dOOv behaves like Java: it <strong>short-circuits</strong>. This can be disabled to execute all nodes, even if they don't impact the end result.</p>
           </section>
-
-<!--
-canonique / normale
-count(p1, p2, p3) >= 2
-(p1 n p2) u (...)
-
-reduction / simplification : faire liste
-eventuellement detection simplifications
-(A | B) & C
-A & C
-B & C
--->
         </section>
 
         <section>
@@ -575,9 +827,13 @@ B & C
             <h2>Performance - Java Microbenchmark Harness</h2>
             <p>We use JMH to check the performance of the DSL</p>
             <div class="code-wrapper small">
-              <pre class="prettyprint"><code class="code lang-xml" data-trim data-noescape>Benchmark                          Mode  Samples      Mean  Mean error   Units
+              <pre class="prettyprint">
+                <code class="code lang-xml">
+Benchmark                          Mode  Samples      Mean  Mean error   Units
 o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
-o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms</code></pre>
+o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
+                </code>
+              </pre>
             </div>
             <p>Performance of the DSL and POJO code are very close</p>
           </section>
@@ -593,12 +849,16 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms</
             <h2>Beyond Bean Validation: types</h2>
             <p>Bean Validation rules are not strongly typed since it's annotation based. This code will fail at compile time, but your IDE won't be able to tell you why.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account {
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account {
 
     @NotNull @Email
     private Email email;
 
-}</code></pre>
+}
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -606,7 +866,9 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms</
             <h2>Beyond Bean Validation: complex validation</h2>
             <p>Because Bean Validation constraints are based on field annotation, cross validation between fields are only available through the extension mechanism.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>public class Account {
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account {
 
     @Pattern(regexp = "(FR)|(UK)")
     private String country;
@@ -614,7 +876,9 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms</
     @Pattern(regexp = "???")
     private String phoneNumber;
 
-}</code></pre>
+}
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -622,15 +886,23 @@ o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms</
             <h2>Beyond Bean Validation: natural language</h2>
             <p>Bean Validation rules are not written with a natural language syntax and does not provide a syntax tree</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>@Size(min = 10, max = 200,
+              <pre class="prettyprint">
+                <code class="code lang-java">
+@Size(min = 10, max = 200,
       message = "About Me must be between 10 and 200 characters")
-private String aboutMe;</code></pre>
+private String aboutMe;
+                </code>
+              </pre>
             </div>
             <p></p>
             <h2>DSL</h2>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java" data-trim data-noescape>userAboutMe().length().between(10, 200).validate().readable()
-> When user about me length is between 10 and 200, validate</code></pre>
+              <pre class="prettyprint">
+                <code class="code lang-java">
+userAboutMe().length().between(10, 200).validate().readable()
+&gt; When user about me length is between 10 and 200, validate
+                </code>
+              </pre>
             </div>
           </section>
 
@@ -662,12 +934,6 @@ private String aboutMe;</code></pre>
               </div>
             </div>
           </section>
-
-          <section>
-            <h2>dOOv pitfalls</h2>
-            <p><strong style="color:#ec7f00">dOOv</strong> is harder to debug than bare metal code</p>
-            <p><strong style="color:#ec7f00">dOOv</strong> cannot handle lists of arbitrary size,<br/>meaning your model needs to be <strong>bounded</strong><br/>(there are workarounds)</p>
-          </section>
         </section>
 
         <section>
@@ -684,12 +950,16 @@ private String aboutMe;</code></pre>
             <h2>Roadmap</h2>
             <p>Next step is extending the DSL to create an <strong>object to object mapping framework</strong>, Domain Object Oriented Mapping (<strong>dOOm</strong>). It will feature the same AST to text and statistics functionnalities.</p>
             <div class="code-wrapper">
-              <pre class="prettyprint"><code class="code lang-java data-trim data-noescape">DOOV.map(userEmail().to(insurerEmail())
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.map(userEmail().to(insurerEmail())
     .map(userFirstName(), userLastName())
       .using(StringJoiner)
       .to(insurerFullName())
     .when(userCountry().eq(FR))
-      .map(userPhone().to(insurerPhone()))</code></pre>
+      .map(userPhone().to(insurerPhone()))
+                </code>
+              </pre>
             </div>
             <p>Stay tuned for the next versions!</p>
           </section>
@@ -723,12 +993,14 @@ private String aboutMe;</code></pre>
             <p/>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">DOOV.when(accountEmail.length().lesserThan(20)
+                <code class="code lang-java">
+DOOV.when(accountEmail.length().lesserThan(20)
       .and(userBirthdate.ageAt(today()).greaterThan(18)
-          .and(accountCountry.eq(Country.FR)))
+        .and(accountCountry.eq(Country.FR)))
       .and(accountCountry.eq(Country.FR)
-          .and(accountPhoneNumber.startsWith("+33"))))
-    .validate();</code>
+        .and(accountPhoneNumber.startsWith("+33"))))
+    .validate();
+                </code>
               </pre>
             </div>
           </section>
@@ -737,7 +1009,8 @@ private String aboutMe;</code></pre>
             <h2>Failure cause - sample 1</h2>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">model.getAccount().setEmail("test@test.org");
+                <code class="code lang-java">
+model.getAccount().setEmail("test@test.org");
 model.getAccount().setCountry(Country.FR);
 model.getUser().setBirthDate(LocalDate.now().minusYears(19));
 
@@ -751,12 +1024,15 @@ ValidationRule rule = DOOV
 
 Result result = rule.withShortCircuit(false)
                     .executeOn(wrapper);
-System.out.println("&gt; " + result.getFailureCause());</code>
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
               </pre>
             </div>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-xml output data-trim data-noescape">&gt; account phone number starts with '+33'</code>
+                <code class="code lang-xml output">
+&gt; account phone number starts with '+33'
+                </code>
               </pre>
             </div>
           </section>
@@ -773,13 +1049,15 @@ System.out.println("&gt; " + result.getFailureCause());</code>
               <p/>
               <div class="code-wrapper small">
                 <pre class="prettyprint">
-                  <code class="code lang-java data-trim data-noescape">DOOV.when(userBirthdate.ageAt(today()).greaterThan(18)
+                  <code class="code lang-java">
+DOOV.when(userBirthdate.ageAt(today()).greaterThan(18)
         .and(accountCountry.eq(Country.FR)
         .and(accountPhoneNumber.startsWith("+33")))
         .or(userBirthdate.ageAt(today()).greaterThan(21)
               .and(accountCountry.eq(Country.CAN)
               .and(accountPhoneNumber.startsWith("+1")))))
-    .validate();</code>
+    .validate();
+                  </code>
                 </pre>
               </div>
           </section>
@@ -788,7 +1066,8 @@ System.out.println("&gt; " + result.getFailureCause());</code>
             <h2>Failure cause - sample 2</h2>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(22));
 model.getAccount().setCountry(Country.FR);
 
 ValidationRule rule = DOOV
@@ -802,14 +1081,17 @@ ValidationRule rule = DOOV
 
 Result result = rule.withShortCircuit(false)
                     .executeOn(wrapper);
-System.out.println("&gt; " + result.getFailureCause());</code>
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
               </pre>
             </div>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-xml output data-trim data-noescape">&gt; account phone number starts with '+33'
+                <code class="code lang-xml output">
+&gt; account phone number starts with '+33'
     or (account country = CAN and
-        account phone number starts with '+1')</code>
+        account phone number starts with '+1')
+                </code>
               </pre>
             </div>
           </section>
@@ -825,14 +1107,16 @@ System.out.println("&gt; " + result.getFailureCause());</code>
               <p/>
               <div class="code-wrapper small">
                 <pre class="prettyprint">
-                  <code class="code lang-java data-trim data-noescape">DOOV.when(matchAny(
+                  <code class="code lang-java">
+DOOV.when(matchAny(
         matchAll(userBirthdate.ageAt(today()).greaterThan(18),
                  accountCountry.eq(Country.FR),
                  accountPhoneNumber.startsWith("+33")),
         matchAll(userBirthdate.ageAt(today()).greaterThan(21),
                  accountCountry.eq(Country.CAN),
                  accountPhoneNumber.startsWith("+1"))))
-    .validate();</code>
+     .validate();
+                 </code>
                 </pre>
               </div>
           </section>
@@ -841,7 +1125,8 @@ System.out.println("&gt; " + result.getFailureCause());</code>
             <h2>Failure cause - sample 3</h2>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(22));
 model.getAccount().setCountry(Country.FR);
 
 ValidationRule rule = DOOV
@@ -856,14 +1141,17 @@ ValidationRule rule = DOOV
 
 Result result = rule.withShortCircuit(false)
                     .executeOn(wrapper);
-System.out.println("&gt; " + result.getFailureCause());</code>
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
               </pre>
             </div>  
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-xml output data-trim data-noescape">&gt; match any [account phone number starts with '+33',
+                <code class="code lang-xml output">
+&gt; match any [account phone number starts with '+33',
              match all [account country = CAN,
-                        account phone number starts with '+1']]</code>
+                        account phone number starts with '+1']]
+                </code>
               </pre>
             </div>
           </section>
@@ -876,8 +1164,10 @@ System.out.println("&gt; " + result.getFailureCause());</code>
             <p></p>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">DOOV.when(accountCountry.anyMatch(Country.CAN, Country.FR))
-    .validate();</code>
+                <code class="code lang-java">
+DOOV.when(accountCountry.anyMatch(Country.CAN, Country.FR))
+    .validate();
+                </code>
               </pre>
             </div>
           </section>
@@ -886,7 +1176,8 @@ System.out.println("&gt; " + result.getFailureCause());</code>
             <h2>Failure cause - sample 4</h2>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">model.getAccount().setCountry(Country.UK);
+                <code class="code lang-java">
+model.getAccount().setCountry(Country.UK);
 
 ValidationRule rule = DOOV
     .when(accountCountry.<mark class="false-predicate">anyMatch(Country.CAN, Country.FR)</mark>)
@@ -894,12 +1185,15 @@ ValidationRule rule = DOOV
 
 Result result = rule.withShortCircuit(false)
                     .executeOn(wrapper);
-System.out.println("&gt; " + result.getFailureCause());</code>
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
               </pre>
             </div>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-xml output data-trim data-noescape">&gt; account country != UK</code>
+                <code class="code lang-xml output">
+&gt; account country != UK
+                </code>
               </pre>
             </div>
           </section>
@@ -918,11 +1212,13 @@ System.out.println("&gt; " + result.getFailureCause());</code>
             <p/>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">DOOV.when(count(
+                <code class="code lang-java">
+DOOV.when(count(
       userBirthdate.ageAt(today()).greaterThan(18),
       accountCountry.eq(Country.FR),
       accountPhoneNumber.startsWith("+33")).greaterThan(1))
-    .validate();</code>
+    .validate();
+                </code>
               </pre>
             </div>
           </section>
@@ -931,7 +1227,8 @@ System.out.println("&gt; " + result.getFailureCause());</code>
             <h2>Failure cause - sample 5</h2>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-java data-trim data-noescape">model.getUser().setBirthDate(LocalDate.now().minusYears(19));
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(19));
 model.getAccount().setCountry(Country.CAN);
 model.getAccount().setPhoneNumber("1 23 45 67 89");
 
@@ -945,12 +1242,15 @@ ValidationRule rule = DOOV
 
 Result result = rule.withShortCircuit(false)
                     .executeOn(wrapper);
-System.out.println("&gt; " + result.getFailureCause());</code>
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
               </pre>
             </div>
             <div class="code-wrapper small">
               <pre class="prettyprint">
-                <code class="code lang-xml output data-trim data-noescape">&gt; account country = FR and account phone number starts with '+33'</code>
+                <code class="code lang-xml output">
+&gt; account country = FR and account phone number starts with '+33'
+                </code>
               </pre>
             </div>
           </section>
