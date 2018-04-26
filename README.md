@@ -22,7 +22,9 @@ See [latest presentation at Snowcamp 2018](http://doov.io/dsl_to_go_beyond_bean_
 
 See [the sample project in dOOv](sample)
 
-## Usage overview
+## Usage
+
+### Overview
 
 **For a more in-depth usage documentation, see the [documentation](#documentation)**
 
@@ -72,7 +74,7 @@ if (result.isFalse()) {
 
 The result will return true or false depending on the result of the predicate, for example `Result#isTrue` means the predicate validated.
 
-## Syntax tree
+### Syntax tree
 
 The rules provides an AST that can be printed as a human readable format with the `Readable#readable` method that is available on any DSL object. By default the output is from `AstLineVisitor` that outputs the string in plain text.
 
@@ -81,7 +83,7 @@ DOOV.when(userBirthdate().ageAt(today()).greaterOrEquals(18)).validate().readabl
 > When user age at 'today' greater or equals '18', validate with empty message
 ```
 
-## Testing
+### Testing
 
 Assertions are available in the `doov-assertions` jar. It depends on AssertJ, so you can use the `assertThat` syntax.
 
@@ -90,34 +92,7 @@ ValidationRule rule = DOOV.when(userFirstName().isNotNull().or(userLastName().is
 assertThat(rule).validates(model).hasFailedNodeEmpty();
 ```
 
-## Releasing
-
-We use a custom release script that will
-
-- change the version to VERSION (in pom.xml, core/pom.xml, assertions/pom.xml, generator/pom.xml)
-- release the parent pom (optional: signed with GPG)
-- release core, assertions, generator (optional: signed with GPG)
-- commit the changes in git and tag the commit to VERSION
-- revert changes to VERSION
-- push commit and tags
-
-```bash
-bin/release.sh VERSION REPOSITORY_ID REPOSITORY_URL [GPG_KEYNAME]
-```
-
-## Generating documentation
-
-It is automatically generated and commited by the release script (so the available documentation is the latest released version).
-
-It can also be generated for a snapshot version with the following command, the output is in `target/site`.
-
-```bash
-mvn -pl core clean site
-mvn -pl assertions clean site
-mvn -pl generator clean site
-```
-
-## Build with gradle
+## Build
 
 To build core, assertions, generator core, maven generator plugin and gradle generator plugin modules:
 
@@ -155,6 +130,10 @@ To generate documentation with gradle:
 # Generate documentation in docs/site/apidocs/subproject
 ./gradlew javadoc
 ```
+
+## Release
+
+Todo release scripts
 
 ## Licence
 
