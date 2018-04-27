@@ -133,6 +133,8 @@ To generate documentation with gradle:
 
 ## Release
 
+To release the code, it will create 2 commits with proper tags and versions and push them:
+
 ```bash
 ./gradlew \
   -Psigning.secretKeyRingFile=secret-file.gpg \
@@ -145,6 +147,8 @@ To generate documentation with gradle:
   -Pversions.newVersion=RELEASE_VERSION \
   release
 ```
+
+You can add `-PdryRun` to prevent the push.
 
 ## Licence
 

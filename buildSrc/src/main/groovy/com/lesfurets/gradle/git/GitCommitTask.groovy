@@ -11,7 +11,7 @@ class GitCommitTask extends DefaultTask {
 
     @Input
     @Optional
-    String message = "Release v%s"
+    String message = "[release] Release version %s"
 
     @Override
     Spec<? super TaskInternal> getOnlyIf() {

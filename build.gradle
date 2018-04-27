@@ -189,11 +189,12 @@ wrapper {
 task commitRelease(type: GitCommitTask, dependsOn: writeVersion)
 commitRelease.mustRunAfter(subprojects.deploy)
 task tagVersion(type: GitTagTask, dependsOn: commitRelease)
+subprojects.javadoc.mustRunAfter(tagVersion.action)
 task writeDevVersion(type: SetVersionTask, dependsOn: [tagVersion, subprojects.deploy]) {
     newVersion = "1.0-SNAPSHOT"
 }
 task commitDevVersion(type: GitCommitTask, dependsOn: writeDevVersion) {
-    message = "Revert versions to SNAPSHOT"
+    message = "[release] Revert versions to SNAPSHOT"
 }
 task pushRelease(type: GitPushTask, dependsOn: commitDevVersion)
 
