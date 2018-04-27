@@ -1,3 +1,6 @@
+import com.lesfurets.gradle.versions.*
+import com.lesfurets.gradle.git.*
+
 apply from: 'dependencyVersions.gradle'
 
 allprojects {
@@ -17,6 +20,7 @@ buildscript {
     }
 }
 
+apply plugin: VersionsPlugin
 apply plugin: "io.codearte.nexus-staging"
 
 defaultTasks 'verify'
@@ -177,6 +181,19 @@ subprojects {
 }
 
 wrapper {
-    version = '4.7'
+    gradleVersion = '4.7'
     distributionType = Wrapper.DistributionType.ALL
 }
+
+// Release commits and tag
+task commitRelease(type: GitCommitTask, dependsOn: writeVersion)
+task tagVersion(type: GitTagTask, dependsOn: commitRelease)
+task writeDevVersion(type: SetVersionTask, dependsOn: [tagVersion, subprojects.deploy]) {
+    newVersion = "1.0-SNAPSHOT"
+}
+task commitDevVersion(type: GitCommitTask, dependsOn: writeDevVersion) {
+    message = "Revert versions to SNAPSHOT"
+}
+task pushRelease(type: GitPushTask, dependsOn: commitDevVersion)
+
+task release(dependsOn: pushRelease)
