@@ -114,7 +114,7 @@ a.button {
       </div>
       <div class="code">
           <div class="java">
-              ValidationRule <font color="#aeaeae">rule</font> = DOOV<br/>
+              ValidationRule <font color="#aeaeae">rule</font> = DslSampleModel<br/>
               &nbsp;&nbsp;&nbsp;.when(<font color="#efef8f">userBirthdate</font>.ageAt(<font color="#efef8f">today</font>()).greaterOrEquals(<font color="#8cd0d3">18</font>)<br/>
               &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountEmail</font>.length().lesserOrEquals(<font color="#efef8f">maxEmailSize</font>))<br/>
               &nbsp;&nbsp;&nbsp;.and(<font color="#efef8f">accountCountry</font>.eq(<font color="#98fb98">Country</font>.FR))<br/>
@@ -133,8 +133,7 @@ a.button {
           <font color="#aeaeae">beanModel</font>.setAccount(<font color="#efef8f">new</font> Account());<br/>
           <font color="#aeaeae">beanModel</font>.getAccount().setPhoneNumber(<font color="#cc9393">"01 42 90 90 90"</font>);<br/>
           &dot;&dot;&dot;<br/>
-          DslModel <font color="#aeaeae">wrapperModel</font> = <font color="#efef8f">new</font> SampleModelWrapper(<font color="#aeaeae">beanModel</font>);<br/>
-          Result <font color="#aeaeae">result</font> = <font color="#aeaeae">rule</font>.executeOn(<font color="#aeaeae">wrapperModel</font>);<br/>
+          Result <font color="#aeaeae">result</font> = <font color="#aeaeae">rule</font>.executeOn(<font color="#aeaeae">beanModel</font>);<br/>
         </div>
       </div>
 
