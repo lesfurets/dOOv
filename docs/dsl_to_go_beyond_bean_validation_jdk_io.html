@@ -236,61 +236,6 @@ Dataset&lt;Row&gt; averagePrice = prices
           </section>
 
           <section>
-            <h2>Model-map: deep accessors</h2>
-            <p>We developed a typed, null-safe, two way mapping framework<br/>from <strong>key value to model</strong>.</p>
-            <div class="horizontal">
-              <div class="column">
-                <p><strong>object</strong></p>
-                <div class="code-wrapper small">
-                  <pre class="prettyprint">
-                    <code class="code lang-java">
-public class Account {
-
-  @Path(field = SampleFieldId.<mark class="fragment">LOGIN</mark>,
-        readable = "account login")
-  private String login;
-
-  @Path(field = SampleFieldId.PASSWD,
-        readable = "account password")
-  private String password;
-
-}
-                    </code>
-                  </pre>
-                </div>
-              </div>
-              <div class="column fragment">
-                <p><strong>dictionary</strong></p>
-                <div class="code-wrapper small">
-                  <pre class="prettyprint">
-                    <code class="code lang-java">
-Account account = new Account();
-account.setLogin("alex");
-
-SampleModel model = new SampleModel();
-model.setAccount(account);
-
-SampleModelWrapper wrapper 
-    = new SampleModelWrapper(model);
-wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // alex
-wrapper.set(SampleFieldId.<mark class="fragment">LOGIN</mark>, "bob");
-wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob
-                    </code>
-                  </pre>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section data-transition="slide-in fade-out">
-            <img width="80%" src="png/org_modelmap_casper_1.png">
-          </section>
-
-          <section data-transition="fade-in slide-out">
-            <img width="80%" src="png/org_modelmap_casper_2.png">
-          </section>
-
-          <section>
             <h2>How to write a validation rule?</h2>
             <div class="horizontal">
               <div class="column">
@@ -298,38 +243,44 @@ wrapper.get(SampleFieldId.<mark class="fragment">LOGIN</mark>); // bob
                 <div class="code-wrapper small">
                   <pre class="prettyprint">
                     <code class="code lang-java">
+// Root class of model
 class Model {
   User user;
 }
 
-class User {
-  @Path(field = <mark class="fragment">EMAIL</mark>
-        readable = ...)
-  String email;
+// Add key named EMAIL
+enum ModelFieldId {
+  <mark class="fragment">EMAIL</mark>;
 }
 
-enum ModelFieldId {
-  EMAIL;
+// Annotate email field
+class User {
+  @Path(field = <mark class="fragment">EMAIL</mark>
+        readable = <mark class="fragment true-predicate">...</mark>)
+  String email;
 }
                     </code>
                   </pre>
                 </div>
               </div>
               <div class="column fragment">
+<!-- // Protected dOOv class -->
+<!-- class ModelFieldInfo { -->
+  <!-- FieldInfo <mark class="fragment">EMAIL</mark>; -->
+<!-- } -->
+<!--  -->
                 <p><strong>code generate</strong></p>
                 <div class="code-wrapper small">
                   <pre class="prettyprint">
                     <code class="code lang-java">
-class ModelFieldInfo {
-  FieldInfo <mark class="fragment">EMAIL</mark>;
-}
-
+// dOOv typed field class
 class DslModel {
-  StringFieldInfo <mark class="fragment">userEmail</mark>;
+  StringFieldInfo <mark class="fragment true-predicate">userEmail</mark>;
 }
 
-class ModelWrapper {
-  ...
+// dOOv typed rule
+class ModelRule {
+  Result executeOn(Model m);
 }
                     </code>
                   </pre>
@@ -340,11 +291,17 @@ class ModelWrapper {
                 <div class="code-wrapper small">
                   <pre class="prettyprint">
                     <code class="code lang-java">
+// Create rules by using
+// generated fields
+// in DslModel
 class Validations {
-  ValidationRule email = 
-    DOOV.when(<mark class="fragment">userEmail</mark>.eq(...))
-        .validate()
-        .register(REGISTRY_DEFAULT);
+  ModelRule email = DslModel
+    .when(<mark class="fragment true-predicate">userEmail</mark>.eq(...))
+    .validate()
+
+    // Optionaly add rules
+    // to a registry
+    .registerOn(DEFAULT);
 }
                     </code>
                   </pre>
@@ -357,18 +314,17 @@ class Validations {
             <h2>How to validate a model</h2>
             <div class="horizontal">
               <div class="column">
-                <p><strong>wrap model</strong></p>
+                <p><strong>get model</strong></p>
                 <div class="code-wrapper small">
                   <pre class="prettyprint">
                     <code class="code lang-java">
+// Get model from somewhere
+// or instanciate it
 User user = new User();
 user.setEmail("e@mail.com");
 
-Model model = new Model();
+Model <mark class="fragment">model</mark> = new Model();
 model.setUser(user);
-
-ModelWrapper <mark class="fragment">wrap</mark>
-  = new ModelWrapper(model);
                     </code>
                   </pre>
                 </div>
@@ -379,17 +335,28 @@ ModelWrapper <mark class="fragment">wrap</mark>
                   <pre class="prettyprint">
                     <code class="code lang-java">
 // Directly reference rule email
-Validations.email.executeOn(<mark class="fragment">wrap</mark>);
+Validations.email.executeOn(<mark class="fragment">model</mark>);
 
 // Or use the registry
-REGISTRY_DEFAULT.stream()
-  .map(rule -&gt; rule.executeOn(<mark class="fragment">wrap</mark>));
+DEFAULT.stream()
+  .map(rule -&gt; rule.executeOn(<mark class="fragment">model</mark>));
                     </code>
                   </pre>
                 </div>
               </div>
             </div>
           </section>
+
+          <section data-transition="slide-in fade-out">
+            <h2>Keying a model</h2>
+            <img width="75%" src="png/org_modelmap_casper_1.png">
+          </section>
+
+          <section data-transition="fade-in slide-out">
+            <h2>Keying a model</h2>
+            <img width="75%" src="png/org_modelmap_casper_2.png">
+          </section>
+
         </section>
 
         <section>
@@ -462,16 +429,20 @@ public static boolean validateAccount(User user, Account account, Configuration 
             <div class="code-wrapper small">
               <pre class="prettyprint">
                 <code class="code lang-java">
-ValidationRule userAccount = DOOV
-  // Entry point is when
-  .when(userBirthdate.ageAt(today()).greaterOrEquals(18)
-   .and(accountEmail.length().lesserOrEquals(configurationMaxEmailSize))
-   .and(accountCountry.eq(Country.FR))
-   .and(accountPhoneNumber.startsWith("+33")))
-  // Terminal operation is validate
-  .validate()
-  // Optional: add to registry
-  .registerOn(REGISTRY_DEFAULT);
+public interface RulesConference {
+
+  SampleModelRule userAccount = DslSampleModel
+    // Entry point is when
+    .when(userBirthdate.ageAt(today()).greaterOrEquals(18)
+     .and(accountEmail.length().lesserOrEquals(configurationMaxEmailSize))
+     .and(accountCountry.eq(Country.FR))
+     .and(accountPhoneNumber.startsWith("+33")))
+    // Terminal operation is validate
+    .validate()
+    // Optional: add to registry
+    .registerOn(REGISTRY_DEFAULT);
+
+}
                 </code>
               </pre>
             </div>
@@ -479,20 +450,32 @@ ValidationRule userAccount = DOOV
 
           <section>
             <h2>Live code: test</h2>
-            <div class="code-wrapper small">
+            <div class="code-wrapper smaller">
               <pre class="prettyprint">
                 <code class="code lang-java">
-@Test
-public void should_user_account_validates() {
-  // Condition assert
-  assertThat(accountEmail().isNotNull()).validates(wrapper);
+public class RulesConferenceTest {
 
-  // Rule assert
-  assertThat(RulesConference.userAccount).validates(wrapper);
+  private SampleModel model;
 
-  // Result assert
-  Result result = RulesConference.userAccount.executeOn(wrapper);
-  assertThat(result).isTrue();
+  @BeforeEach
+  public void before() {
+    model = SampleModels.sample();
+  }
+
+  @Test
+  public void should_default_user_account_validates() {
+    Result result = userAccount.executeOn(model);
+    assertThat(result).isTrue().hasNoFailureCause();
+  }
+
+  @Test
+  public void should_user_account_too_young_fail() {
+    model.getAccount().setPhoneNumber(null);
+    Result result = userAccount.executeOn(model);
+    assertThat(result).isFalse()
+                      .hasFailureCause("account phone number starts with '+33'");
+  }
+
 }
                 </code>
               </pre>
@@ -643,7 +626,7 @@ private String firstName;
 user.first.name = user first name
 
 // SampleResourceBundle_fr_FR.properties
-user.first.name = prénom
+user.first.name = prénom utilisateur
                 </code>
               </pre>
             </div>
