@@ -21,3 +21,17 @@ const doov = function (args) {
 
 // Callback after the code is pretty printed
 window.exports = { 'doov': doov };
+
+const setFooterVisibility = function() {
+  const footer = document.getElementById('footer');
+  if (footer) {
+    if (Reveal.isFirstSlide()) {
+      footer.className = footer.className.replace('show', 'hide');
+    } else {
+      footer.className = footer.className.replace('hide', 'show');
+    }
+  }
+}
+setFooterVisibility();
+Reveal.addEventListener('slidechanged', function(event) { setFooterVisibility(); });
+

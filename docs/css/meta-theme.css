@@ -1,0 +1,15 @@
+.footer {
+  transition: all 500ms;
+}
+
+.footer.hide {
+  transform: translateY(100px);
+}
+
+.footer .logo-conference {
+  background-color: transparent;
+  height: 50px;
+  margin: 10px;
+  padding: 0;
+}
+

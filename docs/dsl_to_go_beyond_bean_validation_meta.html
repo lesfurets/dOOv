@@ -2,14 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>DSL.using(java).toGoBeyond(BeanValidation).at(JDK.IO);</title>
+    <title>DSL.using(java).toGoBeyond(BeanValidation).at(META.UK);</title>
     <meta name="description" content="Fluent, stream-like API's are great for writing type checked code, taking advantage of Java 8 functions and lambdas. Perhaps the best example of such project is jOOQ, which creates a fluent Java DSL for SQL. But what about creating your own DSL to manipulate and validate your model? We created an open-source framework for generating validation DSLs from a domain model. This presentation will demonstrate the efficiency and expressiveness of this framework to define validation constraints. We will refactor complex legacy business rules during a live code session.">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
     <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
-    <link rel="stylesheet" href="css/jdkio-theme.css" id="theme">
+    <link rel="stylesheet" href="css/dsl-theme.css" id="theme">
+    <link rel="stylesheet" href="css/meta-theme.css" id="theme">
     <script>
 if( window.location.search.match( /print-pdf/gi ) ) {
   var link = document.createElement( 'link' );
@@ -21,22 +22,25 @@ if( window.location.search.match( /print-pdf/gi ) ) {
     </script>
   </head>
   <body>
-    <div class="footer">
+    <div id="footer" class="footer show">
       <img class="logo-lesfurets" src="png/logo_lesfurets_blanc.png">
       <img class="logo-lesfurets" src="png/doov_io_logo_dark_small.png">
-      <img class="logo-conference" src="png/logo_jdk_io.png">
+      <img class="logo-conference" src="png/bgl.png">
+      <img class="logo-conference" src="png/meta.png">
     </div>
     <div class="reveal">
       <div class="slides">
+
+        <section data-background="png/meta-front-page.png">
+        </section>
 
         <section>
           <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
           <div class="container-grid-2">
             <h1 class="code">DSL.using(java)<br>
               &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
-              &nbsp;&nbsp;&nbsp;.at(JDK.IO);</h1>
-            <p align="right"><img class="logo herve-francois" src="png/doov_io_logo_clear_small.png" width="30%"></p>
-        </div>
+              &nbsp;&nbsp;&nbsp;.at(META.UK);</h1>
+          </div>
         </section>
 
         <section>
