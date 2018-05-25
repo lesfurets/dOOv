@@ -15,6 +15,8 @@
  */
 package io.doov.sample.model;
 
+import static io.doov.sample.field.SampleComputedField.sha256;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -38,6 +40,7 @@ public class SampleModels {
         account.setCreationDate(LocalDate.of(2017, 1, 1));
         account.setAcceptEmail(true);
         account.setEmail("foo@bar.com");
+        account.setEmailHash(sha256("foo@bar.com"));
         account.setEmailTypes(EnumSet.of(EmailType.ADMINISTRATOR, EmailType.PRIVATE));
         account.setLanguage(Language.FR);
         account.setCountry(Country.FR);
