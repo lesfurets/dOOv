@@ -3,18 +3,14 @@
  */
 package io.doov.core.dsl.runtime;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.stream.Stream;
 
-import io.doov.core.FieldId;
-import io.doov.core.FieldInfo;
-import io.doov.core.FieldModel;
+import io.doov.core.*;
 import io.doov.core.serial.TypeAdapterRegistry;
 import io.doov.core.serial.TypeAdapters;
+import io.doov.core.virtual.VirtualFieldRegistry;
+import io.doov.core.virtual.VirtualFields;
 
 /**
  * Runtime implementation of {@link FieldModel}
@@ -135,4 +131,8 @@ public class RuntimeModel<M> implements FieldModel {
         return TypeAdapters.INSTANCE;
     }
 
+    @Override
+    public VirtualFieldRegistry getVirtualFieldRegistry() {
+        return VirtualFields.INSTANCE;
+    }
 }

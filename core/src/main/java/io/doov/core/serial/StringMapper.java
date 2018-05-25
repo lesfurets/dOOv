@@ -5,6 +5,7 @@ package io.doov.core.serial;
 
 import io.doov.core.FieldId;
 import io.doov.core.FieldInfo;
+import io.doov.core.virtual.VirtualFieldRegistry;
 
 /**
  * Bi-directional mapping to String representation for serialization
@@ -17,6 +18,13 @@ public interface StringMapper {
      * @return the type adapter registry
      */
     TypeAdapterRegistry getTypeAdapterRegistry();
+
+    /**
+     * Returns the registry for VirtualFields
+     *
+     * @return the virtual field registry
+     */
+    VirtualFieldRegistry getVirtualFieldRegistry();
 
     /**
      * Gets the field value as String

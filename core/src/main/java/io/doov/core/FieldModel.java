@@ -15,6 +15,7 @@ package io.doov.core;
 import static java.util.stream.Collectors.toList;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import io.doov.core.dsl.DslModel;
@@ -24,7 +25,7 @@ import io.doov.core.serial.TypeAdapter;
 /**
  * An model that maps {@code FieldId} to values. Each {@code FieldId} can map to at most one value.
  */
-public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslModel, StringMapper {
+public interface FieldModel extends Iterable<Entry<FieldId, Object>>, DslModel, StringMapper {
 
     /**
      * Returns the {@code FieldId} value from the {@code FieldId} to read
@@ -51,17 +52,17 @@ public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslMod
      *
      * @return the stream
      */
-    Stream<Map.Entry<FieldId, Object>> stream();
+    Stream<Entry<FieldId, Object>> stream();
 
     @Override
-    Spliterator<Map.Entry<FieldId, Object>> spliterator();
+    Spliterator<Entry<FieldId, Object>> spliterator();
 
     /**
      * Returns a parallel {@code Stream} with all key-value pairs
      *
      * @return the parallel stream
      */
-    Stream<Map.Entry<FieldId, Object>> parallelStream();
+    Stream<Entry<FieldId, Object>> parallelStream();
 
     /**
      * Returns all the {@code FieldInfo} for this model
@@ -85,15 +86,18 @@ public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslMod
      * @param source the source content
      */
     default void setAll(FieldModel source) {
-        getFieldInfos().stream().filter(info -> source.get(info.id()) != null)
-                        .forEach(info -> set(info.id(), source.get(info.id())));
+        getFieldInfos().stream()
+                .filter(info -> source.get(info.id()) != null)
+                .forEach(info -> set(info.id(), source.get(info.id())));
     }
 
     /**
      * Clears all the {@code FieldId} by setting their value to <code>null</code>
      */
     default void clear() {
-        getFieldInfos().stream().filter(info -> get(info.id()) != null).forEach(info -> set(info.id(), null));
+        getFieldInfos().stream()
+                .filter(info -> get(info.id()) != null)
+                .forEach(info -> set(info.id(), null));
     }
 
     /**
@@ -103,8 +107,9 @@ public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslMod
      * @param tag the tag id
      */
     default void clear(TagId tag) {
-        getFieldInfos().stream().filter(info -> info.id().hasTag(tag) && get(info.id()) != null)
-                        .forEach(info -> set(info.id(), null));
+        getFieldInfos().stream()
+                .filter(info -> info.id().hasTag(tag) && get(info.id()) != null)
+                .forEach(info -> set(info.id(), null));
     }
 
     /**
@@ -117,7 +122,6 @@ public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslMod
         return getFieldInfos().stream().filter(info -> info.id() == id).findFirst().orElse(null);
     }
 
-
     @Override
     default String getAsString(FieldId fieldId) {
         Object value = get(fieldId);
@@ -125,10 +129,10 @@ public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslMod
             return null;
         }
         return getTypeAdapterRegistry().stream()
-                        .filter(a -> a.accept(value))
-                        .findFirst()
-                        .map(a -> a.toString(value))
-                        .orElse(null);
+                .filter(a -> a.accept(value))
+                .findFirst()
+                .map(a -> a.toString(value))
+                .orElse(null);
     }
 
     @Override
@@ -152,10 +156,18 @@ public interface FieldModel extends Iterable<Map.Entry<FieldId, Object>>, DslMod
             TypeAdapter typeAdapter = getTypeAdapterRegistry().stream()
                     .filter(a -> a.accept(fieldInfo))
                     .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("cannot set field "
-                            + fieldInfo.id() + " with value " + value));
+                    .orElseThrow(() -> new IllegalStateException("cannot set field " + fieldInfo.id()
+                            + " with value " + value));
             set(fieldInfo.id(), typeAdapter.fromString(fieldInfo, value));
         }
     }
 
+    default void setVirtualField(FieldId fieldId, Object value) {
+        getVirtualFieldRegistry()
+                .stream()
+                .filter(derived -> derived.getPredicate().test(fieldId))
+                .forEach(derived -> set(
+                        derived.getKeyFunction().apply(fieldId),
+                        derived.getValueFunction().apply(value)));
+    }
 }

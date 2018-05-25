@@ -59,6 +59,7 @@
               <sourceClass>io.doov.sample.model.SampleModel</sourceClass>
               <baseClass>io.doov.sample.field.SampleBase</baseClass>
               <fieldInfoTypes>io.doov.sample.field.FieldTypes</fieldInfoTypes>
+              <virtualFields>io.doov.sample.field.SampleVirtualField</virtualFields>
             </configuration>
           </execution>
           <execution>

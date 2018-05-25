@@ -17,9 +17,11 @@ import io.doov.core.FieldId;
 import io.doov.core.FieldInfo;
 import io.doov.core.FieldModels;
 import io.doov.core.serial.TypeAdapterRegistry;
+import io.doov.core.virtual.VirtualFieldRegistry;
 
 import ${process.class};
 import ${type.adapter.class.package};
+import ${virtual.field.class.package};
 import ${process.base.class.package};
 import ${target.field.info.package.name}.${target.field.info.class.name};
 
@@ -27,6 +29,8 @@ import ${target.field.info.package.name}.${target.field.info.class.name};
 public final class ${target.class.name} extends ${process.base.class.name} {
 
     private static TypeAdapterRegistry TYPE_ADAPTER_REGISTRY = new ${type.adapter.class.name}();
+
+    private static VirtualFieldRegistry VIRTUAL_FIELD_REGISTRY = new ${virtual.field.class.name}();
 
     public static Collector<Entry<FieldId, Object>, ?, ${target.class.name}> toFieldModel() {
         return FieldModels.<${target.class.name}> toFieldModel(new ${target.class.name}());
@@ -43,6 +47,11 @@ ${constructors}
     @Override
     public TypeAdapterRegistry getTypeAdapterRegistry() {
         return TYPE_ADAPTER_REGISTRY;
+    }
+
+    @Override
+    public VirtualFieldRegistry getVirtualFieldRegistry() {
+        return VIRTUAL_FIELD_REGISTRY;
     }
 
     @Override
@@ -91,7 +100,8 @@ ${map.getter}
 
     @Override
     public <T> void set(FieldId fieldId, T value) {
-${map.setter.if}    }
+${map.setter.if}        setVirtualField(fieldId, value);
+    }
 
 ${map.setter}
 

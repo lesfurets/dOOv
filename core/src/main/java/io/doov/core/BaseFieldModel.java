@@ -21,6 +21,8 @@ import java.util.stream.Stream;
 
 import io.doov.core.serial.TypeAdapterRegistry;
 import io.doov.core.serial.TypeAdapters;
+import io.doov.core.virtual.VirtualFieldRegistry;
+import io.doov.core.virtual.VirtualFields;
 
 /**
  * {@code FieldModel} implementation based on {@code java.util.Map}
@@ -28,17 +30,30 @@ import io.doov.core.serial.TypeAdapters;
 public class BaseFieldModel implements FieldModel {
 
     private static TypeAdapterRegistry TYPE_ADAPTER_REGISTRY = new TypeAdapters();
+    private static VirtualFieldRegistry DERIVED_FIELD_REGISTRY = new VirtualFields();
 
     protected Map<FieldId, Object> values;
     protected List<FieldInfo> fieldInfos;
+    private VirtualFieldRegistry virtualFieldRegistry;
 
     public BaseFieldModel(List<FieldInfo> fieldInfos) {
-        this(new HashMap<>(), fieldInfos);
+        this(new HashMap<>(), fieldInfos, DERIVED_FIELD_REGISTRY);
+    }
+
+    public BaseFieldModel(List<FieldInfo> fieldInfos, VirtualFieldRegistry virtualFieldRegistry) {
+        this(new HashMap<>(), fieldInfos, virtualFieldRegistry);
     }
 
     public BaseFieldModel(Map<FieldId, Object> values, List<FieldInfo> fieldInfos) {
+        this(values, fieldInfos, DERIVED_FIELD_REGISTRY);
+    }
+
+    private BaseFieldModel(Map<FieldId, Object> values,
+            List<FieldInfo> fieldInfos,
+            VirtualFieldRegistry virtualFieldRegistry) {
         this.values = values;
         this.fieldInfos = fieldInfos;
+        this.virtualFieldRegistry = virtualFieldRegistry;
     }
 
     public BaseFieldModel(FieldModel fieldModel) {
@@ -61,6 +76,11 @@ public class BaseFieldModel implements FieldModel {
     }
 
     @Override
+    public VirtualFieldRegistry getVirtualFieldRegistry() {
+        return virtualFieldRegistry;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T get(FieldId fieldId) {
         return (T) values.get(fieldId);
@@ -69,14 +89,20 @@ public class BaseFieldModel implements FieldModel {
     @Override
     public void set(FieldId fieldId, Object value) {
         values.put(fieldId, value);
+
         Arrays.stream(siblingsOf(fieldId)).forEach(s -> values.put(s, value));
+
+        setVirtualField(fieldId, value);
     }
 
     private static final FieldId[] NO_SIBLINGS = new FieldId[] {};
 
     private FieldId[] siblingsOf(FieldId fieldId) {
-        Optional<FieldInfo> sublings = fieldInfos.stream().filter(info -> info.id() == fieldId).findFirst();
-        return sublings.isPresent() ? sublings.get().siblings() : NO_SIBLINGS;
+        return fieldInfos.stream()
+                .filter(info -> info.id() == fieldId)
+                .findFirst()
+                .map(FieldInfo::siblings)
+                .orElse(NO_SIBLINGS);
     }
 
     @Override
