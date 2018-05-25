@@ -53,19 +53,19 @@ import io.doov.core.dsl.path.FieldPath;
 import io.doov.core.dsl.path.FieldPathProvider;
 import io.doov.core.serial.TypeAdapterRegistry;
 import io.doov.core.serial.TypeAdapters;
+import io.doov.core.computed.ComputedFieldRegistry;
+import io.doov.core.computed.ComputedFields;
 import io.doov.gen.processor.MacroProcessor;
 import io.doov.gen.processor.Templates;
 import io.doov.gen.utils.ClassLoaderUtils;
 import io.doov.gen.utils.ClassUtils;
 
-@Mojo(name = "generate", defaultPhase = GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE, requiresDependencyCollection = ResolutionScope.COMPILE, threadSafe = true)
+@Mojo(name = "generate", defaultPhase = GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE,
+        requiresDependencyCollection = ResolutionScope.COMPILE, threadSafe = true)
 public final class ModelMapGenMojo extends AbstractMojo {
 
     @Parameter(required = true, defaultValue = "${basedir}/src/generated/java")
     private File outputDirectory;
-
-    @Parameter(required = true, property = "project.build.outputDirectory")
-    private File buildDirectory;
 
     @Parameter(required = true, defaultValue = "${basedir}/target")
     private File outputResourceDirectory;
@@ -90,6 +90,9 @@ public final class ModelMapGenMojo extends AbstractMojo {
 
     @Parameter
     private String typeAdapters;
+
+    @Parameter
+    private String computedFields;
 
     @Parameter(defaultValue = "true")
     private boolean enumFieldInfo;
@@ -136,7 +139,7 @@ public final class ModelMapGenMojo extends AbstractMojo {
         try {
             List<FieldPath> fieldPaths = fieldPathProvider != null
                     ? loadClassWithType(this.fieldPathProvider, FieldPathProvider.class, null, classLoader)
-                            .newInstance().values()
+                    .newInstance().values()
                     : Collections.emptyList();
             Class<?> modelClazz = Class.forName(sourceClass, true, classLoader);
             Class<? extends FieldId> fieldClazz = loadClassWithType(fieldClass, FieldId.class, null, classLoader);
@@ -144,35 +147,39 @@ public final class ModelMapGenMojo extends AbstractMojo {
                     AbstractWrapper.class, AbstractWrapper.class, classLoader);
             Class<? extends TypeAdapterRegistry> typeAdapterClazz = loadClassWithType(typeAdapters,
                     TypeAdapterRegistry.class, TypeAdapters.class, classLoader);
+            Class<? extends ComputedFieldRegistry> computedFieldClazz = loadClassWithType(computedFields,
+                    ComputedFieldRegistry.class, ComputedFields.class, classLoader);
             FieldTypeProvider typeProvider = loadClassWithType(fieldInfoTypes,
                     FieldTypeProvider.class, FieldTypes.class, classLoader).newInstance();
-            generateModels(fieldClazz, modelClazz, baseClazz, typeAdapterClazz, typeProvider, fieldPaths);
+            generateModels(fieldClazz, modelClazz, baseClazz, typeAdapterClazz, computedFieldClazz, typeProvider,
+                    fieldPaths);
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
 
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Class<? extends T> loadClassWithType(String className,
             Class<T> type,
             Class<? extends T> defaultClass,
             URLClassLoader classLoader)
             throws MojoExecutionException, ClassNotFoundException {
-        Class<? extends T> classToLoad = defaultClass;
         if (className != null) {
             Class<?> loadedClass = Class.forName(className, true, classLoader);
             if (!type.isAssignableFrom(loadedClass)) {
                 throw new MojoExecutionException("Class " + loadedClass + " does not implement " + type.getName());
             }
-            classToLoad = (Class<? extends T>) loadedClass;
+            return (Class<? extends T>) loadedClass;
         }
-        return classToLoad;
+        return defaultClass;
     }
 
     private void generateModels(Class<? extends FieldId> fieldClazz,
             Class<?> modelClazz,
             Class<? extends FieldModel> baseClazz,
             Class<? extends TypeAdapterRegistry> typeAdapterClazz,
+            Class<? extends ComputedFieldRegistry> computedFieldClazz,
             FieldTypeProvider typeProvider,
             List<FieldPath> fieldPaths) {
         try {
@@ -186,7 +193,7 @@ public final class ModelMapGenMojo extends AbstractMojo {
             final Map<FieldId, GeneratorFieldInfo> fieldInfoMap = createFieldInfos(fieldPathMap);
             Runnable generateCsv = () -> generateCsv(fieldPathMap, modelClazz);
             Runnable generateWrapper = () -> generateWrapper(fieldPathMap, modelClazz, fieldClazz, baseClazz,
-                    typeAdapterClazz);
+                    typeAdapterClazz, computedFieldClazz);
             Runnable generateFieldInfo = () -> generateFieldInfo(fieldInfoMap, fieldClazz);
             Runnable generateDslFields = () -> generateDslFields(fieldInfoMap, modelClazz, fieldClazz, typeProvider);
             asList(generateWrapper, generateCsv, generateFieldInfo, generateDslFields).parallelStream()
@@ -203,7 +210,10 @@ public final class ModelMapGenMojo extends AbstractMojo {
         List<Method> methods = new ArrayList<>(path.values());
         // Last class of the path is the container of the field
         Class<?> containerClass = classes.get(classes.size() - 1);
+
+        @SuppressWarnings("unchecked")
         Method readMethod = ClassUtils.getReferencedMethod(containerClass, p.getReadMethod());
+        @SuppressWarnings("unchecked")
         Method writeMethod = ClassUtils.getReferencedMethod(containerClass, p.getWriteMethod());
         Map<String, String> cannonicalReplacement = new HashMap<>();
         PathConstraint constraint = p.getConstraint();
@@ -305,7 +315,8 @@ public final class ModelMapGenMojo extends AbstractMojo {
             Class<?> modelClass,
             Class<?> fieldClass,
             Class<? extends FieldModel> baseClazz,
-            Class<? extends TypeAdapterRegistry> typeAdapterClazz) throws RuntimeException {
+            Class<? extends TypeAdapterRegistry> typeAdapterClazz,
+            Class<? extends ComputedFieldRegistry> computedFieldClazz) throws RuntimeException {
         try {
             final String targetClassName = modelClass.getSimpleName() + "Wrapper";
             final String targetFieldInfoPackage = fieldInfoPackage(fieldClass);
@@ -323,6 +334,8 @@ public final class ModelMapGenMojo extends AbstractMojo {
             conf.put("process.date", ofLocalizedDateTime(SHORT).format(now()));
             conf.put("type.adapter.class.package", typeAdapterClazz.getCanonicalName());
             conf.put("type.adapter.class.name", typeAdapterClazz.getSimpleName());
+            conf.put("computed.field.class.package", computedFieldClazz.getCanonicalName());
+            conf.put("computed.field.class.name", computedFieldClazz.getSimpleName());
             conf.put("constructors", mapConstructors(targetClassName, baseClazz, modelClass));
             conf.put("target.model.class.name", modelClass.getSimpleName());
             conf.put("target.model.class.full.name", modelClass.getName());

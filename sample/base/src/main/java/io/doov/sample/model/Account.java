@@ -14,7 +14,6 @@ package io.doov.sample.model;
 
 import java.time.LocalDate;
 import java.util.*;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -50,6 +49,9 @@ public class Account extends Identity {
     @Size(max = 20)
     @SamplePath(field = SampleFieldId.EMAIL, readable = "account.email")
     private String email;
+
+    @SamplePath(field = SampleFieldId.EMAIL_HASH, readable = "account.email.hash")
+    private String emailHash;
 
     @SamplePath(field = SampleFieldId.EMAIL_ACCEPTED, readable = "account accept.email")
     private boolean acceptEmail;
@@ -150,6 +152,14 @@ public class Account extends Identity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmailHash() {
+        return emailHash;
+    }
+
+    public void setEmailHash(String emailHash) {
+        this.emailHash = emailHash;
     }
 
     public String getPhoneNumber() {
