@@ -3,7 +3,7 @@
  */
 package io.doov.core;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Base class for Wrapper implementation.
@@ -18,6 +18,11 @@ public abstract class AbstractWrapper<M> implements FieldModel {
     public AbstractWrapper(List<FieldInfo> fieldInfos, M model) {
         this.fieldInfos = fieldInfos;
         this.model = model;
+
+        // ensure all computed values are synchronized
+        this.fieldInfos.stream()
+                .map(FieldInfo::id)
+                .forEach(id -> computeField(id, get(id)));
     }
 
     public M getModel() {
