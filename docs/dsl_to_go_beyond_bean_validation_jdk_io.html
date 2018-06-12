@@ -263,11 +263,6 @@ class User {
                 </div>
               </div>
               <div class="column fragment">
-<!-- // Protected dOOv class -->
-<!-- class ModelFieldInfo { -->
-  <!-- FieldInfo <mark class="fragment">EMAIL</mark>; -->
-<!-- } -->
-<!--  -->
                 <p><strong>code generate</strong></p>
                 <div class="code-wrapper small">
                   <pre class="prettyprint">
@@ -275,11 +270,6 @@ class User {
 // dOOv typed field class
 class DslModel {
   StringFieldInfo <mark class="fragment true-predicate">userEmail</mark>;
-}
-
-// dOOv typed rule
-class ModelRule {
-  Result executeOn(Model m);
 }
                     </code>
                   </pre>
@@ -293,15 +283,12 @@ class ModelRule {
 // Create rules by using
 // generated fields
 // in DslModel
-class Validations {
-  ModelRule email = DslModel
-    .when(<mark class="fragment true-predicate">userEmail</mark>.eq(...))
-    .validate()
-
-    // Optionaly add rules
-    // to a registry
-    .registerOn(DEFAULT);
-}
+DslModel
+  .when(<mark class="fragment true-predicate">userEmail</mark>.eq(...))
+  .validate()
+  // Optionaly add rules
+  // to a registry
+  .registerOn(DEFAULT);
                     </code>
                   </pre>
                 </div>
@@ -333,8 +320,10 @@ model.setUser(user);
                 <div class="code-wrapper small">
                   <pre class="prettyprint">
                     <code class="code lang-java">
-// Directly reference rule email
-Validations.email.executeOn(<mark class="fragment">model</mark>);
+// Use executeOn method
+DslModel.when(email.matches(...))
+        .validate()
+        .executeOn(<mark class="fragment">model</mark>);
 
 // Or use the registry
 DEFAULT.stream()
@@ -935,7 +924,18 @@ userAboutMe().length().between(10, 200).validate().readable()
           </section>
 
           <section>
-            <h2>Roadmap</h2>
+            <h2>dOOv 2.0.0 is out!</h2>
+            <ul>
+            <li><strong>Gradle</strong> code generation support</li>
+            <li><strong>Better</strong> failure causes</li>
+            <li><strong>New</strong> operators for some types</li>
+            <li><strong>Improved</strong> documentation (javadoc and wiki)</li>
+            <li><strong>dOOm</strong> beta support</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>What is dOOm?</h2>
             <p>Next step is extending the DSL to create an <strong>object to object mapping framework</strong>, Domain Object Oriented Mapping (<strong>dOOm</strong>). It will feature the same AST to text and statistics functionnalities.</p>
             <div class="code-wrapper">
               <pre class="prettyprint">
@@ -958,7 +958,8 @@ DOOV.map(userEmail().to(insurerEmail())
             <p><a href="http://www.dOOv.io">http://www.dOOv.io</a></p>
             <ul>
               <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework and examples)</li>
-              <li><a href="https://repo1.maven.org/maven2/io/doov">https://repo1.maven.org/maven2/io/doov</a> (maven central: <strong>1.3.0</strong>)</li>
+              <li><a href="https://repo1.maven.org/maven2/io/doov">https://repo1.maven.org/maven2/io/doov</a> (maven central: <strong>2.0.0</strong>)</li>
+              <li><a href="http://github.com/lesfurets/dOOv#conferences">http://github.com/lesfurets/dOOv#conferences</a> (slides)</li>
               <li>Apache Licence</li>
               <li>Try and contribute!</li>
             </ul>
