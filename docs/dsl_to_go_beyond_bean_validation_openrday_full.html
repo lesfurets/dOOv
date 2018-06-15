@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DSL.using(java).toGoBeyond(BeanValidation).at(OpenRd.day);</title>
+    <meta name="description" content="Fluent, stream-like API's are great for writing type checked code, taking advantage of Java 8 functions and lambdas. Perhaps the best example of such project is jOOQ, which creates a fluent Java DSL for SQL. But what about creating your own DSL to manipulate and validate your model? We created an open-source framework for generating validation DSLs from a domain model. This presentation will demonstrate the efficiency and expressiveness of this framework to define validation constraints. We will refactor complex legacy business rules during a live code session.">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/openrday-theme.css" id="theme">
+    <script>
+if( window.location.search.match( /print-pdf/gi ) ) {
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = 'css/print/pdf.css';
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+}
+    </script>
+  </head>
+  <body>
+    <div class="footer">
+      <img class="logo-lesfurets" src="png/logo_lesfurets_blanc.png">
+      <img class="logo-lesfurets" src="png/doov_io_logo_dark_small.png">
+      <img class="logo-conference" src="png/logo-openrday.png">
+    </div>
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
+          <div class="container-grid-2">
+            <h1 class="code">DSL.using(java)<br>
+              &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)<br>
+              &nbsp;&nbsp;&nbsp;.at(OpenRd.day);</h1>
+          </div>
+        </section>
+
+        <section>
+          <section>
+            <h2>Welcome to the Furets!</h2>
+          </section>
+          <section>
+            <div class="">
+              <h2>@dubreuia – Alexandre Dubreuil</h2>
+              <ul>
+                <li>French canadian working in Paris since 2009</li>
+                <li>Software Architect at LesFurets.com</li>
+              </ul>
+            </div>
+            <br><br>
+            <div class="">
+              <h2>@gdigugli – Gilles Di Guglielmo</h2>
+              <ul>
+                <li>Designer of sweet cooked software since 1999</li>
+                <li>Software Architect at LesFurets.com</li>
+              </ul>
+            </div>
+          </section>
+          <section>
+            <img src="png/doov_meme.png">
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Introduction</h2>
+          </section>
+
+          <section data-transition="fade">
+            <h2>LesFurets service orchestration</h2>
+            <img width="80%" src="png/lf_scatter_gather.jpg">
+          </section>
+
+          <section data-transition="fade-in slide-out">
+            <h2>LesFurets service orchestration</h2>
+            <img width="80%" src="png/lf_scatter_gather_doov.jpg">
+          </section>
+
+          <section>
+            <p>We have 71 live insurers, on 5 products, each with <strong>business validation rules</strong>, that filter prospects based on their profile</p>
+            <img width="75%" src="png/exclusion-list.png">
+            <p>Hierarchy of 492 legacy classes, no governance or auditability</p>
+          </section>
+
+          <section>
+            <h2>Use case: goal</h2>
+            <ul>
+            <li><strong>compliance</strong>: the rules correspond to the specification documents</li>
+            <li><strong>auditability</strong>: understand a rule without looking at the code</li>
+            <li><strong>governance</strong>: maintenance of the rules catalogue</li>
+            <li><strong>clarity</strong>: productivity for developers</li>
+            </ul>
+            <p>Rewrite everything with a fluent API</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public ExclusionRule exclusionRule() {
+    return DOOV.when(dateContrat().after(todayPlusDays(60)))
+               .exclusionRule();
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <h2>Meet dOOv!</h2>
+            <p><strong>D</strong>omain <strong>O</strong>bject <strong>O</strong>riented <strong>V</strong>alidation</p>
+            <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="40%">
+            <p>dOOv is a fluent API for typesafe domain model validation</p>
+          </section>
+
+          <section>
+            <h2>dOOv ecosystem</h2>
+            <img class="logo herve-francois" src="png/doov_ecosystem.svg" width="75%">
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Live code</h2>
+          </section>
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public static boolean validateAccount(User user,
+                Account account, Configuration config) {
+  if (config == null) {
+      return false;
+  }
+  if (user == null || user.getBirthDate() == null) {
+      return false;
+  }
+  if (account == null || account.getCountry() == null ||
+      account.getPhoneNumber() == null) {
+      return false;
+  }
+  if (YEARS.between(user.getBirthDate(), LocalDate.now()) >= 18
+          && account.getEmail().length() <= config.getMaxEmailSize()
+          && account.getCompany() == Company.LES_FURETS
+          && account.getPhoneNumber().startsWith("+33")) {
+      return true;
+  }
+  return false;
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public static SampleModel sample() {
+  User user = new User();
+  user.setId(1);
+  user.setFirstName("Foo");
+  user.setLastName("BAR");
+  // ...
+            
+  Account account = new Account();
+  account.setCompany(Company.LES_FURETS);
+  account.setId(9);
+  // ...
+                </code>
+              </pre>
+            </div>
+          </section>
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account extends Identity {
+
+  @SamplePath(field = SampleFieldId.LOGIN, readable = "account.login")
+  private String login;     
+  // ...
+
+  <mark>@SamplePath(field = SampleFieldId.COMPANY, readable = "account.company")</mark>
+  private Company company;
+  // ...
+                </code>
+              </pre>
+            </div>
+          </section>
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-xml output">
+SampleModelResourceBundle_en_US.properties
+
+account.login = account login
+account.password = account password
+account.country = account country
+<mark>account.company = account company</mark>
+...
+
+SampleModelResourceBundle_fr_FR.properties
+
+account.login = l'identifiant de connection
+account.country = le pays
+<mark>account.company = la soci\u00e9t\u00e9</mark>
+...
+
+                </code>
+              </pre>
+            </div>
+          </section>
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-xml output">
+> ./gradlew -p sample build
+
+BUILD SUCCESSFUL in 23s
+10 actionable tasks: 3 executed, 7 up-to-date
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+public class RulesOpenRndayTest {
+  SampleModelRule demoRule = DslSampleModel
+          .when(DOOV.matchAll(
+                  userBirthdate.ageAt(today()).greaterOrEquals(18),
+                  accountEmail.length().lesserOrEquals(configurationMaxEmailSize),
+                  accountCompany.eq(Company.LES_FURETS),
+                  accountPhoneNumber.startsWith("+33")))
+          .validate();
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account() {
+    SampleModel sample = SampleModels.sample();
+              
+    Result result = demoRule.executeOn(sample);
+              
+    Assertions.assertThat(result).isTrue();
+    System.out.println(demoRule.readable());
+    System.out.println(demoRule.markdown(Locale.FRANCE));
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-xml output">
+rule when match all [user birthdate age at today >= 18, //
+  account email length is <= configuration max email size, //
+  account company = LES_FURETS, account phone number starts with '+33'] validate
+* règle
+  * lorsque
+    * correspond à tous
+      * la date de naissance âge à la date du jour >= 18
+      * l'émail a une longueur <= la taille maximum de l'émail
+      * la société = LES_FURETS
+      * le numéro de téléphone commence par '+33'
+  * valider
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account_failure_cause() {
+    SampleModel sample = SampleModels.sample();
+    <mark>sample.getAccount().setPhoneNumber("+1 12 34 56 78");</mark>
+              
+    Result result = demoRule.executeOn(sample);
+              
+    Assertions.assertThat(result).isTrue();
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+
+
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-xml output">
+java.lang.AssertionError: Expected result to be true 
+  (invalidated nodes: [account phone number starts with '+33'])
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account_failure_cause() {
+    SampleModel sample = SampleModels.sample();
+    sample.getAccount().setPhoneNumber("+1 12 34 56 78");
+              
+    Result result = demoRule.executeOn(sample);
+              
+    Assertions.assertThat(result)
+            <mark>.isFalse()</mark>
+            <mark>.hasFailureCause("account phone number starts with '+33'");</mark>
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account_failure_cause_2() {
+    SampleModel sample = SampleModels.sample();
+    sample.getAccount().setPhoneNumber("+1 12 34 56 78");
+    sample.getAccount().setCompany(Company.BLABLACAR);
+              
+    <mark>Result result = demoRule.withShortCircuit(false).executeOn(sample);</mark>
+              
+    Assertions.assertThat(result)
+            .isFalse()
+            .hasFailureCause("match all [account company = LES_FURETS, " +
+                    "account phone number starts with '+33']");
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+
+          <section>
+            <img src="png/exclusions_maintenance_page.png" width="90%">
+          </section>
+
+          <section>
+            <img src="png/doov_bench_ui.png" width="90%">
+            <p>Visit our blog for details: <a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com</a></p>
+          </section>
+
+        </section>
+
+        <section>
+          <section>
+            <h2>Conclusion</h2>
+          </section>
+
+          <section>
+            <h2>dOOv 2.0.0 is out!</h2>
+            <ul>
+            <li><strong>Gradle</strong> code generation support</li>
+            <li><strong>Better</strong> failure causes</li>
+            <li><strong>New</strong> operators for some types</li>
+            <li><strong>Improved</strong> documentation (javadoc and wiki)</li>
+            <li><strong>dOOm</strong> beta support</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>What is dOOm?</h2>
+            <p>Next step is extending the DSL to create an <strong>object to object mapping framework</strong>, Domain Object Oriented Mapping (<strong>dOOm</strong>). It will feature the same AST to text and statistics functionnalities.</p>
+            <div class="code-wrapper">
+              <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.map(userEmail().to(insurerEmail())
+    .map(userFirstName(), userLastName())
+      .using(StringJoiner)
+      .to(insurerFullName())
+    .when(userCountry().eq(FR))
+      .map(userPhone().to(insurerPhone()))
+                </code>
+              </pre>
+            </div>
+            <p>Stay tuned for the next versions!</p>
+          </section>
+
+          <section>
+            <h2>Enjoy dOOv.io</h2>
+            <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="33%">
+            <p><a href="http://www.dOOv.io">http://www.dOOv.io</a></p>
+            <ul>
+              <li><a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework and examples)</li>
+              <li><a href="https://repo1.maven.org/maven2/io/doov">https://repo1.maven.org/maven2/io/doov</a> (maven central: <strong>2.0.0</strong>)</li>
+              <li><a href="http://github.com/lesfurets/dOOv#conferences">http://github.com/lesfurets/dOOv#conferences</a> (slides)</li>
+              <li>Apache Licence</li>
+              <li>Try and contribute!</li>
+            </ul>
+          </section>
+
+        </section>
+
+        </section>
+
+            </div>
+            </div>
+            <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+            <script src="bower_components/reveal.js/js/reveal.js"></script>
+            <script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+  controls: false,
+  progress: true,
+  history: true,
+  center: true,
+  embedded: true,
+  mouseWheel: true,
+  viewDistance: 5,
+
+  width: 1280,
+  height: 900,
+  margin: 0,
+
+  transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+  { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+  { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  //{ src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+  { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});
+
+// navigation with mouse click
+
+window.addEventListener("mousedown", handleClick, false);
+window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+
+function handleClick(e) {
+  e.preventDefault();
+  if(e.button === 0) Reveal.next();
+  if(e.button === 2) Reveal.prev();
+}
+
+            </script>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+            <script src="js/doov.js"></script>
+            <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert&amp;callback=doov"></script>
+  </body>
+</html>
