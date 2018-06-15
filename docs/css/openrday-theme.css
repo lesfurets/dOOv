@@ -486,3 +486,36 @@ code.output span.pln,
 code.output span.pun {
   color: black !important;
 }
+
+@media print {
+  .reveal code {
+    background-color: white;
+  }
+  pre mark .pln,
+  code mark .pln,
+  pre mark .typ,
+  code mark .typ,
+  pre mark .pun,
+  code mark .pun {
+    color: black;
+  }
+
+  pre .pln.doov {
+    font-weight: bold;
+    color: black;
+  }
+
+  pre .pln.operator {
+    font-weight: bold;
+    color: black;
+  }
+
+  code.output {
+    background-color: white;
+  }
+
+  code.output span.pln,
+  code.output span.pun {
+    color: black;
+  }
+}
