@@ -376,10 +376,10 @@ body {
 }
 
 .footer .logo-conference {
-  height: 30px;
+  height: 40px;
   margin: 10px;
   float: right;
-  padding: 10px;
+  padding: 5px;
 }
 
 .footer a {
