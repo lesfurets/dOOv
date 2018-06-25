@@ -207,35 +207,6 @@ public static SampleModel sample() {
               </pre>
           </div>
         </section>
-        <section>
-          <div class="code-wrapper">
-            <pre class="prettyprint">
-                <code class="code lang-java">
-public class Account extends Identity {
-
-  @SamplePath(field = SampleFieldId.LOGIN, readable = "account.login")
-  private String login;     
-  // ...
-
-  <mark>@SamplePath(field = SampleFieldId.COMPANY)</mark>
-  private Company company;
-  // ...
-                </code>
-              </pre>
-          </div>
-        </section>
-        <section>
-          <div class="code-wrapper">
-            <pre class="prettyprint">
-                <code class="code lang-xml output">
-> <mark>./gradlew -p sample build</mark>
-
-BUILD SUCCESSFUL in 23s
-10 actionable tasks: 3 executed, 7 up-to-date
-                </code>
-              </pre>
-          </div>
-        </section>
 
         <section>
           <div class="code-wrapper">
@@ -349,6 +320,7 @@ CREATE TABLE meetup.sample_model (
           </div>
         </section>
 
+
         <section>
           <div class="code-wrapper">
             <pre class="prettyprint">
@@ -378,6 +350,53 @@ d102c880-7736-11e8-ac36-478151704385 | foobar |          9 | 41 rue Thiers | 198
 (1 rows)
               </code>
             </pre>
+          </div>
+        </section>
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account extends Identity {
+
+  @SamplePath(field = SampleFieldId.LOGIN, readable = "account.login")
+  private String login;     
+  // ...
+
+  <mark>@SamplePath(field = SampleFieldId.COMPANY)</mark>
+  private Company company;
+  // ...
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+> <mark>./gradlew -p sample build</mark>
+
+BUILD SUCCESSFUL in 23s
+10 actionable tasks: 3 executed, 7 up-to-date
+                </code>
+              </pre>
+          </div>
+        </section>
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang_java">
+FieldModel model = SampleModels.wrapper();
+model.getFieldInfos().stream().filter(f -> {
+    ColumnMetadata column = session.getCluster().getMetadata()
+            .getKeyspace("meetup").getTable("sample_model")
+            .getColumn(f.id().code());
+    return column == null;
+}).forEach(f -> session.execute(SchemaBuilder.alterTable("meetup", "sample_model")
+        .addColumn(f.id().code()).type(cqlType(f))));
+                </code>
+              </pre>
           </div>
         </section>
 
