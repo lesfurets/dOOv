@@ -25,7 +25,6 @@ public class RulesOpenRndayTest {
                     .when(DOOV.matchAll(
                                     userBirthdate.ageAt(today()).greaterOrEquals(18),
                                     accountEmail.length().lesserOrEquals(configurationMaxEmailSize),
-                                    accountCompany.eq(Company.LES_FURETS),
                                     accountPhoneNumber.startsWith("+33")))
                     .validate();
 
@@ -60,7 +59,6 @@ public class RulesOpenRndayTest {
     @Disabled
     public void test_account_failure_cause_2() {
         sample.getAccount().setPhoneNumber("+1 12 34 56 78");
-        sample.getAccount().setCompany(Company.BLABLACAR);
 
         Result result = demoRule.withShortCircuit(false).executeOn(sample);
 

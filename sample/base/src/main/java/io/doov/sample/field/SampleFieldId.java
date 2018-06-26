@@ -38,7 +38,6 @@ public enum SampleFieldId implements SampleField {
     LANGUAGE(ACCOUNT),
     TIMEZONE(ACCOUNT),
     COUNTRY(ACCOUNT),
-    COMPANY(ACCOUNT),
 
     PHONE_NUMBER(ACCOUNT),
     EMAIL_ACCEPTED(ACCOUNT),
