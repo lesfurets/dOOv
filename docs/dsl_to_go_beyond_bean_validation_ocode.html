@@ -1,0 +1,1369 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>DSL.using(java).toGoBeyond(BeanValidation).at(OracleCode);</title>
+  <meta name="description" content="Fluent, stream-like API's are great for writing type checked code, taking advantage of Java 8 functions and lambdas. Perhaps the best example of such project is jOOQ, which creates a fluent Java DSL for SQL. But what about creating your own DSL to manipulate and validate your model? We created an open-source framework for generating validation DSLs from a domain model. This presentation will demonstrate the efficiency and expressiveness of this framework to define validation constraints. We will refactor complex legacy business rules during a live code session.">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css">
+  <link rel="stylesheet" href="css/ocode-theme.css" id="theme">
+  <script>
+    if (window.location.search.match(/print-pdf/gi)) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = 'css/print/pdf.css';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+  </script>
+</head>
+
+<body>
+  <div class="footer">
+    <img class="logo-lesfurets" src="png/logo_lesfurets_blanc.png">
+    <img class="logo-lesfurets" src="png/doov_io_logo_clear_small.png">
+    <img class="logo-conference" src="png/logo-ocode.png">
+  </div>
+  <div class="reveal">
+    <div class="slides">
+
+      <section>
+        <img class="logo herve-francois" width="45%" src="png/lf_com_herve_francois.png">
+        <div class="container-grid-2">
+          <h1 class="code">DSL.using(java)
+            <br> &nbsp;&nbsp;&nbsp;.toGoBeyond(BeanValidation)
+            <br> &nbsp;&nbsp;&nbsp;.at(OracleCode);
+          </h1>
+        </div>
+      </section>
+
+      <section>
+        <section>
+          <h2>Welcome to the Furets!</h2>
+        </section>
+        <section>
+          <div class="">
+            <h2>@ogunalp – Ozan Gunalp</h2>
+            <ul>
+              <li>PhD in Computer Science, Jenkins Pipeline Unit author</li>
+              <li>Software Architect at LesFurets.com</li>
+            </ul>
+          </div>
+          <br>
+          <br>
+          <div class="">
+            <h2>@gdigugli – Gilles Di Guglielmo</h2>
+            <ul>
+              <li>Designer of sweet cooked software since 1999</li>
+              <li>Software Architect at LesFurets.com</li>
+            </ul>
+          </div>
+        </section>
+        <section>
+          <img width="50%" src="png/logo_lesfurets.png">
+          <p></p>
+          <ul class="">
+            <li>1 website, 5 Insurance Products : Car, Health, Home, Bike, Loan</li>
+            <li class="emptyline">1 codebase, 450k lines of code, 60k unit tests, 150 selenium tests</li>
+
+            <li>22 Developers, 2 DevOps, 4 Architects</li>
+            <li class="emptyline">19 production servers including Load balancers, Frontend, Backend, Databases, BI</li>
+
+            <li>1 release per day</li>
+            <li class="emptyline">9 years of code history
+              <br/>
+            </li>
+
+            <li>3M quotes/year, 40% of market share, 4M of customers</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Introduction</h2>
+        </section>
+
+        <section data-transition="slide-in fade-out">
+          <img width="66%" src="png/lf_car_journey.png">
+        </section>
+
+        <section data-transition="fade">
+          <img width="66%" src="png/lf_com_car_price_sheet.png">
+        </section>
+
+        <section data-transition="fade">
+          <h2>LesFurets service orchestration</h2>
+          <img width="80%" src="png/lf_scatter_gather.jpg">
+        </section>
+
+        <section data-transition="fade-in slide-out">
+          <h2>LesFurets service orchestration</h2>
+          <img width="80%" src="png/lf_scatter_gather_doov.jpg">
+        </section>
+
+        <section>
+          <h2>Insurers partners</h2>
+          <p>We have 71 live insurers, on 5 products, each with
+            <strong>business validation rules</strong>, that filter prospects based on their profile</p>
+        </section>
+
+        <section>
+          <h2>Insurer exclusions</h2>
+          <p>Hierarchy of 492 legacy classes, no governance or auditability</p>
+          <img width="80%" src="png/exclusion-list.png">
+        </section>
+
+        <section>
+          <h2>Use case: insurer exclusions</h2>
+          <p>Insurer exclusions based on object model (legacy code)</p>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public void check(FieldContext context, FormuleMoto formule, Conducteur conducteur,
+                  Vehicule vehicule, Void unused, Besoins besoins,
+                  Set&lt;EAbTestingScenario&gt; scenarios)
+                  throws ExclusionException {
+    if (besoins == null) {
+        return;
+    }
+    if (besoins.getDateDebutContrat() == null) {
+        return;
+    }
+    if (!DateHelper.isAfter(besoins.getDateDebutContrat(),
+                    DateHelper.ajouteJoursADate(DateHelper.getToday(), NBR_JOURS),
+                    DateHelper.EPrecision.jour)) {
+        throw new ExclusionException(DATE_EFFET_PLUS_60_JOURS);
+    }
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Use case: goal</h2>
+          <ul>
+            <li>
+              <strong>compliance</strong>: the rules correspond to the specification documents</li>
+            <li>
+              <strong>auditability</strong>: understand a rule without looking at the code</li>
+            <li>
+              <strong>governance</strong>: maintenance of the rules catalogue</li>
+            <li>
+              <strong>clarity</strong>: productivity for developers</li>
+          </ul>
+          <p>Same rule, more
+            <strong>fluent</strong>:</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public ExclusionRule exclusionRule() {
+    return DOOV.when(dateContrat().after(todayPlusDays(60)))
+               .exclusionRule();
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Why a fluent API?</h2>
+          <p>Java is verbose, but you can reduce the noise and write code like natural language with a fluent API</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+// JUnit API
+assertEquals(9, fellowshipOfTheRing.size());
+assertTrue(fellowshipOfTheRing.contains(frodo, sam));
+assertFalse(fellowshipOfTheRing.contains(sauron));
+
+// AssertJ API (fluent)
+assertThat(fellowshipOfTheRing).hasSize(9)
+                               .contains(frodo, sam)
+                               .doesNotContain(sauron);
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Fluent API</h2>
+          <p>New elements in Java 8 makes it easier to write a fluent API</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+// java.util.function (io.doov.core.dsl.impl.LogicalBinaryCondition)
+left.predicate().and(right.predicate()).test(model, context)
+
+// java.util.stream (io.doov.core.dsl.impl.LogicalNaryCondition)
+steps.stream().anyMatch(s -&gt; s.predicate().test(model, context))
+
+// lambda and method reference (io.doov.core.dsl.impl.NumericCondition)
+predicate(greaterThanMetadata(field, value),
+          (model, context) -&gt; Optional.ofNullable(value),
+          (l, r) -&gt; greaterThanFunction().apply(l, r));
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Fluent API</h2>
+          <p>Many popular libraries propose fluent APIs like
+            <br>
+            <strong>jOOQ</strong>,
+            <strong>AssertJ</strong>,
+            <strong>Apache Spark</strong>, etc.</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+Dataset&lt;Row&gt; averagePrice = prices
+        .filter(value.&lt;String&gt;getAs("insurer")
+                     .equals("COOL insurer"))
+        .groupBy("product")
+        .agg(avg("price").as("average"))
+        .orderBy(desc("average"));
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>DSL</h2>
+          <p>
+            <em>"A domain-specific language (DSL) is a computer language specialized to a particular application domain. This
+              is in contrast to a general-purpose language (GPL), which is broadly applicable across domains"</em>
+          </p>
+        </section>
+
+        <section>
+          <h2>Meet dOOv!</h2>
+          <p>
+            <strong>D</strong>omain
+            <strong>O</strong>bject
+            <strong>O</strong>riented
+            <strong>V</strong>alidation</p>
+          <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="40%">
+          <p>dOOv is a fluent API for typesafe domain model validation</p>
+        </section>
+
+        <section>
+          <h2>dOOv ecosystem</h2>
+          <img class="logo herve-francois" src="png/doov_ecosystem.svg" width="75%">
+        </section>
+
+        <section>
+          <h2>How to write a validation rule?</h2>
+          <div class="horizontal">
+            <div class="column">
+              <p>
+                <strong>key model</strong>
+              </p>
+              <div class="code-wrapper small">
+                <pre class="prettyprint">
+                    <code class="code lang-java">
+// Root class of model
+class Model {
+  User user;
+}
+
+// Add key named EMAIL
+enum ModelFieldId {
+  <mark class="fragment">EMAIL</mark>;
+}
+
+// Annotate email field
+class User {
+  @Path(field = <mark class="fragment">EMAIL</mark>
+        readable = <mark class="fragment true-predicate">...</mark>)
+  String email;
+}
+                    </code>
+                  </pre>
+              </div>
+            </div>
+            <div class="column fragment">
+              <p>
+                <strong>code generate</strong>
+              </p>
+              <div class="code-wrapper small">
+                <pre class="prettyprint">
+                    <code class="code lang-java">
+// dOOv typed field class
+class DslModel {
+  StringFieldInfo <mark class="fragment true-predicate">userEmail</mark>;
+}
+                    </code>
+                  </pre>
+              </div>
+            </div>
+            <div class="column fragment">
+              <p>
+                <strong>write rules</strong>
+              </p>
+              <div class="code-wrapper small">
+                <pre class="prettyprint">
+                    <code class="code lang-java">
+// Create rules by using
+// generated fields
+// in DslModel
+DslModel
+  .when(<mark class="fragment true-predicate">userEmail</mark>.eq(...))
+  .validate()
+  // Optionaly add rules
+  // to a registry
+  .registerOn(DEFAULT);
+                    </code>
+                  </pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>How to validate a model</h2>
+          <div class="horizontal">
+            <div class="column">
+              <p>
+                <strong>get model</strong>
+              </p>
+              <div class="code-wrapper small">
+                <pre class="prettyprint">
+                    <code class="code lang-java">
+// Get model from somewhere
+// or instanciate it
+User user = new User();
+user.setEmail("e@mail.com");
+
+Model <mark class="fragment">model</mark> = new Model();
+model.setUser(user);
+                    </code>
+                  </pre>
+              </div>
+            </div>
+            <div class="column fragment">
+              <p>
+                <strong>execute</strong>
+              </p>
+              <div class="code-wrapper small">
+                <pre class="prettyprint">
+                    <code class="code lang-java">
+// Use executeOn method
+DslModel.when(email.matches(...))
+        .validate()
+        .executeOn(<mark class="fragment">model</mark>);
+
+// Or use the registry
+DEFAULT.stream()
+  .map(rule -&gt; rule.executeOn(<mark class="fragment">model</mark>));
+                    </code>
+                  </pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-transition="slide-in fade-out">
+          <h2>Keying a model</h2>
+          <img width="75%" src="png/org_modelmap_casper_1.png">
+        </section>
+
+        <section data-transition="fade-in slide-out">
+          <h2>Keying a model</h2>
+          <img width="75%" src="png/org_modelmap_casper_2.png">
+        </section>
+
+      </section>
+
+      <section>
+        <section>
+          <h2>Live code</h2>
+        </section>
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public static boolean validateAccount(User user,
+                Account account, Configuration config) {
+  if (config == null) {
+      return false;
+  }
+  if (user == null || user.getBirthDate() == null) {
+      return false;
+  }
+  if (account == null || account.getCountry() == null ||
+      account.getPhoneNumber() == null) {
+      return false;
+  }
+  if (YEARS.between(user.getBirthDate(), LocalDate.now()) >= 18
+          && account.getEmail().length() <= config.getMaxEmailSize()
+          && account.getCompany() == Company.LES_FURETS
+          && account.getPhoneNumber().startsWith("+33")) {
+      return true;
+  }
+  return false;
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public static SampleModel sample() {
+  User user = new User();
+  user.setId(1);
+  user.setFirstName("Foo");
+  user.setLastName("BAR");
+  // ...
+            
+  Account account = new Account();
+  account.setCompany(Company.LES_FURETS);
+  account.setId(9);
+  // ...
+                </code>
+              </pre>
+          </div>
+        </section>
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account extends Identity {
+
+  @SamplePath(field = SampleFieldId.LOGIN, readable = "account.login")
+  private String login;     
+  // ...
+
+  <mark>@SamplePath(field = SampleFieldId.COMPANY, readable = "account.company")</mark>
+  private Company company;
+  // ...
+                </code>
+              </pre>
+          </div>
+        </section>
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+SampleModelResourceBundle_en_US.properties
+
+account.login = account login
+account.password = account password
+account.country = account country
+<mark>account.company = account company</mark>
+...
+
+SampleModelResourceBundle_fr_FR.properties
+
+account.login = l'identifiant de connection
+account.country = le pays
+<mark>account.company = la soci\u00e9t\u00e9</mark>
+...
+
+                </code>
+              </pre>
+          </div>
+        </section>
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+> ./gradlew -p sample build
+
+BUILD SUCCESSFUL in 23s
+10 actionable tasks: 3 executed, 7 up-to-date
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public class RulesOpenRndayTest {
+  SampleModelRule demoRule = DslSampleModel
+          .when(DOOV.matchAll(
+                  userBirthdate.ageAt(today()).greaterOrEquals(18),
+                  accountEmail.length().lesserOrEquals(configurationMaxEmailSize),
+                  accountCompany.eq(Company.LES_FURETS),
+                  accountPhoneNumber.startsWith("+33")))
+          .validate();
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account() {
+    SampleModel sample = SampleModels.sample();
+              
+    Result result = demoRule.executeOn(sample);
+              
+    Assertions.assertThat(result).isTrue();
+    System.out.println(demoRule.readable());
+    System.out.println(demoRule.markdown(Locale.FRANCE));
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+rule when match all [user birthdate age at today >= 18, //
+  account email length is <= configuration max email size, //
+  account company = LES_FURETS, account phone number starts with '+33'] validate
+* règle
+  * lorsque
+    * correspond à tous
+      * la date de naissance âge à la date du jour >= 18
+      * l'émail a une longueur <= la taille maximum de l'émail
+      * la société = LES_FURETS
+      * le numéro de téléphone commence par '+33'
+  * valider
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account_failure_cause() {
+    SampleModel sample = SampleModels.sample();
+    <mark>sample.getAccount().setPhoneNumber("+1 12 34 56 78");</mark>
+              
+    Result result = demoRule.executeOn(sample);
+              
+    Assertions.assertThat(result).isTrue();
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+java.lang.AssertionError: Expected result to be true 
+  (invalidated nodes: [account phone number starts with '+33'])
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account_failure_cause() {
+    SampleModel sample = SampleModels.sample();
+    sample.getAccount().setPhoneNumber("+1 12 34 56 78");
+              
+    Result result = demoRule.executeOn(sample);
+              
+    Assertions.assertThat(result)
+            <mark>.isFalse()</mark>
+            <mark>.hasFailureCause("account phone number starts with '+33'");</mark>
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+@Test
+public void test_account_failure_cause_2() {
+    SampleModel sample = SampleModels.sample();
+    sample.getAccount().setPhoneNumber("+1 12 34 56 78");
+    sample.getAccount().setCompany(Company.BLABLACAR);
+              
+    <mark>Result result = demoRule.withShortCircuit(false).executeOn(sample);</mark>
+              
+    Assertions.assertThat(result)
+            .isFalse()
+            .hasFailureCause("match all [account company = LES_FURETS, " +
+                    "account phone number starts with '+33']");
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <img src="png/exclusions_maintenance_page.png" width="90%">
+        </section>
+
+      </section>
+
+      <section>
+        <section>
+          <h2>Syntax tree</h2>
+        </section>
+
+        <section>
+          <img src="dot/ast.svg" width="40%">
+        </section>
+
+        <section>
+          <h2>Why a syntax tree?</h2>
+          <p>Makes readable text generation possible:
+            <br/>we can output a multi-language rules catalog
+            <br/>in multiple formats (text, markdown, HTML, etc.)</p>
+          <img src="png/doov_rules_visitor_test.png" width="90%">
+        </section>
+
+        <section>
+          <h2>i18n of the syntax tree</h2>
+          <p>The syntax tree is localized for left side elements (fields) and operators via
+            <code>MessageBundle</code>.</p>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+// User.java
+@SamplePath(field = SampleFieldId.FIRST_NAME, 
+            readable = "user.first.name")
+private String firstName;
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+// SampleResourceBundle_en_US.properties
+user.first.name = user first name
+
+// SampleResourceBundle_fr_FR.properties
+user.first.name = prénom utilisateur
+                </code>
+              </pre>
+          </div>
+          <p>You can also specify the text directly in the
+            <code>readable</code> field.</p>
+        </section>
+
+        <section>
+          <h2>i18n of the syntax tree</h2>
+          <p>You can use
+            <code>ValidationRule#readable(Locale)</code> and
+            <code>Result#getFailureCause(Locale)</code> to specify a locale</p>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+// Output in default Locale.getDefault()
+String readable = DOOV.when(userFirstName.isNotNull())
+                      .readable())
+System.out.println("&gt; " + readable);
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java output">
+&gt; when first name exists
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+// Output in french
+String readable = DOOV.when(userFirstName.isNotNull())
+                      .readable(Locale.FRANCE))
+System.out.println("&gt; " + readable)
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java output">
+&gt; lorsque pr&eacute;nom utilisateur existe
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Execution statistics</h2>
+          <p>During execution, each node of the AST captures
+            <strong>context value</strong> and
+            <strong>predicate result</strong>. We know at runtime which node failed, and why.</p>
+          <img src="png/doov_exclusions_insurer_conducteur_statistics.png" width="100%">
+        </section>
+
+        <section>
+          <h2>Execution statistics</h2>
+          <p>We make daily statistics that helps us shape the business,
+            <br/>by removing or tweaking rules as needed</p>
+          <img src="png/doov_failure_cause.png" width="90%">
+        </section>
+
+        <section>
+          <h2>Execution statistics</h2>
+          <p>We also rewrite the execution rules by simplifying the predicate tree, to show the minimal predicate that fails.</p>
+          <img src="png/doov_failure_cause_simplify.png" width="100%">
+        </section>
+
+        <section>
+          <h2>Failure cause - and / or</h2>
+          <p class="quote">
+            <em>Validate that the profile has an email with less than 20 characters, is at least 18 years old when the country
+              is France, and the country is France when the phone number starts with '+33'</em>
+          </p>
+          <p/>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(accountEmail.length().lesserThan(20)
+      .and(userBirthdate.ageAt(today()).greaterThan(18)
+        .and(accountCountry.eq(Country.FR)))
+      .and(accountCountry.eq(Country.FR)
+        .and(accountPhoneNumber.startsWith("+33"))))
+    .validate();
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - and / or</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+model.getAccount().setEmail("test@test.org");
+model.getAccount().setCountry(Country.FR);
+model.getUser().setBirthDate(LocalDate.now().minusYears(19));
+
+ValidationRule rule = DOOV
+    .when(<mark class="true-predicate">accountEmail.length().lesserThan(20)</mark>  
+      .and(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>
+        .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>))
+      .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>
+        .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>)))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; account phone number starts with '+33'
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - matchAny / matchAll</h2>
+          <p class="quote">
+            <em>Validate that the profile is least 18 years old, the country is France, the phone number starts with '+33', is
+              at least 21 years old when their country is Canada, and their phone number starts with '+1'</em>
+          </p>
+          <p/>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(matchAny(
+      matchAll(userBirthdate.ageAt(today()).greaterThan(18),
+               accountCountry.eq(Country.FR),
+               accountPhoneNumber.startsWith("+33")),
+      matchAll(userBirthdate.ageAt(today()).greaterThan(21),
+               accountCountry.eq(Country.CAN),
+               accountPhoneNumber.startsWith("+1"))))
+    .validate();
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - matchAny / matchAll</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+model.getAccount().setCountry(Country.FR);
+
+ValidationRule rule = DOOV
+    .when(matchAny(
+        matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>,
+                 <mark class="true-predicate">accountCountry.eq(Country.FR)</mark>,
+                 <mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>),
+        matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(21)</mark>,
+                 <mark class="false-predicate">accountCountry.eq(Country.CAN)</mark>,
+                 <mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>)))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; match any [account phone number starts with '+33',
+             match all [account country = CAN,
+                        account phone number starts with '+1']]
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Execution short-circuit</h2>
+          <p>By default, predicate evaluation in dOOv behaves like Java: it
+            <strong>short-circuits</strong>. This can be disabled to execute all nodes, even if they don't impact the end result.</p>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Beyond bean validation</h2>
+        </section>
+
+        <section>
+          <h2>Performance - Java Microbenchmark Harness</h2>
+          <p>We use JMH to check the performance of the DSL</p>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml">
+Benchmark                          Mode  Samples      Mean  Mean error   Units
+o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
+o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
+                </code>
+              </pre>
+          </div>
+          <p>Performance of the DSL and POJO code are very close</p>
+        </section>
+
+        <section>
+          <img src="png/doov_bench_ui.png" width="90%">
+          <p>Visit our blog for details:
+            <a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com</a>
+          </p>
+        </section>
+
+        <section>
+          <h2>Beyond Bean Validation: types</h2>
+          <p>Bean Validation rules are not strongly typed since it's annotation based. This code will fail at compile time,
+            but your IDE won't be able to tell you why.</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account {
+
+    @NotNull @Email
+    private Email email;
+
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Beyond Bean Validation: complex validation</h2>
+          <p>Because Bean Validation constraints are based on field annotation, cross validation between fields are only available
+            through the extension mechanism.</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+public class Account {
+
+    @Pattern(regexp = "(FR)|(UK)")
+    private String country;
+
+    @Pattern(regexp = "???")
+    private String phoneNumber;
+
+}
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Beyond Bean Validation: natural language</h2>
+          <p>Bean Validation rules are not written with a natural language syntax and does not provide a syntax tree</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+@Size(min = 10, max = 200,
+      message = "About Me must be between 10 and 200 characters")
+private String aboutMe;
+                </code>
+              </pre>
+          </div>
+          <p></p>
+          <h2>DSL</h2>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+userAboutMe().length().between(10, 200).validate().readable()
+&gt; When user about me length is between 10 and 200, validate
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Beyond Bean Validation: syntax versus consistency</h2>
+          <p>&nbsp;</p>
+          <div class="horizontal">
+            <div class="column column-2">
+              <div>
+                <strong style="color:#59B2AC">Bean Validation</strong> allows syntax validation</br>&nbsp;</br>&nbsp;
+              </div>
+              <div>
+                <strong style="color:#59B2AC">Bean Validation</strong> rules are written on the model</br>&nbsp;</br>&nbsp;
+              </div>
+              <div>
+                <strong style="color:#59B2AC">Bean Validation</strong> uses reflection
+              </div>
+            </div>
+            <div class="column column-2">
+              <div>
+                <strong style="color:#ec7f00">dOOv</strong> allows consistency checks</br>&nbsp;</br>&nbsp;
+              </div>
+              <div>
+                <strong style="color:#ec7f00">dOOv</strong> rules are writtent outside of the model, allowing complex checks</br>&nbsp;</br>&nbsp;
+              </div>
+              <div>
+                <strong style="color:#ec7f00">dOOv</strong> uses code generation
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Conclusion</h2>
+        </section>
+
+        <section>
+          <h2>Goal</h2>
+          <p>We migrated our 492 business rules to dOOv,
+            <br/> we now have
+            <strong>compliance</strong>,
+            <strong>auditability</strong>,
+            <strong>governance</strong>,
+            <strong>clarity</strong>
+            <br/>(and more!)</p>
+        </section>
+
+        <section>
+          <h2>dOOv 2.0.0 is out!</h2>
+          <ul>
+            <li>
+              <strong>Gradle</strong> code generation support</li>
+            <li>
+              <strong>Better</strong> failure causes</li>
+            <li>
+              <strong>New</strong> operators for some types</li>
+            <li>
+              <strong>Improved</strong> documentation (javadoc and wiki)</li>
+            <li>
+              <strong>dOOm</strong> beta support</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What is dOOm?</h2>
+          <p>Next step is extending the DSL to create an
+            <strong>object to object mapping framework</strong>, Domain Object Oriented Mapping (
+            <strong>dOOm</strong>). It will feature the same AST to text and statistics functionnalities.</p>
+          <div class="code-wrapper">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.map(userEmail().to(insurerEmail())
+    .map(userFirstName(), userLastName())
+      .using(StringJoiner)
+      .to(insurerFullName())
+    .when(userCountry().eq(FR))
+      .map(userPhone().to(insurerPhone()))
+                </code>
+              </pre>
+          </div>
+          <p>Stay tuned for the next versions!</p>
+        </section>
+
+        <section>
+          <h2>Enjoy dOOv.io</h2>
+          <img class="logo herve-francois" src="png/doov_io_logo_dark_large.png" width="33%">
+          <p>
+            <a href="http://www.dOOv.io">http://www.dOOv.io</a>
+          </p>
+          <ul>
+            <li>
+              <a href="http://github.com/lesfurets/dOOv">http://github.com/lesfurets/dOOv</a> (framework and examples)</li>
+            <li>
+              <a href="https://repo1.maven.org/maven2/io/doov">https://repo1.maven.org/maven2/io/doov</a> (maven central:
+              <strong>2.0.0</strong>)</li>
+            <li>
+              <a href="http://github.com/lesfurets/dOOv#conferences">http://github.com/lesfurets/dOOv#conferences</a> (slides)</li>
+            <li>Apache Licence</li>
+            <li>Try and contribute!</li>
+          </ul>
+        </section>
+
+      </section>
+
+      <section>
+        <section>
+          <h2>Appendices</h2>
+        </section>
+        <section>
+          <h2>Failure cause - sample 1</h2>
+          <p>
+            <em>Validate that a profile
+              <br> has an email with less than 20 characters
+              <br> has at least 18 years when their country is France
+              <br> their country is France when their phone number starts with '+33'</em>
+          </p>
+          <p/>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(accountEmail.length().lesserThan(20)
+      .and(userBirthdate.ageAt(today()).greaterThan(18)
+        .and(accountCountry.eq(Country.FR)))
+      .and(accountCountry.eq(Country.FR)
+        .and(accountPhoneNumber.startsWith("+33"))))
+    .validate();
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 1</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+model.getAccount().setEmail("test@test.org");
+model.getAccount().setCountry(Country.FR);
+model.getUser().setBirthDate(LocalDate.now().minusYears(19));
+
+ValidationRule rule = DOOV
+    .when(<mark class="true-predicate">accountEmail.length().lesserThan(20)</mark>  
+      .and(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>
+          .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>))
+      .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>
+          .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>)))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; account phone number starts with '+33'
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 2</h2>
+          <p>
+            <em>Validate that a profile
+              <br> has at least 18 years when their country is France
+              <br> and their phone number starts with '+33'
+              <br> has at least 21 years when their country is Canadian
+              <br> and their phone number starts with '+1'</em>
+          </p>
+          <p/>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                  <code class="code lang-java">
+DOOV.when(userBirthdate.ageAt(today()).greaterThan(18)
+        .and(accountCountry.eq(Country.FR)
+        .and(accountPhoneNumber.startsWith("+33")))
+        .or(userBirthdate.ageAt(today()).greaterThan(21)
+              .and(accountCountry.eq(Country.CAN)
+              .and(accountPhoneNumber.startsWith("+1")))))
+    .validate();
+                  </code>
+                </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 2</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+model.getAccount().setCountry(Country.FR);
+
+ValidationRule rule = DOOV
+    .when(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>
+        .and(<mark class="true-predicate">accountCountry.eq(Country.FR)</mark>
+        .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>))
+        .or(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(21)</mark>
+              .and(<mark class="false-predicate">accountCountry.eq(Country.CAN)</mark>
+              .and(<mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>))))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; account phone number starts with '+33'
+    or (account country = CAN and
+        account phone number starts with '+1')
+                </code>
+              </pre>
+          </div>
+        </section>
+        <section>
+          <h2>Failure cause - sample 3</h2>
+          <p>
+            <em>Validate that a profile
+              <br> has at least 18 years when their country is France
+              <br> and their phone number starts with '+33'
+              <br> has at least 21 years when their country is Canadian
+              <br> and their phone number starts with '+1'</em>
+          </p>
+          <p/>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                  <code class="code lang-java">
+DOOV.when(matchAny(
+        matchAll(userBirthdate.ageAt(today()).greaterThan(18),
+                 accountCountry.eq(Country.FR),
+                 accountPhoneNumber.startsWith("+33")),
+        matchAll(userBirthdate.ageAt(today()).greaterThan(21),
+                 accountCountry.eq(Country.CAN),
+                 accountPhoneNumber.startsWith("+1"))))
+     .validate();
+                 </code>
+                </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 3</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(22));
+model.getAccount().setCountry(Country.FR);
+
+ValidationRule rule = DOOV
+    .when(matchAny(
+        matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>,
+                 <mark class="true-predicate">accountCountry.eq(Country.FR)</mark>,
+                 <mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>),
+        matchAll(<mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(21)</mark>,
+                 <mark class="false-predicate">accountCountry.eq(Country.CAN)</mark>,
+                 <mark class="false-predicate">accountPhoneNumber.startsWith("+1")</mark>)))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; match any [account phone number starts with '+33',
+             match all [account country = CAN,
+                        account phone number starts with '+1']]
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 4</h2>
+          <p>
+            <em>Validate that a profile country is Canadian or French</em>
+          </p>
+          <p></p>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(accountCountry.anyMatch(Country.CAN, Country.FR))
+    .validate();
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 4</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+model.getAccount().setCountry(Country.UK);
+
+ValidationRule rule = DOOV
+    .when(accountCountry.<mark class="false-predicate">anyMatch(Country.CAN, Country.FR)</mark>)
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; account country != UK
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 5</h2>
+          <p>
+            <em>Validate that a profile match at least two conditions :
+              <br>
+              <ul>
+                <li>profile has at least 18 years</li>
+                <li>country is France</li>
+                <li>phone number starts with '+33'</li>
+              </ul>
+            </em>
+          </p>
+          <p/>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+DOOV.when(count(
+      userBirthdate.ageAt(today()).greaterThan(18),
+      accountCountry.eq(Country.FR),
+      accountPhoneNumber.startsWith("+33")).greaterThan(1))
+    .validate();
+                </code>
+              </pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>Failure cause - sample 5</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
+model.getUser().setBirthDate(LocalDate.now().minusYears(19));
+model.getAccount().setCountry(Country.CAN);
+model.getAccount().setPhoneNumber("1 23 45 67 89");
+
+ValidationRule rule = DOOV
+    .when(count(
+            <mark class="true-predicate">userBirthdate.ageAt(today()).greaterThan(18)</mark>,
+            <mark class="false-predicate">accountCountry.eq(Country.FR)</mark>,
+            <mark class="false-predicate">accountPhoneNumber.startsWith("+33")</mark>)
+        .greaterThan(1))
+    .validate();
+
+Result result = rule.withShortCircuit(false)
+                    .executeOn(wrapper);
+System.out.println("&gt; " + result.getFailureCause());
+                </code>
+              </pre>
+          </div>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-xml output">
+&gt; account country = FR and account phone number starts with '+33'
+                </code>
+              </pre>
+          </div>
+        </section>
+
+      </section>
+    </div>
+  </div>
+  <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+  <script src="bower_components/reveal.js/js/reveal.js"></script>
+  <script>
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      history: true,
+      center: true,
+      embedded: true,
+      mouseWheel: true,
+      viewDistance: 5,
+
+      width: 1280,
+      height: 900,
+      margin: 0,
+
+      transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function () { return !document.body.classList; } },
+        { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+        { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+        //{ src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+        { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+      ]
+    });
+
+    // navigation with mouse click
+
+    window.addEventListener("mousedown", handleClick, false);
+    window.addEventListener("contextmenu", function (e) { e.preventDefault(); }, false);
+
+    function handleClick(e) {
+      e.preventDefault();
+      if (e.button === 0) Reveal.next();
+      if (e.button === 2) Reveal.prev();
+    }
+
+  </script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="js/doov.js"></script>
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert&amp;callback=doov"></script>
+</body>
+
+</html>
