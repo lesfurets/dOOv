@@ -10,8 +10,8 @@
  *********************************************/
 body {
   background-color: #034a5e;
-  background-image: linear-gradient(#01485c, #008095);
-  background-image: -webkit-linear-gradient(#01485c, #008095);
+  background-image: linear-gradient(#003647, #006576);
+  background-image: -webkit-linear-gradient(#003647, #006576);
 }
 
 .reveal {

@@ -368,16 +368,6 @@ DEFAULT.stream()
           </div>
         </section>
 
-        <section data-transition="slide-in fade-out">
-          <h2>Keying a model</h2>
-          <img width="75%" src="png/org_modelmap_casper_1.png">
-        </section>
-
-        <section data-transition="fade-in slide-out">
-          <h2>Keying a model</h2>
-          <img width="75%" src="png/org_modelmap_casper_2.png">
-        </section>
-
       </section>
 
       <section>
@@ -633,76 +623,6 @@ public void test_account_failure_cause_2() {
             <br/>we can output a multi-language rules catalog
             <br/>in multiple formats (text, markdown, HTML, etc.)</p>
           <img src="png/doov_rules_visitor_test.png" width="90%">
-        </section>
-
-        <section>
-          <h2>i18n of the syntax tree</h2>
-          <p>The syntax tree is localized for left side elements (fields) and operators via
-            <code>MessageBundle</code>.</p>
-          <div class="code-wrapper small">
-            <pre class="prettyprint">
-                <code class="code lang-java">
-// User.java
-@SamplePath(field = SampleFieldId.FIRST_NAME, 
-            readable = "user.first.name")
-private String firstName;
-                </code>
-              </pre>
-          </div>
-          <div class="code-wrapper small">
-            <pre class="prettyprint">
-                <code class="code lang-java">
-// SampleResourceBundle_en_US.properties
-user.first.name = user first name
-
-// SampleResourceBundle_fr_FR.properties
-user.first.name = prénom utilisateur
-                </code>
-              </pre>
-          </div>
-          <p>You can also specify the text directly in the
-            <code>readable</code> field.</p>
-        </section>
-
-        <section>
-          <h2>i18n of the syntax tree</h2>
-          <p>You can use
-            <code>ValidationRule#readable(Locale)</code> and
-            <code>Result#getFailureCause(Locale)</code> to specify a locale</p>
-          <div class="code-wrapper small">
-            <pre class="prettyprint">
-                <code class="code lang-java">
-// Output in default Locale.getDefault()
-String readable = DOOV.when(userFirstName.isNotNull())
-                      .readable())
-System.out.println("&gt; " + readable);
-                </code>
-              </pre>
-          </div>
-          <div class="code-wrapper small">
-            <pre class="prettyprint">
-                <code class="code lang-java output">
-&gt; when first name exists
-                </code>
-              </pre>
-          </div>
-          <div class="code-wrapper small">
-            <pre class="prettyprint">
-                <code class="code lang-java">
-// Output in french
-String readable = DOOV.when(userFirstName.isNotNull())
-                      .readable(Locale.FRANCE))
-System.out.println("&gt; " + readable)
-                </code>
-              </pre>
-          </div>
-          <div class="code-wrapper small">
-            <pre class="prettyprint">
-                <code class="code lang-java output">
-&gt; lorsque pr&eacute;nom utilisateur existe
-                </code>
-              </pre>
-          </div>
         </section>
 
         <section>
