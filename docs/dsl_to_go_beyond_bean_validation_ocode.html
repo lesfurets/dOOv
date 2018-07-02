@@ -924,12 +924,14 @@ userAboutMe().length().between(10, 200).validate().readable()
           <div class="code-wrapper">
             <pre class="prettyprint">
                 <code class="code lang-java">
-DOOV.map(userEmail().to(insurerEmail())
-    .map(userFirstName(), userLastName())
+DOOV.mappings(
+  map(userEmail).to(insurerEmail),
+  map(userFirstName, userLastName)
       .using(StringJoiner)
-      .to(insurerFullName())
-    .when(userCountry().eq(FR))
-      .map(userPhone().to(insurerPhone()))
+      .to(insurerFullName),
+  when(userCountry.eq(FR))
+    .map(userPhone.to(insurerPhone))
+)
                 </code>
               </pre>
           </div>
