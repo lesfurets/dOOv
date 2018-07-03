@@ -7,7 +7,6 @@ import static io.doov.sample.validation.RulesConference.userAccount;
 import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.doov.core.dsl.lang.Readable;

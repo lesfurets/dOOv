@@ -41,9 +41,7 @@ public class Account extends Identity {
     @SamplePath(field = SampleFieldId.COUNTRY, readable = "account.country")
     private Country country;
 
-    @NotNull
-    @SamplePath(field = SampleFieldId.COMPANY, readable = "account.company")
-    private Company company;
+    // TODO : live code - add company field, annotation and generate getter/setter
 
     @NotNull
     @SamplePath(field = SampleFieldId.PHONE_NUMBER, readable = "account.phone.number")
@@ -105,14 +103,6 @@ public class Account extends Identity {
 
     public void setCountry(Country country) {
         this.country = country;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
     }
 
     public boolean getAcceptEmail() {

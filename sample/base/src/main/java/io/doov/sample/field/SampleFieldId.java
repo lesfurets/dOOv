@@ -38,7 +38,7 @@ public enum SampleFieldId implements SampleField {
     LANGUAGE(ACCOUNT),
     TIMEZONE(ACCOUNT),
     COUNTRY(ACCOUNT),
-    COMPANY(ACCOUNT),
+    // TODO : live code - add key for company field
 
     PHONE_NUMBER(ACCOUNT),
     EMAIL_ACCEPTED(ACCOUNT),

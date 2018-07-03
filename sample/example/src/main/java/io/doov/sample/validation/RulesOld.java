@@ -51,7 +51,7 @@ public class RulesOld {
         }
         if (YEARS.between(user.getBirthDate(), LocalDate.now()) >= 18
                 && account.getEmail().length() <= config.getMaxEmailSize()
-                && account.getCompany() == Company.LES_FURETS
+                // TODO : live code - test the value of the company field
                 && account.getPhoneNumber().startsWith("+33")) {
             return true;
         }
