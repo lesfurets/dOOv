@@ -640,28 +640,6 @@ public void test_account_failure_cause_2() {
         </section>
 
         <section>
-          <h2>Performance - Java Microbenchmark Harness</h2>
-          <p>We use JMH to check the performance of the DSL</p>
-          <div class="code-wrapper small">
-            <pre class="prettyprint">
-                <code class="code lang-xml">
-Benchmark                          Mode  Samples      Mean  Mean error   Units
-o.m.BenchmarkOldRule.valid_email  thrpt       25  1860.553      42.269  ops/ms
-o.m.BenchmarkRule.valid_email     thrpt       25  1733.465      18.461  ops/ms
-                </code>
-              </pre>
-          </div>
-          <p>Performance of the DSL and POJO code are very close</p>
-        </section>
-
-        <section>
-          <img src="png/doov_bench_ui.png" width="90%">
-          <p>Visit our blog for details:
-            <a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com</a>
-          </p>
-        </section>
-
-        <section>
           <h2>Beyond Bean Validation: types</h2>
           <p>Bean Validation rules are not strongly typed since it's annotation based. This code will fail at compile time,
             but your IDE won't be able to tell you why.</p>
@@ -722,6 +700,13 @@ userAboutMe().length().between(10, 200).validate().readable()
                 </code>
               </pre>
           </div>
+        </section>
+
+        <section>
+          <img src="png/doov_bench_ui.png" width="90%">
+          <p>Visit our blog for details:
+            <a href="https://beastie.lesfurets.com/articles/doov-revisits-bean-validation-benchmark">https://beastie.lesfurets.com</a>
+          </p>
         </section>
 
         <section>
