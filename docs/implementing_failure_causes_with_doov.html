@@ -575,7 +575,7 @@ DOOV.when(accountCompany.noneMatch(DAILYMOTION, BLABLACAR)).validate();
         </section>
 
         <section>
-
+          <h2>Rewritting #1</h2>
           <div class="code-wrapper small">
             <pre class="prettyprint">
                 <code class="code lang-java">
@@ -600,6 +600,7 @@ System.out.println("&gt; " + result.getFailureCause());
         </section>
 
         <section>
+          <h2>Rewritting #2</h2>
           <div class="code-wrapper small">
             <pre class="prettyprint">
                   <code class="code lang-java">
@@ -639,6 +640,7 @@ System.out.println("&gt; " + result.getFailureCause());
         </section>
 
         <section>
+          <h2>Rewritting #3</h2>
           <div class="code-wrapper small">
             <pre class="prettyprint">
                     <code class="code lang-java">
@@ -679,6 +681,7 @@ System.out.println("&gt; " + result.getFailureCause());
         </section>
 
         <section>
+          <h2>Rewritting #4</h2>
           <div class="code-wrapper small">
             <pre class="prettyprint">
                       <code class="code lang-java">
@@ -718,18 +721,19 @@ System.out.println("&gt; " + result.getFailureCause());
         </section>
 
         <section>
-            <div class="code-wrapper small">
-              <pre class="prettyprint">
-                        <code class="code lang-java">
+          <h2>Rewritting #5</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                <code class="code lang-java">
   DOOV.when(accountCompany.noneMatch(DAILYMOTION, BLABLACAR)).validate();
-                        </code>
-                      </pre>
-            </div>
-            <br>could be rewritten
-            <br>
-            <br>
-            <div class="code-wrapper small">
-              <pre class="prettyprint">
+                </code>
+              </pre>
+          </div>
+          <br>could be rewritten
+          <br>
+          <br>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
                       <code class="code lang-java">
   DOOV.when(
     <mark class="false-predicate">accountCompany.eq(LES_FURETS)</mark>.or(<mark class="false-predicate">accountCompany.eq(CANAL_PLUS)</mark>
@@ -737,27 +741,59 @@ System.out.println("&gt; " + result.getFailureCause());
                     .validate();
                   </code>
                 </pre>
-            </div>
-            <br>
-            <div class="code-wrapper small">
-              <pre class="prettyprint">
+          </div>
+          <br>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
                     <code class="code lang-java">
   model.getAccount().setCompany(DAILYMOTION);
   Result result = rule.withShortCircuit(false).executeOn(wrapper);
   System.out.println("&gt; " + result.getFailureCause());
                     </code>
                   </pre>
-            </div>
-            <br>
-            <div class="code-wrapper small">
-              <pre class="prettyprint">
+          </div>
+          <br>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
                   <code class="code lang-xml output">
   &gt; account company = LES_FURETS or (account company = CANAL_PLUS 
          or (account company = MEETIC or account company = OODRIVE))
                   </code>
                 </pre>
-            </div>
-          </section>
+          </div>
+        </section>
+
+        <section>
+          <h2>Speed is not enough</h2>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                  <code class="code lang-xml output">
+Benchmark                                        Mode  Cnt     Score      Error   Units
+<mark class="true-predicate">test_account_1                                   thrpt   20  8775.818 ± 148.951  ops/ms</mark>
+<mark>test_account_2  [failure cause OK]               thrpt   20  5022.391 ± 147.550  ops/ms</mark>
+test_account_3                                   thrpt   20  3022.433 ± 586.881  ops/ms
+test_account_4  [failure cause OK]               thrpt   20  6002.415 ±  94.531  ops/ms
+<mark class="false-predicate">test_account_5                                   thrpt   20  1855.837 ±  50.183  ops/ms</mark>
+                  </code>
+                </pre>
+          </div>
+          <br>
+          <div class="code-wrapper small">
+            <pre class="prettyprint">
+                    <code class="code lang-xml output">
+Benchmark                                        Mode  Cnt     Score      Error   Units
+test_account_1_short_circuit                     thrpt   20  6839.429 ± 262.318  ops/ms
+<mark class="true-predicate">test_account_2_short_circuit                     thrpt   20  7397.586 ± 252.090  ops/ms</mark>
+test_account_3_short_circuit                     thrpt   20  5084.227 ± 450.013  ops/ms
+test_account_4_short_circuit                     thrpt   20  6275.185 ±  56.600  ops/ms
+<mark class="false-predicate">test_account_5_short_circuit                     thrpt   20  1820.198 ±  60.300  ops/ms</mark>
+                    </code>
+                  </pre>
+          </div>
+          <br>
+          #2 approach is the overall winner<br>
+          #4 approach is the winner only for listed values
+        </section>
 
       </section>
       <section>
